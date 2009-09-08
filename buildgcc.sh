@@ -21,9 +21,9 @@ BINUTILS_VERSION=2.19.1
 GNU_MIRROR=ftp.uni-kl.de
 BINPACKAGE_NAME=
 
-GDB_VERSION=5.1.1
-GDB_SRC_URL=http://downloads.sourceforge.net/project/mspgcc4/gdb-5.1.1.tar.gz?use_mirror=master
-GDB_PATCH_FOLDER=gdb-5.1.1
+GDB_VERSION=6.8
+GDB_PATCH_FOLDER=gdb-6.x
+GDB_SRC_URL=ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$GDB_VERSION.tar.gz
 GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
 
 if [ 0$1 != 0--defaults ]; then
@@ -59,6 +59,12 @@ if [ 0$1 != 0--defaults ]; then
 	
 	$DIALOG --menu "Select GDB version to build" 10 50 3 1 "gdb-5.1.1" 2 "gdb-6.8" 3 "none" 2>/tmp/dialog.ans
 	if [ $? == 0 -a -e /tmp/dialog.ans ]; then
+		if [ `cat /tmp/dialog.ans` = 1 ]; then
+			GDB_VERSION=5.1.1
+			GDB_SRC_URL=http://downloads.sourceforge.net/project/mspgcc4/gdb-5.1.1.tar.gz?use_mirror=master
+			GDB_PATCH_FOLDER=gdb-5.1.1
+			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
+		fi
 		if [ `cat /tmp/dialog.ans` = 2 ]; then
 			GDB_VERSION=6.8
 			GDB_PATCH_FOLDER=gdb-6.x
