@@ -22,7 +22,7 @@ GNU_MIRROR=ftp.uni-kl.de
 BINPACKAGE_NAME=
 
 GDB_VERSION=5.1.1
-GDB_SRC_URL=http://rts-wiki.eit.uni-kl.de/tiki-download_wiki_attachment.php?attId=45
+GDB_SRC_URL=http://downloads.sourceforge.net/project/mspgcc4/gdb-5.1.1.tar.gz?use_mirror=master
 GDB_PATCH_FOLDER=gdb-5.1.1
 GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
 
@@ -151,10 +151,10 @@ if [ x"$GCC_VERSION" != x"" ]; then
 	cd mspgcc
 	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gcc || exit 2
 
-	if [ -e ../../msp430-gcc4x.tbz ]
+	if [ -e ../../ports/gcc-4.x ]
 	then
-		echo Unpacking msp430-gcc4x.tbz...
-		tar xjf ../../msp430-gcc4x.tbz
+		echo Copying gcc-4.x port
+		cp -r ../../ports/gcc-4.x gcc
 	fi
 
 	if [ -e ../../msp$GCC_PATCH_FOLDER.patch ]
@@ -245,6 +245,13 @@ if [ 0$GDB_VERSION != 0 ]; then
 	cd mspgcc
 	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gdb || exit 1
 	cd gdb
+	
+	if [ -e ../../../ports/gdb-6.x ]
+	then
+		echo Copying gdb-6.x port
+		cp -r ../../ports/gdb-6.x .
+	fi
+
 	test -e ../../../msp430-gdb6x.tbz && tar xjf ../../../msp430-gdb6x.tbz
 	cd ../..
 	wget -c $GDB_SRC_URL -O gdb-$GDB_VERSION.tar.gz || exit 1
