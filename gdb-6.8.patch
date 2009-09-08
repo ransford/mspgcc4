@@ -1,0 +1,82 @@
+diff -urN gdb68-orig/configure gdb68-new/configure
+--- gdb68-orig/configure	Wed Feb 20 15:26:58 2008
++++ gdb68-new/configure	Tue Sep  1 13:34:49 2009
+@@ -2279,6 +2279,9 @@
+   avr-*-*)
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
+     ;;
++  msp430-*-*)
++    noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
++    ;;
+   bfin-*-*)
+     noconfigdirs="$noconfigdirs gdb"
+     if test x${is_cross_compiler} != xno ; then
+diff -urN gdb68-orig/gdb/configure.tgt gdb68-new/gdb/configure.tgt
+--- gdb68-orig/gdb/configure.tgt	Mon Feb 11 22:58:42 2008
++++ gdb68-new/gdb/configure.tgt	Tue Sep  1 14:48:01 2009
+@@ -101,6 +101,10 @@
+ 	# for the simulator used during development of avr
+ 	# support for gdb.
+ 	;;
++msp430-*-*)
++	gdb_target_obs="msp430-tdep.o"
++	gdb_sim=../sim/msp430/libsim.a
++	;;
+ 
+ cris*)
+ 	# Target: CRIS
+diff -urN gdb68-orig/opcodes/Makefile.am gdb68-new/opcodes/Makefile.am
+--- gdb68-orig/opcodes/Makefile.am	Fri Dec 21 18:04:04 2007
++++ gdb68-new/opcodes/Makefile.am	Mon Aug 31 21:14:39 2009
+@@ -155,6 +155,7 @@
+ 	m10300-opc.c \
+ 	mmix-dis.c \
+ 	mmix-opc.c \
++	msp430-dis.c \
+ 	mt-asm.c \
+ 	mt-desc.c \
+ 	mt-dis.c \
+@@ -1043,6 +1044,8 @@
+   $(BFD_H) $(INCDIR)/ansidecl.h $(INCDIR)/symcat.h $(INCDIR)/libiberty.h \
+   $(INCDIR)/ansidecl.h $(BFD_H) opintl.h
+ mmix-opc.lo: mmix-opc.c $(INCDIR)/opcode/mmix.h $(INCDIR)/symcat.h
++msp430-dis.lo: msp430-dis.c sysdep.h config.h $(INCDIR)/ansidecl.h \
++  $(INCDIR)/dis-asm.h $(BFD_H) opintl.h $(INCDIR)/opcode/msp430.h
+ mt-asm.lo: mt-asm.c sysdep.h config.h $(INCDIR)/ansidecl.h \
+   $(BFD_H) $(INCDIR)/ansidecl.h $(INCDIR)/symcat.h $(INCDIR)/symcat.h \
+   mt-desc.h $(INCDIR)/opcode/cgen-bitset.h $(INCDIR)/opcode/cgen.h \
+diff -urN gdb68-orig/opcodes/Makefile.in gdb68-new/opcodes/Makefile.in
+--- gdb68-orig/opcodes/Makefile.in	Fri Dec 21 18:04:04 2007
++++ gdb68-new/opcodes/Makefile.in	Mon Aug 31 21:15:40 2009
+@@ -384,6 +384,7 @@
+ 	m10300-opc.c \
+ 	mmix-dis.c \
+ 	mmix-opc.c \
++    msp430-dis.c \
+ 	mt-asm.c \
+ 	mt-desc.c \
+ 	mt-dis.c \
+@@ -1595,6 +1596,8 @@
+   $(BFD_H) $(INCDIR)/ansidecl.h $(INCDIR)/symcat.h $(INCDIR)/libiberty.h \
+   $(INCDIR)/ansidecl.h $(BFD_H) opintl.h
+ mmix-opc.lo: mmix-opc.c $(INCDIR)/opcode/mmix.h $(INCDIR)/symcat.h
++msp430-dis.lo: msp430-dis.c sysdep.h config.h $(INCDIR)/ansidecl.h \
++  $(INCDIR)/dis-asm.h $(BFD_H) opintl.h $(INCDIR)/opcode/msp430.h
+ mt-asm.lo: mt-asm.c sysdep.h config.h $(INCDIR)/ansidecl.h \
+   $(BFD_H) $(INCDIR)/ansidecl.h $(INCDIR)/symcat.h $(INCDIR)/symcat.h \
+   mt-desc.h $(INCDIR)/opcode/cgen-bitset.h $(INCDIR)/opcode/cgen.h \
+diff -urN gdb68-orig/sim/configure gdb68-new/sim/configure
+--- gdb68-orig/sim/configure	Wed Feb  6 01:40:06 2008
++++ gdb68-new/sim/configure	Tue Sep  1 13:33:36 2009
+@@ -3423,6 +3423,11 @@
+ 
+ 	   testsuite=yes
+ 	   ;;
++	   
++       msp430*-*-*)
++subdirs="$subdirs msp430"
++		;;
++
+        cris-*-* | crisv32-*-*)
+ 
+ 

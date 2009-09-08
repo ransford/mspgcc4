@@ -1,0 +1,1 @@
+To build a certain version of MSPGCC, ensure that you have the "dialog" package installed and run the "buildgcc.sh" script.

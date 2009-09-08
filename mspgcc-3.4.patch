@@ -1,0 +1,71 @@
+diff -urN gcc-3.4/gcc/config/msp430/msp430.c gcc-3.4-new/gcc/config/msp430/msp430.c
+--- gcc-3.4/gcc/config/msp430/msp430.c	2006-01-30 11:44:49.000000000 +0300
++++ gcc-3.4-new/gcc/config/msp430/msp430.c	2009-02-13 14:26:17.000000000 +0300
+@@ -122,6 +122,7 @@
+ 
+ 
+ const char *msp430_mcu_name = "msp430x110";
++const char *msp430_data_sections_fix = "";
+ 
+ enum msp430_arch
+ {
+diff -urN gcc-3.4/gcc/config/msp430/msp430.h gcc-3.4-new/gcc/config/msp430/msp430.h
+--- gcc-3.4/gcc/config/msp430/msp430.h	2006-01-30 11:44:49.000000000 +0300
++++ gcc-3.4-new/gcc/config/msp430/msp430.h	2009-02-13 15:08:55.000000000 +0300
+@@ -74,6 +74,7 @@
+ extern const char *msp430_endup;
+ extern const char *msp430_init_stack;
+ extern const char *msp430_mcu_name;
++extern const char *msp430_data_sections_fix;
+ extern int msp430_has_hwmul;
+ 
+ 
+@@ -85,7 +86,8 @@
+ #define TARGET_OPTIONS {						      \
+  { "init-stack=", &msp430_init_stack, N_("Specify the initial stack address") }, \
+  { "mcu=", &msp430_mcu_name, N_("Specify the MCU name") }, \
+- { "endup-at=",&msp430_endup,N_("Jump to specified routine at the end of main()")} \
++ { "endup-at=",&msp430_endup,N_("Jump to specified routine at the end of main()")}, \
++ { "data-sections-fix=",&msp430_data_sections_fix,N_("Support data-sections broken in original MSP430 port")} \
+ }
+ 
+ #define TARGET_VERSION fprintf (stderr, " (GNU assembler syntax)");
+@@ -530,7 +532,16 @@
+ 
+ #define ASM_OUTPUT_LABEL(STREAM, NAME)		\
+ {						\
+-  assemble_name (STREAM, NAME);			\
++  int __msp430_data_name_workaround = (msp430_data_sections_fix && msp430_data_sections_fix[0] && ((NAME)[0] == '*') && ((NAME)[1] == '0'));  \
++  if (__msp430_data_name_workaround) \
++  { \
++    static int repeatable_pseudolabels_resolver = 0;\
++	fprintf (STREAM, "__");			\
++    assemble_name (STREAM, NAME);			\
++	fprintf (STREAM, "_%d", ++repeatable_pseudolabels_resolver);			\
++  } \
++  else \
++    assemble_name (STREAM, NAME);			\
+   fprintf (STREAM, ":\n");			\
+ }
+ 
+@@ -567,7 +578,10 @@
+   } while (0)
+ 
+ #define ASM_DECLARE_OBJECT_NAME(FILE, NAME, DECL)			  \
+-do {									  \
++do {	\
++      int __msp430_data_name_workaround = (msp430_data_sections_fix && msp430_data_sections_fix[0] && ((NAME)[0] == '*') && ((NAME)[1] == '0'));  \
++	  if (__msp430_data_name_workaround) \
++	    fprintf (FILE, "#"); \
+       fprintf (FILE, "%s", TYPE_ASM_OP);				  \
+       assemble_name (FILE, NAME);					  \
+       putc (',', FILE);							  \
+@@ -577,6 +591,8 @@
+       if (!flag_inhibit_size_directive && DECL_SIZE (DECL))		  \
+ 	{								  \
+ 	  size_directive_output = 1;					  \
++	  if (__msp430_data_name_workaround) \
++	    fprintf (FILE, "#"); \
+ 	  fprintf (FILE, "%s", SIZE_ASM_OP);				  \
+ 	  assemble_name (FILE, NAME);					  \
+ 	  fprintf (FILE, ",%ld\n",  int_size_in_bytes (TREE_TYPE (DECL))); \
