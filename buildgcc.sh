@@ -249,7 +249,7 @@ if [ 0$GDB_VERSION != 0 ]; then
 	if [ -e ../../../ports/gdb-6.x ]
 	then
 		echo Copying gdb-6.x port
-		cp -r ../../ports/gdb-6.x .
+		cp -r ../../../ports/gdb-6.x .
 	fi
 
 	test -e ../../../msp430-gdb6x.tbz && tar xjf ../../../msp430-gdb6x.tbz
