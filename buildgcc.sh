@@ -235,7 +235,7 @@ if [ x"$GCC_VERSION" != x"" ]; then
 	$INSTALL_LAUNCHER cp $TARGET_LOCATION/msp430/include/sys/inttypes.h $TARGET_LOCATION/msp430/include/inttypes.h  || exit 1
 
 	cd $TARGET_LOCATION/msp430/lib/ldscripts
-	$INSTALL_LAUNCHER tar xjf $BASEDIR/../ldscripts-new.tbz || exit 14
+	$INSTALL_LAUNCHER tar xjf $BASEDIR/../port/ldscripts-new.tbz || exit 14
 
 	cd $BASEDIR
 fi
