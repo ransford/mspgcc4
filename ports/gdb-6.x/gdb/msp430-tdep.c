@@ -47,6 +47,8 @@
 
 #include "gdb_assert.h"
 
+#define NUM_REGS 16
+
 struct gdbarch_tdep
 {
   int dummy;
@@ -188,7 +190,7 @@ msp430_frame_align (struct gdbarch *gdbarch, CORE_ADDR sp)
    registers. */
 
 static int
-msp430_use_struct_convention (int gcc_p, struct type *type)
+msp430_use_struct_convention (struct type *type)
 {
   long alignment;
   int i;
@@ -261,7 +263,6 @@ msp430_register_type (struct gdbarch *gdbarch, int reg_nr)
 static void
 msp430_address_to_pointer (struct type *type, gdb_byte *buf, CORE_ADDR addr)
 {
-  /* XXX: SHOULD this STORE register ? */
   store_unsigned_integer (buf, TYPE_LENGTH (type), addr);
 }
 
@@ -279,10 +280,7 @@ msp430_pointer_to_address (struct type *type, const gdb_byte *buf)
 static CORE_ADDR
 msp430_integer_to_address (struct gdbarch *gdbarch, struct type *type, const gdb_byte *buf)
 {
-  LONGEST val;
-
-  val = unpack_long (type, buf);
-  return val;
+  return (CORE_ADDR) extract_unsigned_integer (buf, TYPE_LENGTH (type));
 }
 
 /* Write into appropriate registers a function return value
@@ -293,7 +291,7 @@ msp430_integer_to_address (struct gdbarch *gdbarch, struct type *type, const gdb
 static void
 msp430_store_return_value (struct type *type,
                            struct regcache *regcache,
-                           const void *valbuf)
+                           const gdb_byte *valbuf)
 {
   /* Only char return values need to be shifted right within the first
      regnum. */
@@ -335,15 +333,6 @@ get_insn (CORE_ADDR pc)
     return 0;
   return extract_unsigned_integer (buf, 2);
 }
-
-/* Returns the return address for a dummy. */
-static CORE_ADDR
-msp430_call_dummy_address (void)
-{
-  return entry_point_address ();
-}
-
-#define NUM_REGS E_NUM_REGS
 
 static CORE_ADDR
 msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
@@ -398,8 +387,10 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
   for (rn = 0; rn < NUM_REGS; rn++)
     register_offsets[rn] = -1;
 
-  //stack_top = read_sp();
-  
+  /* stack_top = read_sp(); */
+  /* stack_top = read_register (E_SP_REGNUM); */
+  /* regcache_cooked_read_unsigned(get_current_regcache(), E_SP_REGNUM, &stack_top); */
+
   /* Analyze the prologue. Things we determine from analyzing the
      prologue include:
      * the size of the frame
@@ -727,7 +718,7 @@ msp430_frame_unwind_cache (struct frame_info *next_frame,
       /* The SP was moved to the FP.  This indicates that a new frame
          was created.  Get THIS frame's FP value by unwinding it from
          the next frame. */
-      this_base = frame_unwind_register_unsigned(next_frame, E_FP_REGNUM);
+      this_base=frame_unwind_register_unsigned (next_frame, E_FP_REGNUM);
       /* The FP points at the last saved register.  Adjust the FP back
          to before the first saved register giving the SP. */
       prev_sp = this_base + info->size;
@@ -736,7 +727,7 @@ msp430_frame_unwind_cache (struct frame_info *next_frame,
     {
       /* Assume that the FP is this frame's SP but with that pushed
          stack space added back. */
-      this_base = frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
+      this_base=frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
       prev_sp = this_base + info->size;
     }
 
@@ -782,7 +773,9 @@ msp430_print_registers_info (struct gdbarch *gdbarch,
     int r;
     for (r = 0; r < E_NUM_REGS; r++)
       {
-        ULONGEST tmp = frame_unwind_register_unsigned(frame, r);
+        ULONGEST tmp;
+        //frame_read_unsigned_register (frame, r, &tmp);
+        regcache_cooked_read_unsigned(get_current_regcache(), r, &tmp);
         switch (r)
         {
         case E_PC_REGNUM:
@@ -825,20 +818,23 @@ static CORE_ADDR
 msp430_read_pc (struct regcache *regcache)
 {
   ULONGEST pc;
-  regcache_cooked_read_unsigned (regcache, E_PC_REGNUM, &pc);
+  regcache_cooked_read_unsigned(regcache, E_PC_REGNUM, &pc);
+
   return pc;
 }
 
 static void
-msp430_write_pc (struct regcache *regcache, CORE_ADDR val)
+msp430_write_pc (struct regcache *regcache, CORE_ADDR pc)
 {
-  regcache_cooked_write_unsigned (regcache, E_PC_REGNUM, val);
+  regcache_cooked_write_unsigned(regcache, E_PC_REGNUM, pc);
 }
 
 static CORE_ADDR
 msp430_unwind_sp (struct gdbarch *gdbarch, struct frame_info *next_frame)
 {
-  return frame_unwind_register_unsigned(next_frame, E_SP_REGNUM);
+  ULONGEST sp;
+  sp=frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
+  return sp;
 }
 
 /* When arguments must be pushed onto the stack, they go on in reverse
@@ -878,7 +874,7 @@ pop_stack_item (struct stack_item *si)
 
 static CORE_ADDR
 msp430_push_dummy_call (struct gdbarch *gdbarch,
-                        struct value *function,
+                        struct value *func_addr,
                         struct regcache *regcache,
                         CORE_ADDR bp_addr,
                         int nargs,
@@ -909,8 +905,8 @@ msp430_push_dummy_call (struct gdbarch *gdbarch,
   for (i = 0; i < nargs; i++)
     {
       struct value *arg = args[i];
-      struct type *type = check_typedef (value_type(arg));
-      const char *contents = value_contents (arg);
+      struct type *type = check_typedef (value_type (arg));
+      const gdb_byte *contents = value_contents (arg);
       int len = TYPE_LENGTH (type);
       int aligned_regnum = (regnum + 1) & ~1;
 
@@ -962,11 +958,10 @@ msp430_push_dummy_call (struct gdbarch *gdbarch,
 
 /* Given a return value in `regbuf' with a type `valtype', 
    extract and copy its value into `valbuf'. */
-
 static void
 msp430_extract_return_value (struct type *type,
                              struct regcache *regcache,
-                             void *valbuf)
+                             gdb_byte *valbuf)
 {
   int len;
   if (TYPE_LENGTH (type) == 1)
@@ -1000,30 +995,20 @@ msp430_extract_return_value (struct type *type,
     }
 }
 
-enum return_value_convention
-msp430_return_value (struct gdbarch *gdbarch, struct type *valtype,
-		  struct regcache *regcache, gdb_byte *readbuf,
-		  const gdb_byte *writebuf)
+static enum return_value_convention
+msp430_return_value (struct gdbarch *gdbarch, struct type *type,
+                        struct regcache *regcache,
+                        gdb_byte *readbuf, const gdb_byte *writebuf)
 {
-  int struct_return = msp430_use_struct_convention(1, valtype);
-
-  if (writebuf != NULL)
-    {
-      gdb_assert (!struct_return);
-      error (_("Cannot store return value."));
-    }
-
-  if (readbuf != NULL)
-    {
-      gdb_assert (!struct_return);
-      msp430_extract_return_value (valtype, regcache, readbuf);
-    }
-
-  if (struct_return)
+  if (msp430_use_struct_convention (type))
     return RETURN_VALUE_STRUCT_CONVENTION;
-  else
-    return RETURN_VALUE_REGISTER_CONVENTION;
+  if (writebuf)
+    msp430_store_return_value (type, regcache, writebuf);
+  else if (readbuf)
+    msp430_extract_return_value (type, regcache, readbuf);
+  return RETURN_VALUE_REGISTER_CONVENTION;
 }
+
 
 /* Translate a GDB virtual ADDR/LEN into a format the remote target
    understands.  Returns number of bytes that can be transfered
@@ -1085,7 +1070,9 @@ mcu_info (char *args, int from_tty)
 static CORE_ADDR
 msp430_unwind_pc (struct gdbarch *gdbarch, struct frame_info *next_frame)
 {
-  return frame_unwind_register_unsigned (next_frame, E_PC_REGNUM);
+  ULONGEST pc;
+  pc=frame_unwind_register_unsigned (next_frame, E_PC_REGNUM);
+  return pc;
 }
 
 /* Given a GDB frame, determine the address of the calling function's
@@ -1236,23 +1223,28 @@ msp430_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
   set_gdbarch_return_value (gdbarch, msp430_return_value);
   set_gdbarch_print_insn (gdbarch, print_insn_msp430);
 
-  set_gdbarch_push_dummy_call (gdbarch, msp430_push_dummy_call);
-
   set_gdbarch_address_to_pointer (gdbarch, msp430_address_to_pointer);
   set_gdbarch_pointer_to_address (gdbarch, msp430_pointer_to_address);
   set_gdbarch_integer_to_address (gdbarch, msp430_integer_to_address);
 
-  //set_gdbarch_use_struct_convention (gdbarch, msp430_use_struct_convention);
+  /* set_gdbarch_use_struct_convention (gdbarch, msp430_use_struct_convention); */
 
   set_gdbarch_skip_prologue (gdbarch, msp430_skip_prologue);
   set_gdbarch_inner_than (gdbarch, core_addr_lessthan);
 
   set_gdbarch_decr_pc_after_break (gdbarch, 4);
+  
+  /* These values and methods are used when gdb calls a target function. */
+  set_gdbarch_push_dummy_call (gdbarch, msp430_push_dummy_call);
   set_gdbarch_breakpoint_from_pc (gdbarch, msp430_breakpoint_from_pc);
+  set_gdbarch_return_value (gdbarch, msp430_return_value);
+
+  /* set_gdbarch_function_start_offset (gdbarch, 0); */
 
   set_gdbarch_frame_args_skip (gdbarch, 0);
+  /* set_gdbarch_frameless_function_invocation (gdbarch, frameless_look_for_prologue); */
 
-  //set_gdbarch_store_return_value (gdbarch, msp430_store_return_value);
+  /*set_gdbarch_store_return_value (gdbarch, msp430_store_return_value);*/
 
   set_gdbarch_frame_align (gdbarch, msp430_frame_align);
 
@@ -1293,14 +1285,15 @@ _initialize_msp430_tdep (void)
             mcu_info,
             "Display info about the attached MCU.");
 
-  /*add_setshow_boolean_cmd ("releasejtag",
+  add_setshow_boolean_cmd ("releasejtag",
                            no_class,
                            &release_jtag_on_go,
                            "Set release JTAG pins on go.\n",
                            "Show release JTAG pins on go.\n",
+                           "Use on to set pins and off to release them... ahh I dont know really.\n",
                            NULL,
                            NULL,
                            &setlist,
-                           &showlist);*/
+                           &showlist);
   remote_timeout = 999999999;
 }

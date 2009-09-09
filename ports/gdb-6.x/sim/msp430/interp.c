@@ -1568,10 +1568,11 @@ int from_tty;
     /* figure the end of the bss section */
 #if 0
     printf ("bss section at 0x%08x for 0x%08x bytes\n",
-            (unsigned long) s_bss->vma , (unsigned long) s_bss->size);
+            (unsigned long) s_bss->vma , (unsigned long) s_bss->_cooked_size);
 #endif
-    heap_ptr = (unsigned long) s_bss->vma + (unsigned long) s_bss->size;
-
+#if 0
+    heap_ptr = (unsigned long) s_bss->vma + (unsigned long) s_bss->_cooked_size;
+#endif
     /* Clean up after ourselves.  */
     bfd_close (handle);
 
@@ -1619,6 +1620,10 @@ char ** env;
   if (s_data->flags & SEC_LOAD)
     {
       char *buffer;
+#if 0
+      // no longer available
+      bfd_size_type size = bfd_get_section_size_before_reloc (s_data);
+#endif
       bfd_size_type size = bfd_get_section_size (s_data);
       bfd_vma lma;
 

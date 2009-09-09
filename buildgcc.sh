@@ -186,6 +186,12 @@ if [ x"$GCC_VERSION" != x"" ]; then
 	tar xjf binutils-$BINUTILS_VERSION.tar.bz2
 
 	cd binutils-$BINUTILS_VERSION
+
+	if [ -e ../../binutils-$GCC_VERSION.patch ]
+	then
+		patch -p1 < ../../binutils-$GCC_VERSION.patch
+	fi
+
 	./configure --prefix=$TARGET_LOCATION --target=msp430 || exit 5
 	make || exit 6
 	$INSTALL_LAUNCHER make install || exit 7
