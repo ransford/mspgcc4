@@ -187,9 +187,9 @@ if [ x"$GCC_VERSION" != x"" ]; then
 
 	cd binutils-$BINUTILS_VERSION
 
-	if [ -e ../../binutils-$GCC_VERSION.patch ]
+	if [ -e ../../binutils-$BINUTILS_VERSION.patch ]
 	then
-		patch -p1 < ../../binutils-$GCC_VERSION.patch
+		patch -p1 < ../../binutils-$BINUTILS_VERSION.patch
 	fi
 
 	./configure --prefix=$TARGET_LOCATION --target=msp430 || exit 5
@@ -233,7 +233,7 @@ if [ x"$GCC_VERSION" != x"" ]; then
 	mkdir src/msp1
 	mkdir src/msp2
 	cd ../..
-	cat binutils-$BINUTILS_VERSION/gas/config/tc-msp430.c | perl ../fixprocs.pl 
+	#cat binutils-$BINUTILS_VERSION/gas/config/tc-msp430.c | perl ../fixprocs.pl 
 	cd mspgcc
 	cd msp430-libc/src
 	sed -e "s/\/usr\/local\/msp430/$TARGET_LOCATION_SED/" Makefile > Makefile.new
