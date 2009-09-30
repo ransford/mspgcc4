@@ -1,6 +1,6 @@
 diff -urN gcc-3.4/gcc/config/msp430/msp430.c gcc-3.4-new/gcc/config/msp430/msp430.c
 --- gcc-3.4/gcc/config/msp430/msp430.c	2006-01-30 09:44:49.000000000 +0100
-+++ gcc-3.4-new/gcc/config/msp430/msp430.c	2009-09-30 12:22:53.633515600 +0200
++++ gcc-3.4-new/gcc/config/msp430/msp430.c	2009-09-30 13:49:49.819431200 +0200
 @@ -122,6 +122,7 @@
  
  
@@ -9,6 +9,303 @@ diff -urN gcc-3.4/gcc/config/msp430/msp430.c gcc-3.4-new/gcc/config/msp430/msp43
  
  enum msp430_arch
  {
+@@ -134,14 +135,23 @@
+   MSP430_ISA_14 = 14,
+   MSP430_ISA_15 = 15,
+   MSP430_ISA_16 = 16,
+-  MSP430_ISA_210 = 210,
++  MSP430_ISA_20 = 20,
++  MSP430_ISA_21 = 21,
++  MSP430_ISA_22 = 22,
++  MSP430_ISA_23 = 23,
++  MSP430_ISA_24 = 24,
++  MSP430_ISA_241 = 241,
++  MSP430_ISA_26 = 26,
+   MSP430_ISA_31 = 31,
+   MSP430_ISA_32 = 32,
+   MSP430_ISA_33 = 33,
+   MSP430_ISA_41 = 41,
+   MSP430_ISA_42 = 42,
+   MSP430_ISA_43 = 43,
+-  MSP430_ISA_44 = 44
++  MSP430_ISA_44 = 44,
++  MSP430_ISA_46 = 46,
++  MSP430_ISA_47 = 47,
++  MSP430_ISA_54 = 54,
+ };
+ 
+ struct mcu_type_s
+@@ -152,101 +162,182 @@
+ };
+ 
+ static struct mcu_type_s msp430_mcu_types[] = {
+-  {"msp1", MSP430_ISA_1, 0},
+-  {"msp2", MSP430_ISA_2, 1},
++  /* generic types */
++  {"msp1",         MSP430_ISA_1, 0},
++  {"msp2",         MSP430_ISA_2, 1},
++
++  /* F1xx family */
++  {"msp430x110",   MSP430_ISA_11, 0},
++  {"msp430x112",   MSP430_ISA_11, 0},
++
++  {"msp430x1101",  MSP430_ISA_110, 0},
++  {"msp430x1111",  MSP430_ISA_110, 0},
++  {"msp430x1121",  MSP430_ISA_110, 0},
++  {"msp430x1122",  MSP430_ISA_110, 0},
++  {"msp430x1132",  MSP430_ISA_110, 0},
++
++  {"msp430x122",   MSP430_ISA_12, 0},
++  {"msp430x123",   MSP430_ISA_12, 0},
++  {"msp430x1222",  MSP430_ISA_12, 0},
++  {"msp430x1232",  MSP430_ISA_12, 0},
++
++  {"msp430x133",   MSP430_ISA_13, 0},
++  {"msp430x135",   MSP430_ISA_13, 0},
++  {"msp430x1331",  MSP430_ISA_13, 0},
++  {"msp430x1351",  MSP430_ISA_13, 0},
++
++  {"msp430x147",   MSP430_ISA_14, 1},
++  {"msp430x148",   MSP430_ISA_14, 1},
++  {"msp430x149",   MSP430_ISA_14, 1},
++  {"msp430x1471",  MSP430_ISA_14, 1},
++  {"msp430x1481",  MSP430_ISA_14, 1},
++  {"msp430x1491",  MSP430_ISA_14, 1},
++
++  {"msp430x155",   MSP430_ISA_15, 0},
++  {"msp430x156",   MSP430_ISA_15, 0},
++  {"msp430x157",   MSP430_ISA_15, 0},
++
++  {"msp430x167",   MSP430_ISA_16, 1},
++  {"msp430x168",   MSP430_ISA_16, 1},
++  {"msp430x169",   MSP430_ISA_16, 1},
++  {"msp430x1610",  MSP430_ISA_16, 1},
++  {"msp430x1611",  MSP430_ISA_16, 1},
++  {"msp430x1612",  MSP430_ISA_16, 1},
++
++  /* F2xx family */
++  {"msp430x2001",  MSP430_ISA_20, 0},
++  {"msp430x2011",  MSP430_ISA_20, 0},
+ 
+-  {"msp430x110", MSP430_ISA_11, 0},
+-  {"msp430x112", MSP430_ISA_11, 0},
++  {"msp430x2002",  MSP430_ISA_20, 0},
++  {"msp430x2012",  MSP430_ISA_20, 0},
+ 
+-  {"msp430x1101", MSP430_ISA_110, 0},
+-  {"msp430x1111", MSP430_ISA_110, 0},
+-  {"msp430x1121", MSP430_ISA_110, 0},
+-  {"msp430x1122", MSP430_ISA_110, 0},
+-  {"msp430x1132", MSP430_ISA_110, 0},
+-
+-  {"msp430x122", MSP430_ISA_12, 0},
+-  {"msp430x123", MSP430_ISA_12, 0},
+-  {"msp430x1222", MSP430_ISA_12, 0},
+-  {"msp430x1232", MSP430_ISA_12, 0},
+-
+-  {"msp430x133", MSP430_ISA_13, 0},
+-  {"msp430x135", MSP430_ISA_13, 0},
+-  {"msp430x1331", MSP430_ISA_13, 0},
+-  {"msp430x1351", MSP430_ISA_13, 0},
+-
+-  {"msp430x147", MSP430_ISA_14, 1},
+-  {"msp430x148", MSP430_ISA_14, 1},
+-  {"msp430x149", MSP430_ISA_14, 1},
+-  {"msp430x1471", MSP430_ISA_14, 1},
+-  {"msp430x1481", MSP430_ISA_14, 1},
+-  {"msp430x1491", MSP430_ISA_14, 1},
+-
+-  {"msp430x155", MSP430_ISA_15, 0},
+-  {"msp430x156", MSP430_ISA_15, 0},
+-  {"msp430x157", MSP430_ISA_15, 0},
+-
+-  {"msp430x167", MSP430_ISA_16, 1},
+-  {"msp430x168", MSP430_ISA_16, 1},
+-  {"msp430x169", MSP430_ISA_16, 1},
+-  {"msp430x1610", MSP430_ISA_16, 1},
+-  {"msp430x1611", MSP430_ISA_16, 1},
+-  {"msp430x1612", MSP430_ISA_16, 1},
+-
+-  {"msp430x2101", MSP430_ISA_210, 0},
+-  {"msp430x2111", MSP430_ISA_210, 0},
+-  {"msp430x2121", MSP430_ISA_210, 0},
+-  {"msp430x2131", MSP430_ISA_210, 0},
+-
+-  {"msp430x311", MSP430_ISA_31, 0},
+-  {"msp430x312", MSP430_ISA_31, 0},
+-  {"msp430x313", MSP430_ISA_31, 0},
+-  {"msp430x314", MSP430_ISA_31, 0},
+-  {"msp430x315", MSP430_ISA_31, 0},
+-
+-  {"msp430x323", MSP430_ISA_32, 0},
+-  {"msp430x325", MSP430_ISA_32, 0},
+-
+-  {"msp430x336", MSP430_ISA_33, 1},
+-  {"msp430x337", MSP430_ISA_33, 1},
+-
+-  {"msp430x412", MSP430_ISA_41, 0},
+-  {"msp430x413", MSP430_ISA_41, 0},
+-  {"msp430x415", MSP430_ISA_41, 0},
+-  {"msp430x417", MSP430_ISA_41, 0},
+-
+-  {"msp430x423", MSP430_ISA_42, 1},
+-  {"msp430x425", MSP430_ISA_42, 1},
+-  {"msp430x427", MSP430_ISA_42, 1},
+-
+-  {"msp430x4250", MSP430_ISA_42, 0},
+-  {"msp430x4260", MSP430_ISA_42, 0},
+-  {"msp430x4270", MSP430_ISA_42, 0},
+-
+-  {"msp430xE423", MSP430_ISA_42, 1},
+-  {"msp430xE425", MSP430_ISA_42, 1},
+-  {"msp430xE427", MSP430_ISA_42, 1},
+-
+-  {"msp430xW423", MSP430_ISA_42, 0},
+-  {"msp430xW425", MSP430_ISA_42, 0},
+-  {"msp430xW427", MSP430_ISA_42, 0},
+-
+-  {"msp430xG437", MSP430_ISA_43, 0},
+-  {"msp430xG438", MSP430_ISA_43, 0},
+-  {"msp430xG439", MSP430_ISA_43, 0},
+-
+-  {"msp430x435", MSP430_ISA_43, 0},
+-  {"msp430x436", MSP430_ISA_43, 0},
+-  {"msp430x437", MSP430_ISA_43, 0},
+-
+-  {"msp430x447", MSP430_ISA_44, 1},
+-  {"msp430x448", MSP430_ISA_44, 1},
+-  {"msp430x449", MSP430_ISA_44, 1},
++  {"msp430x2003",  MSP430_ISA_20, 0},
++  {"msp430x2013",  MSP430_ISA_20, 0},
++  
++  {"msp430x2101",  MSP430_ISA_21, 0},
++  {"msp430x2111",  MSP430_ISA_21, 0},
++  {"msp430x2121",  MSP430_ISA_21, 0},
++  {"msp430x2131",  MSP430_ISA_21, 0},
++
++  {"msp430x2112",  MSP430_ISA_22, 0},
++  {"msp430x2122",  MSP430_ISA_22, 0},
++  {"msp430x2132",  MSP430_ISA_22, 0},
++
++  {"msp430x2232",  MSP430_ISA_22, 0},
++  {"msp430x2252",  MSP430_ISA_22, 0},
++  {"msp430x2272",  MSP430_ISA_22, 0},
++
++  {"msp430x2234",  MSP430_ISA_22, 0},
++  {"msp430x2254",  MSP430_ISA_22, 0},
++  {"msp430x2274",  MSP430_ISA_22, 0},
++
++  {"msp430x233",   MSP430_ISA_23, 1},
++  {"msp430x235",   MSP430_ISA_23, 1},
++
++  {"msp430x2330",  MSP430_ISA_23, 1},
++  {"msp430x2350",  MSP430_ISA_23, 1},
++  {"msp430x2370",  MSP430_ISA_23, 1},
++
++  {"msp430x247",   MSP430_ISA_24, 1},
++  {"msp430x248",   MSP430_ISA_24, 1},
++  {"msp430x249",   MSP430_ISA_24, 1},
++  {"msp430x2410",  MSP430_ISA_24, 1},
++  {"msp430x2471",  MSP430_ISA_24, 1},
++  {"msp430x2481",  MSP430_ISA_24, 1},
++  {"msp430x2491",  MSP430_ISA_24, 1},
++
++  {"msp430x2416",  MSP430_ISA_241, 1},
++  {"msp430x2417",  MSP430_ISA_241, 1},
++  {"msp430x2418",  MSP430_ISA_241, 1},
++  {"msp430x2419",  MSP430_ISA_241, 1},
++
++  {"msp430x2616",  MSP430_ISA_26, 1},
++  {"msp430x2617",  MSP430_ISA_26, 1},
++  {"msp430x2618",  MSP430_ISA_26, 1},
++  {"msp430x2619",  MSP430_ISA_26, 1},
++
++  /* 3xx family (ROM) */
++  {"msp430x311",   MSP430_ISA_31, 0},
++  {"msp430x312",   MSP430_ISA_31, 0},
++  {"msp430x313",   MSP430_ISA_31, 0},
++  {"msp430x314",   MSP430_ISA_31, 0},
++  {"msp430x315",   MSP430_ISA_31, 0},
++
++  {"msp430x323",   MSP430_ISA_32, 0},
++  {"msp430x325",   MSP430_ISA_32, 0},
++
++  {"msp430x336",   MSP430_ISA_33, 1},
++  {"msp430x337",   MSP430_ISA_33, 1},
++
++  /* F4xx family */
++  {"msp430x412",   MSP430_ISA_41, 0},
++  {"msp430x413",   MSP430_ISA_41, 0},
++  {"msp430x415",   MSP430_ISA_41, 0},
++  {"msp430x417",   MSP430_ISA_41, 0},
++
++  {"msp430x423",   MSP430_ISA_42, 1},
++  {"msp430x425",   MSP430_ISA_42, 1},
++  {"msp430x427",   MSP430_ISA_42, 1},
++
++  {"msp430x4250",  MSP430_ISA_42, 0},
++  {"msp430x4260",  MSP430_ISA_42, 0},
++  {"msp430x4270",  MSP430_ISA_42, 0},
++
++  {"msp430xG4250", MSP430_ISA_42, 0},
++  {"msp430xG4260", MSP430_ISA_42, 0},
++  {"msp430xG4270", MSP430_ISA_42, 0},
++
++  {"msp430xE423",  MSP430_ISA_42, 1},
++  {"msp430xE425",  MSP430_ISA_42, 1},
++  {"msp430xE427",  MSP430_ISA_42, 1},
++
++  {"msp430xE4232", MSP430_ISA_42, 1},
++  {"msp430xE4242", MSP430_ISA_42, 1},
++  {"msp430xE4252", MSP430_ISA_42, 1},
++  {"msp430xE4272", MSP430_ISA_42, 1},
++
++  {"msp430xW423",  MSP430_ISA_42, 0},
++  {"msp430xW425",  MSP430_ISA_42, 0},
++  {"msp430xW427",  MSP430_ISA_42, 0},
++
++  {"msp430xG437",  MSP430_ISA_43, 0},
++  {"msp430xG438",  MSP430_ISA_43, 0},
++  {"msp430xG439",  MSP430_ISA_43, 0},
++
++  {"msp430x435",   MSP430_ISA_43, 0},
++  {"msp430x436",   MSP430_ISA_43, 0},
++  {"msp430x437",   MSP430_ISA_43, 0},
++
++  {"msp430x4351",  MSP430_ISA_43, 0},
++  {"msp430x4361",  MSP430_ISA_43, 0},
++  {"msp430x4371",  MSP430_ISA_43, 0},
++
++  {"msp430x447",   MSP430_ISA_44, 1},
++  {"msp430x448",   MSP430_ISA_44, 1},
++  {"msp430x449",   MSP430_ISA_44, 1},
++
++  {"msp430xG4616", MSP430_ISA_46, 1},
++  {"msp430xG4617", MSP430_ISA_46, 1},
++  {"msp430xG4618", MSP430_ISA_46, 1},
++  {"msp430xG4619", MSP430_ISA_46, 1},
++
++  {"msp430x4783",  MSP430_ISA_47, 1},
++  {"msp430x4784",  MSP430_ISA_47, 1},
++  {"msp430x4793",  MSP430_ISA_47, 1},
++  {"msp430x4794",  MSP430_ISA_47, 1},
++
++  /* F5xxx family */
++  {"msp430x5418",  MSP430_ISA_54, 1},
++  {"msp430x5419",  MSP430_ISA_54, 1},
++  {"msp430x5435",  MSP430_ISA_54, 1},
++  {"msp430x5436",  MSP430_ISA_54, 1},
++  {"msp430x5437",  MSP430_ISA_54, 1},
++  {"msp430x5438",  MSP430_ISA_54, 1},
+ 
+   {NULL, 0, 0}
+ };
+ 
+ 
+-
+ const struct attribute_spec msp430_attribute_table[];
+ static tree msp430_handle_fndecl_attribute
+ PARAMS ((tree *, tree, tree, int, bool *));
 diff -urN gcc-3.4/gcc/config/msp430/msp430.h gcc-3.4-new/gcc/config/msp430/msp430.h
 --- gcc-3.4/gcc/config/msp430/msp430.h	2006-01-30 09:44:49.000000000 +0100
 +++ gcc-3.4-new/gcc/config/msp430/msp430.h	2009-09-30 12:25:12.551759600 +0200
@@ -251,3 +548,92 @@ diff -urN gcc-3.4/gcc/config/msp430/msp430.h gcc-3.4-new/gcc/config/msp430/msp43
  
  #define LIB_SPEC "-lc"
  #define LIBGCC_SPEC "-lgcc"
+diff -urN gcc-3.4/gcc/config/msp430/t-msp430 gcc-3.4-new/gcc/config/msp430/t-msp430
+--- gcc-3.4/gcc/config/msp430/t-msp430	2006-01-30 09:44:49.000000000 +0100
++++ gcc-3.4-new/gcc/config/msp430/t-msp430	2009-09-30 13:48:00.922753600 +0200
+@@ -58,33 +58,59 @@
+ MULTILIB_DIRNAMES = msp1 msp2
+ 
+ MULTILIB_MATCHES = \
+-	mmcu?msp1=mmcu?msp430x110  mmcu?msp1=mmcu?msp430x112 \
+-	mmcu?msp1=mmcu?msp430x1101 mmcu?msp1=mmcu?msp430x1111 mmcu?msp1=mmcu?msp430x1121 \
+-	mmcu?msp1=mmcu?msp430x1122 mmcu?msp1=mmcu?msp430x1132 \
+-	mmcu?msp1=mmcu?msp430x122  mmcu?msp1=mmcu?msp430x123 \
+-	mmcu?msp1=mmcu?msp430x1222 mmcu?msp1=mmcu?msp430x1232 \
+-	mmcu?msp1=mmcu?msp430x133  mmcu?msp1=mmcu?msp430x135 \
+-	mmcu?msp1=mmcu?msp430x1331 mmcu?msp1=mmcu?msp430x1351 \
+-	mmcu?msp2=mmcu?msp430x147  mmcu?msp2=mmcu?msp430x148  mmcu?msp2=mmcu?msp430x149 \
+-	mmcu?msp2=mmcu?msp430x1471 mmcu?msp2=mmcu?msp430x1481 mmcu?msp2=mmcu?msp430x1491 \
+-	mmcu?msp1=mmcu?msp430x155  mmcu?msp1=mmcu?msp430x156  mmcu?msp1=mmcu?msp430x157 \
+-	mmcu?msp2=mmcu?msp430x167  mmcu?msp2=mmcu?msp430x168  mmcu?msp2=mmcu?msp430x169 \
+-	mmcu?msp2=mmcu?msp430x1610 mmcu?msp2=mmcu?msp430x1611 mmcu?msp2=mmcu?msp430x1612 \
+-	mmcu?msp1=mmcu?msp430x2101 mmcu?msp1=mmcu?msp430x2111 mmcu?msp1=mmcu?msp430x2121 \
++	mmcu?msp1=mmcu?msp430x110   mmcu?msp1=mmcu?msp430x112 \
++	mmcu?msp1=mmcu?msp430x1101  mmcu?msp1=mmcu?msp430x1111  mmcu?msp1=mmcu?msp430x1121 \
++	mmcu?msp1=mmcu?msp430x1122  mmcu?msp1=mmcu?msp430x1132 \
++	mmcu?msp1=mmcu?msp430x122   mmcu?msp1=mmcu?msp430x123 \
++	mmcu?msp1=mmcu?msp430x1222  mmcu?msp1=mmcu?msp430x1232 \
++	mmcu?msp1=mmcu?msp430x133   mmcu?msp1=mmcu?msp430x135 \
++	mmcu?msp1=mmcu?msp430x1331  mmcu?msp1=mmcu?msp430x1351 \
++	mmcu?msp2=mmcu?msp430x147   mmcu?msp2=mmcu?msp430x148   mmcu?msp2=mmcu?msp430x149 \
++	mmcu?msp2=mmcu?msp430x1471  mmcu?msp2=mmcu?msp430x1481  mmcu?msp2=mmcu?msp430x1491 \
++	mmcu?msp1=mmcu?msp430x155   mmcu?msp1=mmcu?msp430x156   mmcu?msp1=mmcu?msp430x157 \
++	mmcu?msp2=mmcu?msp430x167   mmcu?msp2=mmcu?msp430x168   mmcu?msp2=mmcu?msp430x169 \
++	mmcu?msp2=mmcu?msp430x1610  mmcu?msp2=mmcu?msp430x1611  mmcu?msp2=mmcu?msp430x1612 \
++	mmcu?msp1=mmcu?msp430x2001  mmcu?msp1=mmcu?msp430x2011 \
++	mmcu?msp1=mmcu?msp430x2002  mmcu?msp1=mmcu?msp430x2012 \
++	mmcu?msp1=mmcu?msp430x2003  mmcu?msp1=mmcu?msp430x2013 \
++	mmcu?msp1=mmcu?msp430x2101  mmcu?msp1=mmcu?msp430x2111  mmcu?msp1=mmcu?msp430x2121 \
+ 	mmcu?msp1=mmcu?msp430x2131 \
+-	mmcu?msp1=mmcu?msp430x311  mmcu?msp1=mmcu?msp430x312  mmcu?msp1=mmcu?msp430x313 \
+-	mmcu?msp1=mmcu?msp430x314  mmcu?msp1=mmcu?msp430x315 \
+-	mmcu?msp1=mmcu?msp430x323  mmcu?msp1=mmcu?msp430x325 \
+-	mmcu?msp2=mmcu?msp430x336  mmcu?msp2=mmcu?msp430x337 \
+-	mmcu?msp1=mmcu?msp430x412  mmcu?msp1=mmcu?msp430x413 \
+-	mmcu?msp1=mmcu?msp430x415  mmcu?msp1=mmcu?msp430x417 \
+-	mmcu?msp2=mmcu?msp430x423  mmcu?msp2=mmcu?msp430x425  mmcu?msp2=mmcu?msp430x427 \
+-	mmcu?msp1=mmcu?msp430x4250 mmcu?msp1=mmcu?msp430x4260 mmcu?msp1=mmcu?msp430x4270 \
+-	mmcu?msp2=mmcu?msp430xE423 mmcu?msp2=mmcu?msp430xE425 mmcu?msp2=mmcu?msp430xE427 \
+-	mmcu?msp1=mmcu?msp430xW423 mmcu?msp1=mmcu?msp430xW425 mmcu?msp1=mmcu?msp430xW427 \
+-	mmcu?msp1=mmcu?msp430xG437 mmcu?msp1=mmcu?msp430xG438 mmcu?msp1=mmcu?msp430xG439 \
+-	mmcu?msp1=mmcu?msp430x435  mmcu?msp1=mmcu?msp430x436  mmcu?msp1=mmcu?msp430x437 \
+-	mmcu?msp2=mmcu?msp430x447  mmcu?msp2=mmcu?msp430x448  mmcu?msp2=mmcu?msp430x449
++	mmcu?msp1=mmcu?msp430x2112  mmcu?msp1=mmcu?msp430x2122 \
++	mmcu?msp1=mmcu?msp430x2232  mmcu?msp1=mmcu?msp430x2252  mmcu?msp1=mmcu?msp430x2272 \
++	mmcu?msp1=mmcu?msp430x2234  mmcu?msp1=mmcu?msp430x2254  mmcu?msp1=mmcu?msp430x2274 \
++	mmcu?msp2=mmcu?msp430x233   mmcu?msp2=mmcu?msp430x235 \
++	mmcu?msp2=mmcu?msp430x2330  mmcu?msp2=mmcu?msp430x2350  mmcu?msp2=mmcu?msp430x2370 \
++	mmcu?msp2=mmcu?msp430x247   mmcu?msp2=mmcu?msp430x248   mmcu?msp2=mmcu?msp430x249 \
++	mmcu?msp2=mmcu?msp430x2410 \
++	mmcu?msp2=mmcu?msp430x2471  mmcu?msp2=mmcu?msp430x2481  mmcu?msp2=mmcu?msp430x2491 \
++	mmcu?msp2=mmcu?msp430x2416  mmcu?msp2=mmcu?msp430x2417  mmcu?msp2=mmcu?msp430x2418 \
++	mmcu?msp2=mmcu?msp430x2419 \
++	mmcu?msp2=mmcu?msp430x2616  mmcu?msp2=mmcu?msp430x2617  mmcu?msp2=mmcu?msp430x2618 \
++	mmcu?msp2=mmcu?msp430x2619 \
++	mmcu?msp1=mmcu?msp430x311   mmcu?msp1=mmcu?msp430x312   mmcu?msp1=mmcu?msp430x313 \
++	mmcu?msp1=mmcu?msp430x314   mmcu?msp1=mmcu?msp430x315 \
++	mmcu?msp1=mmcu?msp430x323   mmcu?msp1=mmcu?msp430x325 \
++	mmcu?msp2=mmcu?msp430x336   mmcu?msp2=mmcu?msp430x337 \
++	mmcu?msp1=mmcu?msp430x412   mmcu?msp1=mmcu?msp430x413 \
++	mmcu?msp1=mmcu?msp430x415   mmcu?msp1=mmcu?msp430x417 \
++	mmcu?msp2=mmcu?msp430x423   mmcu?msp2=mmcu?msp430x425   mmcu?msp2=mmcu?msp430x427 \
++	mmcu?msp1=mmcu?msp430x4250  mmcu?msp1=mmcu?msp430x4260  mmcu?msp1=mmcu?msp430x4270 \
++	mmcu?msp1=mmcu?msp430xG4250 mmcu?msp1=mmcu?msp430xG4260 mmcu?msp1=mmcu?msp430xG4270 \
++	mmcu?msp2=mmcu?msp430xE423  mmcu?msp2=mmcu?msp430xE425  mmcu?msp2=mmcu?msp430xE427 \
++	mmcu?msp2=mmcu?msp430xE4232 mmcu?msp2=mmcu?msp430xE4242 mmcu?msp2=mmcu?msp430xE4252 \
++	mmcu?msp2=mmcu?msp430xE4272 \
++	mmcu?msp1=mmcu?msp430xW423  mmcu?msp1=mmcu?msp430xW425  mmcu?msp1=mmcu?msp430xW427 \
++	mmcu?msp1=mmcu?msp430xG437  mmcu?msp1=mmcu?msp430xG438  mmcu?msp1=mmcu?msp430xG439 \
++	mmcu?msp1=mmcu?msp430x435   mmcu?msp1=mmcu?msp430x436   mmcu?msp1=mmcu?msp430x437 \
++	mmcu?msp1=mmcu?msp430x4351  mmcu?msp1=mmcu?msp430x4361  mmcu?msp1=mmcu?msp430x4371 \
++	mmcu?msp2=mmcu?msp430x447   mmcu?msp2=mmcu?msp430x448   mmcu?msp2=mmcu?msp430x449 \
++	mmcu?msp2=mmcu?msp430xG4616 mmcu?msp2=mmcu?msp430xG4617 mmcu?msp2=mmcu?msp430xG4618 \
++	mmcu?msp2=mmcu?msp430xG4619 \
++	mmcu?msp2=mmcu?msp430x4783  mmcu?msp2=mmcu?msp430x4784  mmcu?msp2=mmcu?msp430x4793 \
++	mmcu?msp2=mmcu?msp430x4794 \
++	mmcu?msp2=mmcu?msp430x5418 mmcu?msp2=mmcu?msp430x5419 \
++	mmcu?msp2=mmcu?msp430x5435 mmcu?msp2=mmcu?msp430x5436 mmcu?msp2=mmcu?msp430x5437 \
++	mmcu?msp2=mmcu?msp430x5438
+ 
+ MULTILIB_EXCEPTIONS =
+ 
