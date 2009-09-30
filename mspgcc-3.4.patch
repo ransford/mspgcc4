@@ -1,6 +1,6 @@
 diff -urN gcc-3.4/gcc/config/msp430/msp430.c gcc-3.4-new/gcc/config/msp430/msp430.c
---- gcc-3.4/gcc/config/msp430/msp430.c	2006-01-30 11:44:49.000000000 +0300
-+++ gcc-3.4-new/gcc/config/msp430/msp430.c	2009-02-13 14:26:17.000000000 +0300
+--- gcc-3.4/gcc/config/msp430/msp430.c	2006-01-30 09:44:49.000000000 +0100
++++ gcc-3.4-new/gcc/config/msp430/msp430.c	2009-09-30 12:22:53.633515600 +0200
 @@ -122,6 +122,7 @@
  
  
@@ -10,8 +10,8 @@ diff -urN gcc-3.4/gcc/config/msp430/msp430.c gcc-3.4-new/gcc/config/msp430/msp43
  enum msp430_arch
  {
 diff -urN gcc-3.4/gcc/config/msp430/msp430.h gcc-3.4-new/gcc/config/msp430/msp430.h
---- gcc-3.4/gcc/config/msp430/msp430.h	2006-01-30 11:44:49.000000000 +0300
-+++ gcc-3.4-new/gcc/config/msp430/msp430.h	2009-02-13 15:08:55.000000000 +0300
+--- gcc-3.4/gcc/config/msp430/msp430.h	2006-01-30 09:44:49.000000000 +0100
++++ gcc-3.4-new/gcc/config/msp430/msp430.h	2009-09-30 12:25:12.551759600 +0200
 @@ -74,6 +74,7 @@
  extern const char *msp430_endup;
  extern const char *msp430_init_stack;
@@ -69,3 +69,185 @@ diff -urN gcc-3.4/gcc/config/msp430/msp430.h gcc-3.4-new/gcc/config/msp430/msp43
  	  fprintf (FILE, "%s", SIZE_ASM_OP);				  \
  	  assemble_name (FILE, NAME);					  \
  	  fprintf (FILE, ",%ld\n",  int_size_in_bytes (TREE_TYPE (DECL))); \
+@@ -779,10 +795,45 @@
+ %{mmcu=msp430x1610:%(cpp_msp2) -D__MSP430_1610__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430x1611:%(cpp_msp2) -D__MSP430_1611__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430x1612:%(cpp_msp2) -D__MSP430_1612__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2001:%(cpp_msp1) -D__MSP430_2001__} \
++%{mmcu=msp430x2011:%(cpp_msp1) -D__MSP430_2011__} \
++%{mmcu=msp430x2002:%(cpp_msp1) -D__MSP430_2002__} \
++%{mmcu=msp430x2012:%(cpp_msp1) -D__MSP430_2012__} \
++%{mmcu=msp430x2003:%(cpp_msp1) -D__MSP430_2003__} \
++%{mmcu=msp430x2013:%(cpp_msp1) -D__MSP430_2013__} \
+ %{mmcu=msp430x2101:%(cpp_msp1) -D__MSP430_2101__} \
+ %{mmcu=msp430x2111:%(cpp_msp1) -D__MSP430_2111__} \
+ %{mmcu=msp430x2121:%(cpp_msp1) -D__MSP430_2121__} \
+ %{mmcu=msp430x2131:%(cpp_msp1) -D__MSP430_2131__} \
++%{mmcu=msp430x2112:%(cpp_msp1) -D__MSP430_2112__} \
++%{mmcu=msp430x2122:%(cpp_msp1) -D__MSP430_2122__} \
++%{mmcu=msp430x2132:%(cpp_msp1) -D__MSP430_2132__} \
++%{mmcu=msp430x2232:%(cpp_msp1) -D__MSP430_2232__} \
++%{mmcu=msp430x2252:%(cpp_msp1) -D__MSP430_2252__} \
++%{mmcu=msp430x2272:%(cpp_msp1) -D__MSP430_2272__} \
++%{mmcu=msp430x2234:%(cpp_msp1) -D__MSP430_2234__} \
++%{mmcu=msp430x2254:%(cpp_msp1) -D__MSP430_2254__} \
++%{mmcu=msp430x2274:%(cpp_msp1) -D__MSP430_2274__} \
++%{mmcu=msp430x233:%(cpp_msp2) -D__MSP430_233__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x235:%(cpp_msp2) -D__MSP430_235__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2330:%(cpp_msp2) -D__MSP430_2330__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2350:%(cpp_msp2) -D__MSP430_2350__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2370:%(cpp_msp2) -D__MSP430_2370__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x247:%(cpp_msp2) -D__MSP430_247__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x248:%(cpp_msp2) -D__MSP430_248__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x249:%(cpp_msp2) -D__MSP430_249__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2410:%(cpp_msp2) -D__MSP430_2410__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2471:%(cpp_msp2) -D__MSP430_2471__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2481:%(cpp_msp2) -D__MSP430_2481__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2491:%(cpp_msp2) -D__MSP430_2491__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2416:%(cpp_msp2) -D__MSP430_2416__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2417:%(cpp_msp2) -D__MSP430_2417__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2418:%(cpp_msp2) -D__MSP430_2418__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2419:%(cpp_msp2) -D__MSP430_2419__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2616:%(cpp_msp2) -D__MSP430_2616__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2617:%(cpp_msp2) -D__MSP430_2617__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2618:%(cpp_msp2) -D__MSP430_2618__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x2619:%(cpp_msp2) -D__MSP430_2619__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430x311:%(cpp_msp1) -D__MSP430_311__} \
+ %{mmcu=msp430x312:%(cpp_msp1) -D__MSP430_312__} \
+ %{mmcu=msp430x313:%(cpp_msp1) -D__MSP430_313__} \
+@@ -802,9 +853,16 @@
+ %{mmcu=msp430x4250:%(cpp_msp1) -D__MSP430_4250__} \
+ %{mmcu=msp430x4260:%(cpp_msp1) -D__MSP430_4260__} \
+ %{mmcu=msp430x4270:%(cpp_msp1) -D__MSP430_4270__} \
++%{mmcu=msp430xG4250:%(cpp_msp1) -D__MSP430_G4250__} \
++%{mmcu=msp430xG4260:%(cpp_msp1) -D__MSP430_G4260__} \
++%{mmcu=msp430xG4270:%(cpp_msp1) -D__MSP430_G4270__} \
+ %{mmcu=msp430xE423:%(cpp_msp2) -D__MSP430_E423__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430xE425:%(cpp_msp2) -D__MSP430_E425__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430xE427:%(cpp_msp2) -D__MSP430_E427__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xE4232:%(cpp_msp2) -D__MSP430_E4232__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xE4242:%(cpp_msp2) -D__MSP430_E4242__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xE4252:%(cpp_msp2) -D__MSP430_E4252__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xE4272:%(cpp_msp2) -D__MSP430_E4272__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430xW423:%(cpp_msp1) -D__MSP430_W423__} \
+ %{mmcu=msp430xW425:%(cpp_msp1) -D__MSP430_W425__} \
+ %{mmcu=msp430xW427:%(cpp_msp1) -D__MSP430_W427__} \
+@@ -814,10 +872,30 @@
+ %{mmcu=msp430x435:%(cpp_msp1) -D__MSP430_435__} \
+ %{mmcu=msp430x436:%(cpp_msp1) -D__MSP430_436__} \
+ %{mmcu=msp430x437:%(cpp_msp1) -D__MSP430_437__} \
++%{mmcu=msp430x4351:%(cpp_msp1) -D__MSP430_4351__} \
++%{mmcu=msp430x4361:%(cpp_msp1) -D__MSP430_4361__} \
++%{mmcu=msp430x4371:%(cpp_msp1) -D__MSP430_4371__} \
+ %{mmcu=msp430x447:%(cpp_msp2) -D__MSP430_447__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430x448:%(cpp_msp2) -D__MSP430_448__ -DMSP430_HAS_HWMUL} \
+ %{mmcu=msp430x449:%(cpp_msp2) -D__MSP430_449__ -DMSP430_HAS_HWMUL} \
+-%{posix:-D_POSIX_SOURCE}"
++%{mmcu=msp430xG4616:%(cpp_msp2) -D__MSP430_G4616__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xG4617:%(cpp_msp2) -D__MSP430_G4617__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xG4618:%(cpp_msp2) -D__MSP430_G4618__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430xG4619:%(cpp_msp2) -D__MSP430_G4619__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x4783:%(cpp_msp2) -D__MSP430_4783__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x4784:%(cpp_msp2) -D__MSP430_4784__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x4793:%(cpp_msp2) -D__MSP430_4793__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x4794:%(cpp_msp2) -D__MSP430_4794__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5418:%(cpp_msp2) -D__MSP430_5418__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5419:%(cpp_msp2) -D__MSP430_5419__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5435:%(cpp_msp2) -D__MSP430_5435__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5436:%(cpp_msp2) -D__MSP430_5436__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5437:%(cpp_msp2) -D__MSP430_5437__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mmcu=msp430x5438:%(cpp_msp2) -D__MSP430_5438__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
++%{mint8:-D__SIZE_TYPE__=long\\ unsigned\\ int -D__PTRDIFF_TYPE__=long -D__INT_MAX__=127} \
++%{!mint*:-D__SIZE_TYPE__=unsigned\\ int -D__PTRDIFF_TYPE__=int -D__INT_MAX__=32767} \
++%{posix:-D_POSIX_SOURCE} %{mIAR:-D_IAR_ASSEMBLER_}"
++
+ 
+ #define NO_BUILTIN_SIZE_TYPE
+ #define NO_BUILTIN_PTRDIFF_TYPE
+@@ -865,10 +943,45 @@
+ %{mmcu=msp430x1610:-m msp430x1610 } \
+ %{mmcu=msp430x1611:-m msp430x1611 } \
+ %{mmcu=msp430x1612:-m msp430x1612 } \
++%{mmcu=msp430x2001:-m msp430x2001 } \
++%{mmcu=msp430x2011:-m msp430x2011 } \
++%{mmcu=msp430x2002:-m msp430x2002 } \
++%{mmcu=msp430x2012:-m msp430x2012 } \
++%{mmcu=msp430x2003:-m msp430x2003 } \
++%{mmcu=msp430x2013:-m msp430x2013 } \
+ %{mmcu=msp430x2101:-m msp430x2101 } \
+ %{mmcu=msp430x2111:-m msp430x2111 } \
+ %{mmcu=msp430x2121:-m msp430x2121 } \
+ %{mmcu=msp430x2131:-m msp430x2131 } \
++%{mmcu=msp430x2112:-m msp430x2112 } \
++%{mmcu=msp430x2122:-m msp430x2122 } \
++%{mmcu=msp430x2132:-m msp430x2132 } \
++%{mmcu=msp430x2232:-m msp430x2232 } \
++%{mmcu=msp430x2252:-m msp430x2252 } \
++%{mmcu=msp430x2272:-m msp430x2272 } \
++%{mmcu=msp430x2234:-m msp430x2234 } \
++%{mmcu=msp430x2254:-m msp430x2254 } \
++%{mmcu=msp430x2274:-m msp430x2274 } \
++%{mmcu=msp430x233:-m msp430x233 } \
++%{mmcu=msp430x235:-m msp430x235 } \
++%{mmcu=msp430x2330:-m msp430x2330 } \
++%{mmcu=msp430x2350:-m msp430x2350 } \
++%{mmcu=msp430x2370:-m msp430x2370 } \
++%{mmcu=msp430x247:-m msp430x247 } \
++%{mmcu=msp430x248:-m msp430x248 } \
++%{mmcu=msp430x249:-m msp430x249 } \
++%{mmcu=msp430x2410:-m msp430x2410 } \
++%{mmcu=msp430x2471:-m msp430x2471 } \
++%{mmcu=msp430x2481:-m msp430x2481 } \
++%{mmcu=msp430x2491:-m msp430x2491 } \
++%{mmcu=msp430x2416:-m msp430x2416 } \
++%{mmcu=msp430x2417:-m msp430x2417 } \
++%{mmcu=msp430x2418:-m msp430x2418 } \
++%{mmcu=msp430x2419:-m msp430x2419 } \
++%{mmcu=msp430x2616:-m msp430x2616 } \
++%{mmcu=msp430x2617:-m msp430x2617 } \
++%{mmcu=msp430x2618:-m msp430x2618 } \
++%{mmcu=msp430x2619:-m msp430x2619 } \
+ %{mmcu=msp430x311:-m msp430x311 } \
+ %{mmcu=msp430x312:-m msp430x312 } \
+ %{mmcu=msp430x313:-m msp430x313 } \
+@@ -888,9 +1001,16 @@
+ %{mmcu=msp430x4250:-m msp430x4250 } \
+ %{mmcu=msp430x4260:-m msp430x4260 } \
+ %{mmcu=msp430x4270:-m msp430x4270 } \
++%{mmcu=msp430xG4250:-m msp430xG4250 } \
++%{mmcu=msp430xG4260:-m msp430xG4260 } \
++%{mmcu=msp430xG4270:-m msp430xG4270 } \
+ %{mmcu=msp430xE423:-m msp430xE423 } \
+ %{mmcu=msp430xE425:-m msp430xE425 } \
+ %{mmcu=msp430xE427:-m msp430xE427 } \
++%{mmcu=msp430xE4232:-m msp430xE4232 } \
++%{mmcu=msp430xE4242:-m msp430xE4242 } \
++%{mmcu=msp430xE4252:-m msp430xE4252 } \
++%{mmcu=msp430xE4272:-m msp430xE4272 } \
+ %{mmcu=msp430xW423:-m msp430xW423 } \
+ %{mmcu=msp430xW425:-m msp430xW425 } \
+ %{mmcu=msp430xW427:-m msp430xW427 } \
+@@ -902,7 +1022,22 @@
+ %{mmcu=msp430x437:-m msp430x437 } \
+ %{mmcu=msp430x447:-m msp430x447 } \
+ %{mmcu=msp430x448:-m msp430x448 } \
+-%{mmcu=msp430x449:-m msp430x449 }"
++%{mmcu=msp430x449:-m msp430x449 } \
++%{mmcu=msp430xG4616:-m msp430xG4616 } \
++%{mmcu=msp430xG4617:-m msp430xG4617 } \
++%{mmcu=msp430xG4618:-m msp430xG4618 } \
++%{mmcu=msp430xG4619:-m msp430xG4619 } \
++%{mmcu=msp430x4783:-m msp430x4783 } \
++%{mmcu=msp430x4784:-m msp430x4784 } \
++%{mmcu=msp430x4793:-m msp430x4793 } \
++%{mmcu=msp430x4794:-m msp430x4794 } \
++%{mmcu=msp430x5418:-m msp430x5418 } \
++%{mmcu=msp430x5419:-m msp430x5419 } \
++%{mmcu=msp430x5435:-m msp430x5435 } \
++%{mmcu=msp430x5436:-m msp430x5436 } \
++%{mmcu=msp430x5437:-m msp430x5437 } \
++%{mmcu=msp430x5438:-m msp430x5438 } \
++"
+ 
+ #define LIB_SPEC "-lc"
+ #define LIBGCC_SPEC "-lgcc"
