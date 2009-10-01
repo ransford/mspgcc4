@@ -1,4 +1,9 @@
-/* Subroutines for insn-output.c for Texas Instruments MSP430 MCU
+/* This work is partially financed by the European Commission under the
+ * Framework 6 Information Society Technologies Project
+ * "Wirelessly Accessible Sensor Populations (WASP)".
+ */
+
+ /* Subroutines for insn-output.c for Texas Instruments MSP430 MCU
  Copyright (C) 2001, 2002 Free Software Foundation, Inc.
  Contributed by Dmitry Diky <diwil@mail.ru>
  

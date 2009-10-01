@@ -6,6 +6,10 @@
 ; This replaces the deprecated #define TARGET_SWITCHES syntax
 ; String options are defined similarily and replace the #define TARGET_OPTIONS syntax
 
+;; This work is partially financed by the European Commission under the
+;; Framework 6 Information Society Technologies Project
+;; "Wirelessly Accessible Sensor Populations (WASP)".
+
 mpgs
 Target Report Mask(PROF_STD)
 Add ordinary profile information

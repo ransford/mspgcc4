@@ -1,8 +1,17 @@
 #!/bin/bash
+
+# This work is partially financed by the European Commission under the
+# Framework 6 Information Society Technologies Project
+#  "Wirelessly Accessible Sensor Populations (WASP)".
+
 #The following versions of GCC have been tested:
 
 #3.2.3 (patch directory gcc-3.3)
 #3.3.6 (patch directory gcc-3.4, additional configure.in patch involved)
+#4.2.4
+#4.3.4
+
+
 
 DIALOG=`which dialog`
 if [ 0$DIALOG = 0 -a 0$1 != 0--defaults ]; then
@@ -28,28 +37,25 @@ GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
 
 if [ 0$1 != 0--defaults ]; then
 	$DIALOG --menu "Select GCC version to build" 12 50 5 1 "gcc-4.3.4" 2 "gcc-4.2.4" 3 "gcc-3.3.6" 4 "gcc-3.2.3" 5 "none" 2>/tmp/dialog.ans
-	if [ $? == 0 -a -e /tmp/dialog.ans ]; then
-		if [ `cat /tmp/dialog.ans` = 1 ]; then
+	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
+		case `cat /tmp/dialog.ans` in
+		1)
 			GCC_VERSION=4.3.4
 			GCC_PATCH_FOLDER=gcc-4.x
 			GMP_VERSION=4.3.1
-			MPFR_VERSION=2.4.1
-		fi
-		if [ `cat /tmp/dialog.ans` = 2 ]; then
+			MPFR_VERSION=2.4.1 ;;
+		2)
 			GCC_VERSION=4.2.4
-			GCC_PATCH_FOLDER=gcc-4.x
-		fi
-		if [ `cat /tmp/dialog.ans` = 3 ]; then
+			GCC_PATCH_FOLDER=gcc-4.x ;;
+		3)
 			GCC_VERSION=3.3.6
-			GCC_PATCH_FOLDER=gcc-3.4
-		fi
-		if [ `cat /tmp/dialog.ans` = 4 ]; then
+			GCC_PATCH_FOLDER=gcc-3.4 ;;
+		4)
 			GCC_VERSION=3.2.3
-			GCC_PATCH_FOLDER=gcc-3.3
-		fi
-		if [ `cat /tmp/dialog.ans` = 5 ]; then
-			GCC_VERSION=
-		fi
+			GCC_PATCH_FOLDER=gcc-3.3 ;;
+		5)
+			GCC_VERSION= ;;
+		esac
 		rm /tmp/dialog.ans
 		TARGET_LOCATION=/opt/msp430-gcc-$GCC_VERSION
 	else
@@ -58,23 +64,22 @@ if [ 0$1 != 0--defaults ]; then
 	fi
 	
 	$DIALOG --menu "Select GDB version to build" 10 50 3 1 "gdb-5.1.1" 2 "gdb-6.8" 3 "none" 2>/tmp/dialog.ans
-	if [ $? == 0 -a -e /tmp/dialog.ans ]; then
-		if [ `cat /tmp/dialog.ans` = 1 ]; then
+	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
+		case `cat /tmp/dialog.ans` in
+		1)
 			GDB_VERSION=5.1.1
 			GDB_SRC_URL=http://downloads.sourceforge.net/project/mspgcc4/gdb-5.1.1.tar.gz?use_mirror=master
 			GDB_PATCH_FOLDER=gdb-5.1.1
-			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
-		fi
-		if [ `cat /tmp/dialog.ans` = 2 ]; then
+			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION ;;
+		2)
 			GDB_VERSION=6.8
 			GDB_PATCH_FOLDER=gdb-6.x
 			GDB_SRC_URL=ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$GDB_VERSION.tar.gz
-			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
-		fi
-		if [ `cat /tmp/dialog.ans` = 3 ]; then
+			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION ;;
+		3)
 			GDB_VERSION=
-			GDB_PACKAGE_SUFFIX=
-		fi
+			GDB_PACKAGE_SUFFIX= ;;
+		esac
 		rm /tmp/dialog.ans
 	else
 		echo Build cancelled
@@ -83,7 +88,7 @@ if [ 0$1 != 0--defaults ]; then
 
 
 	$DIALOG --inputbox "Enter target GCC toolchain path" 7 50 "$TARGET_LOCATION" 2>/tmp/dialog.ans
-	if [ $? == 0 -a -e /tmp/dialog.ans ]; then
+	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		TARGET_LOCATION=`cat /tmp/dialog.ans`
 		rm /tmp/dialog.ans
 	else
@@ -92,10 +97,10 @@ if [ 0$1 != 0--defaults ]; then
 	fi
 
 	$DIALOG --yesno "Create binary package after build?" 5 50
-	if [ $? == 0 ]; then
+	if [ $? = 0 ]; then
 		BINPACKAGE_NAME=mspgcc-$GCC_VERSION$GDB_PACKAGE_SUFFIX.tbz
 		$DIALOG --inputbox "Enter binary package name" 7 50 "$BINPACKAGE_NAME" 2>/tmp/dialog.ans
-		if [ $? == 0 -a -e /tmp/dialog.ans ]; then
+		if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 			BINPACKAGE_NAME=`cat /tmp/dialog.ans`
 			rm /tmp/dialog.ans
 		else
@@ -114,7 +119,7 @@ fi
 touch $TARGET_LOCATION/test.dat 2>/dev/null || NEED_SUDO=1
 rm $TARGET_LOCATION/test.dat 2> /dev/null || NEED_SUDO=1
 
-if [ $NEED_SUDO == 1 ]; then
+if [ $NEED_SUDO = 1 ]; then
 	echo WARNING! Cannot write to $TARGET_LOCATION!
 	echo Please ensure your account is mentioned in /etc/sudoers and that sudo is installed
 	echo All binary installation tasks will be invoked using sudo.

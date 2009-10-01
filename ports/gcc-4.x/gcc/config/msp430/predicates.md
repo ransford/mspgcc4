@@ -18,6 +18,10 @@
 ;; the Free Software Foundation, 51 Franklin Street, Fifth Floor,
 ;; Boston, MA 02110-1301, USA.
 
+;; This work is partially financed by the European Commission under the
+;; Framework 6 Information Society Technologies Project
+;; "Wirelessly Accessible Sensor Populations (WASP)".
+
 ;; <==== Comment by Ivan Shcherbakov ====>
 ;; All predicates here were checked againist latest port of GCC 3.2.3
 (define_special_predicate "equality_operator"

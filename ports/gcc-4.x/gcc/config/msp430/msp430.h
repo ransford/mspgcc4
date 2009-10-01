@@ -1,3 +1,7 @@
+/* This work is partially financed by the European Commission under the
+ * Framework 6 Information Society Technologies Project
+ * "Wirelessly Accessible Sensor Populations (WASP)".
+ */
 
 /* Definitions of target machine for GNU compiler,
    for Texas Instruments MSP430 microcontrollers.
