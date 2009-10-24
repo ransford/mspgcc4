@@ -33,8 +33,6 @@ Boston, MA 02111-1307, USA.  */
 
 #include "_gccver.h"
 
-enum rtx_code;
-
 #define TARGET_CPU_CPP_BUILTINS()                       \
 do{							\
   builtin_define_std ("MSP430");			\
@@ -377,8 +375,6 @@ msp430_hard_regno_mode_ok(REGNO, MODE)
    If `HARD_REGNO_MODE_OK (R, MODE1)' and `HARD_REGNO_MODE_OK (R,
    MODE2)' are ever different for any R, then `MODES_TIEABLE_P (MODE1,
    MODE2)' must be zero.  */
-
-#define DWARF2_UNWIND_INFO 1
 
 
 enum reg_class {
@@ -1034,6 +1030,13 @@ typedef struct msp430_args {
    store anything in `CUMULATIVE_ARGS'; however, the data structure
    must exist and should not be empty, so use `int'.  */
 
+#define DWARF2_UNWIND_INFO 1
+
+#define INCOMING_RETURN_ADDR_RTX gen_rtx_MEM (VOIDmode, gen_rtx_REG (VOIDmode, STACK_POINTER_REGNUM))
+
+   
+   
+   
 #define INIT_CUMULATIVE_ARGS(CUM, FNTYPE, LIBNAME, FNDECL, N_NAMED_ARGS ) \
 init_cumulative_args (&(CUM), FNTYPE, LIBNAME, FNDECL)
 
@@ -1588,7 +1591,7 @@ GO_IF_LEGITIMATE_ADDRESS (MODE, X, WIN)
 
 #define TARGET_ASM_NAMED_SECTION default_elf_asm_named_section
 
-//#define EXTRA_SECTIONS in_bootloader, in_infomem
+/*#define EXTRA_SECTIONS in_bootloader, in_infomem*/
 /* A list of names for sections other than the standard two, which are
    `in_text' and `in_data'.  You need not define this macro on a
    system with no other sections (that GCC needs to use).  */
@@ -3021,4 +3024,6 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
+#ifdef RTX_CODE
 extern int default_rtx_costs (rtx X ATTRIBUTE_UNUSED, enum rtx_code code, enum rtx_code outer_code ATTRIBUTE_UNUSED);
+#endif
