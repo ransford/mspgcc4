@@ -378,7 +378,7 @@ msp430_hard_regno_mode_ok(REGNO, MODE)
    MODE2)' are ever different for any R, then `MODES_TIEABLE_P (MODE1,
    MODE2)' must be zero.  */
 
-
+#define DWARF2_UNWIND_INFO 1
 
 
 enum reg_class {
