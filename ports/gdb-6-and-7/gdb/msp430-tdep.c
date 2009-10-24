@@ -47,6 +47,12 @@
 
 #include "gdb_assert.h"
 
+#include "_gdbver.h"
+
+#if GDB_VERSION_INT < 0x700
+#define extract_unsigned_integer(a,b,c) extract_unsigned_integer(a,b)
+#endif
+
 #define NUM_REGS 16
 
 struct gdbarch_tdep
@@ -83,10 +89,13 @@ enum regnums
   E_R12_REGNUM,
   E_R13_REGNUM,
   E_R14_REGNUM,
-  E_R15_REGNUM, E_1ST_ARG_REGNUM = E_R15_REGNUM, E_PTR_RET_REGNUM = E_R15_REGNUM,
+  E_R15_REGNUM, E_PTR_RET_REGNUM = E_R15_REGNUM,
   E_NUM_REGS,
   /* msp430 calling convention. */
-  ARGN_REGNUM = E_R5_REGNUM,
+  E_FIRST_ARG_REG = E_R15_REGNUM,
+  E_LAST_ARG_REG = E_R14_REGNUM,
+  E_NEXT_ARG_REG_DELTA = -1,	//Register numbers decreases for every next argument
+  
   RET1_REGNUM = E_R15_REGNUM,
 };
 
@@ -172,10 +181,6 @@ static void msp430_prepare_to_trace (void);
 
 static void msp430_get_trace_data (void);
 
-static CORE_ADDR msp430_analyze_prologue (struct frame_info *fi,
-                                          CORE_ADDR pc,
-                                          int skip_prologue);
-
 static CORE_ADDR
 msp430_frame_align (struct gdbarch *gdbarch, CORE_ADDR sp)
 {
@@ -194,12 +199,19 @@ msp430_use_struct_convention (struct type *type)
 {
   long alignment;
   int i;
+  enum type_code code = TYPE_CODE (type);
+
   /* The msp430 only passes a struct in a register when that structure
      has an alignment that matches the size of a register. */
   /* If the structure doesn't fit in 4 registers, put it on the
      stack. */
   if (TYPE_LENGTH (type) > 8)
     return 1;
+
+  //If type is not a structure, it is passed through a register
+  if (code != TYPE_CODE_STRUCT)
+	  return 0;
+
   /* If the struct contains only one field, don't put it on the stack
      - gcc can fit it in one or more registers. */
   if (TYPE_NFIELDS (type) == 1)
@@ -250,8 +262,17 @@ msp430_register_name (struct gdbarch *gdbarch, int reg_nr)
 /* Return the GDB type object for the "standard" data type
    of data in register N. */
 
-static struct type *
-msp430_register_type (struct gdbarch *gdbarch, int reg_nr)
+#if GDB_VERSION_INT >= 0x700
+static struct type * msp430_register_type (struct gdbarch *gdbarch, int reg_nr)
+{
+  if (reg_nr == E_PC_REGNUM)
+    return builtin_type (gdbarch)->builtin_func_ptr;
+  if (reg_nr == E_SP_REGNUM || reg_nr == E_FP_REGNUM)
+    return builtin_type (gdbarch)->builtin_data_ptr;
+  return builtin_type (gdbarch)->builtin_int16;
+}
+#else
+static struct type * msp430_register_type (struct gdbarch *gdbarch, int reg_nr)
 {
   if (reg_nr == E_PC_REGNUM)
     return builtin_type_void_func_ptr;
@@ -259,18 +280,32 @@ msp430_register_type (struct gdbarch *gdbarch, int reg_nr)
     return builtin_type_void_data_ptr;
   return builtin_type_int16;
 }
+#endif
 
-static void
-msp430_address_to_pointer (struct type *type, gdb_byte *buf, CORE_ADDR addr)
+#if GDB_VERSION_INT >= 0x700
+static void msp430_address_to_pointer (struct gdbarch *gdbarch, struct type *type, gdb_byte *buf, CORE_ADDR addr)
+#else
+static void msp430_address_to_pointer (struct type *type, gdb_byte *buf, CORE_ADDR addr)
+#endif
 {
+#if GDB_VERSION_INT >= 0x700
+  enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
+  store_unsigned_integer (buf, TYPE_LENGTH (type), byte_order, addr);
+#else
   store_unsigned_integer (buf, TYPE_LENGTH (type), addr);
+#endif
 }
 
-static CORE_ADDR
-msp430_pointer_to_address (struct type *type, const gdb_byte *buf)
+#if GDB_VERSION_INT >= 0x700
+static CORE_ADDR msp430_pointer_to_address (struct gdbarch *gdbarch, struct type *type, const gdb_byte *buf)
+#else
+static CORE_ADDR msp430_pointer_to_address (struct type *type, const gdb_byte *buf)
+#endif
 {
-  CORE_ADDR addr = extract_unsigned_integer (buf, TYPE_LENGTH (type));
-  return addr;
+#if GDB_VERSION_INT >= 0x700
+  enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
+#endif
+  return extract_unsigned_integer (buf, TYPE_LENGTH (type), byte_order);
 }
 
 /* Don't do anything if we have an integer. This way users can type 'x
@@ -280,7 +315,8 @@ msp430_pointer_to_address (struct type *type, const gdb_byte *buf)
 static CORE_ADDR
 msp430_integer_to_address (struct gdbarch *gdbarch, struct type *type, const gdb_byte *buf)
 {
-  return (CORE_ADDR) extract_unsigned_integer (buf, TYPE_LENGTH (type));
+  enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
+  return extract_unsigned_integer (buf, TYPE_LENGTH (type), byte_order);
 }
 
 /* Write into appropriate registers a function return value
@@ -323,19 +359,34 @@ msp430_store_return_value (struct type *type,
     }
 }
 
+
 static int
-get_insn (CORE_ADDR pc)
+get_insn (CORE_ADDR pc, struct gdbarch *gdbarch)
 {
   char buf[4];
-  int status = read_memory_nobpt (0xfffful & pc, buf, 2);
+  enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
 
+#if GDB_VERSION_INT >= 0x700
+  read_memory(0xfffful & pc, buf, 2);
+#else
+  int status = read_memory_nobpt (0xfffful & pc, buf, 2);
   if (status != 0)
     return 0;
-  return extract_unsigned_integer (buf, 2);
+#endif
+	
+  return extract_unsigned_integer (buf, 2, byte_order);
 }
 
-static CORE_ADDR
-msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
+typedef struct _parsed_prologue
+{
+	int valid;
+	int saved_register_block_size;
+	int locals_block_size;
+	int register_offsets[NUM_REGS];
+	int flags;
+} parsed_prologue;
+
+static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, parsed_prologue *parsed)
 {
   CORE_ADDR func_addr, func_end, addr, stop;
   CORE_ADDR stack_size;
@@ -346,7 +397,7 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
   int flags;
   int framesize;
   int register_offsets[NUM_REGS];
-  int ro;
+  int pushed_reg_count = 0;
   char *name;
   int vpc = 0;
   CORE_ADDR start_addr ;
@@ -370,7 +421,7 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
   /* At the start of a function, our frame is in the stack pointer. */
   flags = MY_FRAME_IN_SP;
   /* Get the first insn from memory (all msp430 instructions are 16 bits) */
-  insn = get_insn (pc);
+  insn = get_insn (pc, gdbarch);
 
   if (func_addr)
     pc = func_addr;
@@ -401,20 +452,20 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
   if (name && strcmp ("main", name) == 0)
   {
     start_addr = func_addr;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
 
     if (insn == init_sp)
     {
       /* ok... will be a frame pointer adjustment? */
       vpc += 2;
-      insn = get_insn(pc + vpc);
+      insn = get_insn(pc + vpc, gdbarch);
       vpc += 2;        /* skip this and value.*/
       start_addr = func_addr + vpc;
     }
     else if (insn == sub_val)        /* -mno-stack-init */
     {
       vpc += 2;
-      insn = get_insn(pc + vpc);
+      insn = get_insn(pc + vpc, gdbarch);
       vpc += 2;
       start_addr = func_addr + vpc;
     }
@@ -441,7 +492,7 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
       vpc += 2;
       start_addr = func_addr + vpc;
     }
-    insn = get_insn(pc + vpc);        /* check if fp being initialized */
+    insn = get_insn(pc + vpc, gdbarch);        /* check if fp being initialized */
     if (insn == load_fp)
     {
       vpc += 2;
@@ -450,46 +501,46 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
     }
     return start_addr;
   }
+
+  //Function is not "main()". Start analyzing prologue
     
   /* check eint 
      Actually, there is only way to check if this is an interrupt
      is to check eint - enable nested.
      Ordinary interrupts cannot be caught */
-  insn = get_insn(pc + vpc);
+  insn = get_insn(pc + vpc, gdbarch);
   if (insn == eint)
     vpc += 2;
     
   /* check pushes */
-  i = 4;
-  ro = 0;
   for (i = 15;  i >= 2;  i--)
   {
     int rn;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
     if ((insn & 0xfff0) != push_rn)
       break;
     rn  = insn & 15;
     vpc += 2;
-    ro++;
-    register_offsets[rn] = ro*2;
+    pushed_reg_count++;
+    register_offsets[rn] = pushed_reg_count*2;	//Offset from beginning of the frame [0 = return value]
   }
     
   /* now check if there is an arg pointer */
-  insn = get_insn(pc + vpc);
+  insn = get_insn(pc + vpc, gdbarch);
   if (insn == load_ap)
   {
     vpc += 2;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
     if (insn == add_val)
     {
       vpc += 2; /* insn */
       vpc += 2; /* actual value */
-      insn = get_insn(pc + vpc);
+      insn = get_insn(pc + vpc, gdbarch);
     }
     else if (insn == add_2 || insn == add_4 || insn == add_8)
     {
       vpc += 2; 
-      insn = get_insn(pc + vpc);
+      insn = get_insn(pc + vpc, gdbarch);
     }
   }
     
@@ -498,27 +549,27 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
   if (insn == sub_val)
   {
     vpc += 2;
-    framesize = get_insn(pc + vpc);
+    framesize = get_insn(pc + vpc, gdbarch);
     vpc += 2;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
   }
   else if (insn == sub_2)
   {
     framesize = 2;
     vpc += 2;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
   }
   else if (insn == sub_4)
   {
     framesize = 4;
     vpc += 2;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
   }
   else if (insn == sub_8)
   {
     framesize = 8;
     vpc += 2;
-    insn = get_insn(pc + vpc);
+    insn = get_insn(pc + vpc, gdbarch);
   }
     
   /* check if fp loaded */
@@ -529,9 +580,40 @@ msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
     vpc += 2;
   }
 
+  if (parsed)
+  {
+	  parsed->valid = 1;
+	  memcpy(parsed->register_offsets, register_offsets, sizeof(parsed->register_offsets));
+	  parsed->flags = flags;
+	  parsed->locals_block_size = framesize;
+	  parsed->saved_register_block_size = pushed_reg_count * 2;
+  }
+
   /* Return addr of first non-prologue insn. */
   return func_addr + vpc;
 }
+
+static CORE_ADDR msp430_skip_prologue (struct gdbarch *gdbarch, CORE_ADDR pc)
+{
+	return msp430_scan_prologue(gdbarch, pc, NULL);
+}
+
+typedef int bool;
+static const int true = 1;
+static const int false = 0;
+
+typedef struct _msp430_global_cache	//Various global stuff. Used by IsValidCodePtr(), IsValidDataPtr()
+{
+	bool cache_valid;
+	ULONGEST min_code_ptr;
+	ULONGEST max_code_ptr;
+	ULONGEST min_data_ptr;
+	ULONGEST max_data_ptr;
+} msp430_global_cache;
+
+static bool ProvideValidGlobalCache(msp430_global_cache *pCache);
+static bool IsValidCodePtr(msp430_global_cache *pCache, ULONGEST ptr);
+static bool IsValidDataPtr(msp430_global_cache *pCache, ULONGEST ptr);
 
 struct msp430_unwind_cache
 {
@@ -540,7 +622,7 @@ struct msp430_unwind_cache
   CORE_ADDR prev_sp;
   /* The frame's base, optionally used by the high-level debug info. */
   CORE_ADDR base;
-  int size;
+  //int size;
   /* How far the SP and r4 (FP) have been offset from the start of
      the stack frame (as defined by the previous frame's stack
      pointer). */
@@ -549,8 +631,10 @@ struct msp430_unwind_cache
   int uses_frame;
   /* Table indicating the location of each and every register. */
   struct trad_frame_saved_reg *saved_regs;
+  msp430_global_cache global_cache;
 };
 
+#if 0
 static int
 prologue_find_regs (struct msp430_unwind_cache *info,
                     unsigned short op,
@@ -626,6 +710,7 @@ prologue_find_regs (struct msp430_unwind_cache *info,
 
   return 0;
 }
+#endif
 
 /* Put here the code to store, into fi->saved_regs, the addresses of
    the saved registers of frame described by FRAME_INFO.  This
@@ -634,126 +719,105 @@ prologue_find_regs (struct msp430_unwind_cache *info,
    for it IS the sp for the next frame. */
 
 static struct msp430_unwind_cache *
-msp430_frame_unwind_cache (struct frame_info *next_frame,
-                           void **this_prologue_cache)
+msp430_frame_unwind_cache (struct frame_info *associated_frame,
+						   void **this_prologue_cache)
 {
-  struct gdbarch *gdbarch = get_frame_arch (next_frame);
-  CORE_ADDR pc;
-  ULONGEST prev_sp;
-  ULONGEST this_base;
-  unsigned long op;
-  unsigned short op1;
-  unsigned short op2;
-  int i;
-  struct msp430_unwind_cache *info;
+	//Note that on GDB v7 associated_frame is the curent frame, while on gdb v6, it is the next frame
+#if GDB_VERSION_INT >= 0x700
+	struct frame_info *this_frame = associated_frame;
+#else
+	struct frame_info *next_frame = associated_frame;
+#endif
 
-  if ((*this_prologue_cache))
-    return (*this_prologue_cache);
+	const int TargetPointerSize = 2;
 
-  info = FRAME_OBSTACK_ZALLOC (struct msp430_unwind_cache);
-  (*this_prologue_cache) = info;
-  info->saved_regs = trad_frame_alloc_saved_regs (next_frame);
+	struct gdbarch *gdbarch = get_frame_arch (associated_frame);
+	parsed_prologue parsed = {0, };
+	/*CORE_ADDR pc;
+	ULONGEST prev_sp;
+	ULONGEST this_base;
+	int i;*/
 
-  info->size = 0;
-  info->sp_offset = 0;
+	ULONGEST this_pc, this_sp, sp_iter;
 
-  info->uses_frame = 0;
-  for (pc = frame_func_unwind (next_frame, NORMAL_FRAME);
-       pc > 0 && pc < frame_pc_unwind (next_frame);
-       pc += 4)
-    {
-      op = get_frame_memory_unsigned (next_frame, pc, 4);
-      if ((op & 0xC0000000) == 0xC0000000)
-        {
-          /* long instruction */
-          if ((op & 0x3FFF0000) == 0x01FF0000)
-            {
-              /* add3 sp,sp,n */
-              short n = op & 0xFFFF;
-              info->sp_offset += n;
-            }
-          else if ((op & 0x3F0F0000) == 0x340F0000)
-            {
-              /* st  rn, @(offset,sp) */
-              short offset = op & 0xFFFF;
-              short n = (op >> 20) & 0xF;
-              info->saved_regs[n].addr = info->sp_offset + offset;
-            }
-          else if ((op & 0x3F1F0000) == 0x350F0000)
-            {
-              /* st2w  rn, @(offset,sp) */
-              short offset = op & 0xFFFF;
-              short n = (op >> 20) & 0xF;
-              info->saved_regs[n + 0].addr = info->sp_offset + offset + 0;
-              info->saved_regs[n + 1].addr = info->sp_offset + offset + 2;
-            }
-          else
-            break;
-        }
-      else
-        {
-          /* short instructions */
-          if ((op & 0xC0000000) == 0x80000000)
-            {
-              op2 = (op & 0x3FFF8000) >> 15;
-              op1 = op & 0x7FFF;
-            }
-          else
-            {
-              op1 = (op & 0x3FFF8000) >> 15;
-              op2 = op & 0x7FFF;
-            }
-          if (!prologue_find_regs (info, op1, pc) 
-              || !prologue_find_regs (info, op2, pc))
-            break;
-        }
-    }
+	struct msp430_unwind_cache *info;
 
-  info->size = -info->sp_offset;
+	if ((*this_prologue_cache))
+		return (*this_prologue_cache);
 
-  /* Compute the previous frame's stack pointer (which is also the
-     frame's ID's stack address), and this frame's base pointer. */
-  if (info->uses_frame)
-    {
-      /* The SP was moved to the FP.  This indicates that a new frame
-         was created.  Get THIS frame's FP value by unwinding it from
-         the next frame. */
-      this_base=frame_unwind_register_unsigned (next_frame, E_FP_REGNUM);
-      /* The FP points at the last saved register.  Adjust the FP back
-         to before the first saved register giving the SP. */
-      prev_sp = this_base + info->size;
-    }
-  else
-    {
-      /* Assume that the FP is this frame's SP but with that pushed
-         stack space added back. */
-      this_base=frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
-      prev_sp = this_base + info->size;
-    }
+	info = FRAME_OBSTACK_ZALLOC (struct msp430_unwind_cache);
+	(*this_prologue_cache) = info;
+	info->saved_regs = trad_frame_alloc_saved_regs (associated_frame);
 
-  /* Convert that SP/BASE into real addresses. */
-  info->prev_sp = prev_sp;
-  info->base = this_base;
+	//info->size = 0;
+	info->sp_offset = 0;
+	info->uses_frame = 0;
 
-  /* Adjust all the saved registers so that they contain addresses and
-     not offsets. */
-  for (i = 0; i < NUM_REGS - 1; i++)
-    if (trad_frame_addr_p (info->saved_regs, i))
-      {
-        info->saved_regs[i].addr = (info->prev_sp + info->saved_regs[i].addr);
-      }
+	//Extract PC and SP (start of frame) for THIS frame.
 
-  /* The call instruction moves the caller's PC in the callee's LR.
-     Since this is an unwind, do the reverse.  Copy the location of LR
-     into PC (the address / regnum) so that a request for PC will be
-     converted into a request for the LR. */
-  //info->saved_regs[E_PC_REGNUM] = info->saved_regs[LR_REGNUM];
+#if GDB_VERSION_INT >= 0x700
+	this_sp = get_frame_sp (this_frame);
+	this_pc = get_frame_pc (this_frame);
+#else
+	this_sp = frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
+	this_pc = frame_unwind_register_unsigned (next_frame, E_PC_REGNUM);
+#endif
 
-  /* The previous frame's SP needed to be computed.  Save the computed
-     value. */
-  trad_frame_set_value (info->saved_regs, E_SP_REGNUM, prev_sp);
+	if (!this_sp || !this_pc)
+		return info;	//Cannot extract any useful frame information
 
-  return info;
+	if (!ProvideValidGlobalCache(&info->global_cache))
+		return info;
+
+	msp430_scan_prologue(gdbarch, this_pc, &parsed);
+	if (parsed.valid)
+	{
+		ULONGEST saved_return_ptr = this_sp + parsed.locals_block_size + parsed.saved_register_block_size;
+		ULONGEST retptr = get_frame_memory_unsigned (associated_frame, saved_return_ptr, TargetPointerSize);
+		if (IsValidCodePtr(&info->global_cache, retptr))
+		{
+			int i;
+			info->prev_sp = saved_return_ptr + TargetPointerSize;
+			info->base = saved_return_ptr;
+			
+			//Read and save pushed register values, discovered by msp430_scan_prologue()
+			for (i = 0; i < (sizeof(parsed.register_offsets)/sizeof(parsed.register_offsets[0])); i++)
+			{
+				ULONGEST saved_reg_addr, reg_val;
+				if ((i == E_PC_REGNUM) || (i == E_SP_REGNUM))
+					continue;
+				if (parsed.register_offsets[i] == -1)
+					continue;
+
+				saved_reg_addr = info->base - parsed.register_offsets[i];
+				reg_val = get_frame_memory_unsigned(associated_frame, saved_reg_addr, TargetPointerSize);
+
+				trad_frame_set_value (info->saved_regs, i, reg_val);
+			}
+
+			trad_frame_set_value (info->saved_regs, E_PC_REGNUM, retptr);
+			trad_frame_set_value (info->saved_regs, E_SP_REGNUM, info->prev_sp);
+			return info;
+		}
+		//If the saved return address is not valid, the frame was detected incorrectly. Use generic frame scanning then.
+	}
+
+	//We failed to rebuild frame structure based on function prologue. Just scan the stack for the next valid code address and assume it is a return address.
+
+	for (sp_iter = this_sp; sp_iter <= info->global_cache.max_data_ptr; sp_iter += TargetPointerSize)	//Traverse stack towards the top
+	{
+		ULONGEST ptr = get_frame_memory_unsigned (associated_frame, sp_iter, TargetPointerSize);
+		if (IsValidCodePtr(&info->global_cache, ptr))	//If a valid pointer was found on stack, assume it is the return pointer
+		{
+			trad_frame_set_value (info->saved_regs, E_PC_REGNUM, ptr);
+			info->prev_sp = sp_iter + TargetPointerSize;
+			trad_frame_set_value (info->saved_regs, E_SP_REGNUM, info->prev_sp);
+			info->base = sp_iter;
+			return info;
+		}		
+	}
+
+	return info;
 }
 
 static void
@@ -763,8 +827,7 @@ msp430_print_registers_info (struct gdbarch *gdbarch,
                              int regnum,
                              int all)
 {
-  struct gdbarch_tdep *tdep = gdbarch_tdep (gdbarch);
-  if (regnum >= 0)
+  if ((regnum >= 0) && gdbarch)
     {
       default_print_registers_info (gdbarch, file, frame, regnum, all);
       return;
@@ -773,9 +836,8 @@ msp430_print_registers_info (struct gdbarch *gdbarch,
     int r;
     for (r = 0; r < E_NUM_REGS; r++)
       {
-        ULONGEST tmp;
-        //frame_read_unsigned_register (frame, r, &tmp);
-        regcache_cooked_read_unsigned(get_current_regcache(), r, &tmp);
+        ULONGEST tmp = get_frame_register_unsigned(frame, r);
+        //regcache_cooked_read_unsigned(get_current_regcache(), r, &tmp);
         switch (r)
         {
         case E_PC_REGNUM:
@@ -807,7 +869,7 @@ msp430_print_registers_info (struct gdbarch *gdbarch,
 static void
 show_regs (char *args, int from_tty)
 {
-  msp430_print_registers_info (current_gdbarch,
+  msp430_print_registers_info (get_frame_arch(get_current_frame()),
                                gdb_stdout,
                                get_current_frame (),
                                -1,
@@ -874,101 +936,127 @@ pop_stack_item (struct stack_item *si)
 
 static CORE_ADDR
 msp430_push_dummy_call (struct gdbarch *gdbarch,
-                        struct value *func_addr,
-                        struct regcache *regcache,
-                        CORE_ADDR bp_addr,
-                        int nargs,
-                        struct value **args,
-                        CORE_ADDR sp,
-                        int struct_return,
-                        CORE_ADDR struct_addr)
+						struct value *func_addr,
+						struct regcache *regcache,
+						CORE_ADDR bp_addr,
+						int nargs,
+						struct value **args,
+						CORE_ADDR sp,
+						int struct_return,
+						CORE_ADDR struct_addr)
 {
-  int i;
-  int regnum = E_1ST_ARG_REGNUM;
-  struct stack_item *si = NULL;
-  long val;
+	int i;
+	int regnum = E_FIRST_ARG_REG;
+	struct stack_item *si = NULL;
+	long val;
+	enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
 
-  /* Set the return address.  For the msp430, the return breakpoint is
-     always at BP_ADDR. */
-  //regcache_cooked_write_unsigned (regcache, LR_REGNUM, bp_addr);
+	/* Set the return address.  For the msp430, the return breakpoint is
+	always at BP_ADDR. */
+	//regcache_cooked_write_unsigned (regcache, LR_REGNUM, bp_addr);
 
-  /* If STRUCT_RETURN is true, then the struct return address (in
-     STRUCT_ADDR) will consume the first argument-passing register.
-     Both adjust the register count and store that value. */
-  if (struct_return)
-    {
-      regcache_cooked_write_unsigned (regcache, regnum, struct_addr);
-      regnum++;
-    }
+	/* If STRUCT_RETURN is true, then the struct return address (in
+	STRUCT_ADDR) will consume the first argument-passing register.
+	Both adjust the register count and store that value. */
+	if (struct_return)
+	{
+		regcache_cooked_write_unsigned (regcache, regnum, struct_addr);
+		regnum++;
+	}
 
-  /* Fill in registers and arg lists */
-  for (i = 0; i < nargs; i++)
-    {
-      struct value *arg = args[i];
-      struct type *type = check_typedef (value_type (arg));
-      const gdb_byte *contents = value_contents (arg);
-      int len = TYPE_LENGTH (type);
-      int aligned_regnum = (regnum + 1) & ~1;
+	/* Fill in registers and arg lists */
+	for (i = 0; i < nargs; i++)
+	{
+		struct value *arg = args[i];
+		struct type *type = check_typedef (value_type (arg));
+		const gdb_byte *contents = value_contents (arg);
+		int len = TYPE_LENGTH (type);
 
-      /* printf ("push: type=%d len=%d\n", TYPE_CODE (type), len); */
-      if (len <= 2  &&  regnum <= ARGN_REGNUM)
-        /* fits in a single register, do not align */
-        {
-          val = extract_unsigned_integer (contents, len);
-          regcache_cooked_write_unsigned (regcache, regnum++, val);
-        }
-      else if (len <= (ARGN_REGNUM - aligned_regnum + 1)*2)
-        /* value fits in remaining registers, store keeping left
-           aligned */
-        {
-          int b;
-          regnum = aligned_regnum;
-          for (b = 0; b < (len & ~1); b += 2)
-            {
-              val = extract_unsigned_integer (&contents[b], 2);
-              regcache_cooked_write_unsigned (regcache, regnum++, val);
-            }
-          if (b < len)
-            {
-              val = extract_unsigned_integer (&contents[b], 1);
-              regcache_cooked_write_unsigned (regcache, regnum++, (val << 8));
-            }
-        }
-      else
-        {
-          /* arg will go onto stack */
-          regnum = ARGN_REGNUM + 1;
-          si = push_stack_item (si, contents, len);
-        }
-    }
+		/* printf ("push: type=%d len=%d\n", TYPE_CODE (type), len); */
+		if (len <= 2  &&  (regnum != E_LAST_ARG_REG))
+			/* fits in a single register, do not align */
+		{
+			val = extract_unsigned_integer (contents, len, byte_order);
+			regcache_cooked_write_unsigned (regcache, regnum, val);
+			regnum += E_NEXT_ARG_REG_DELTA;
+		}
+		else 
+		{
+			int regs_remaining;
+			static char invalid_e_last_reg[(E_LAST_ARG_REG & 1) == 0];	//Last register should be aligned by 2. Otherwise, the following code will fail horribly.
+			
+			if (regnum & 0x01)
+				regnum += E_NEXT_ARG_REG_DELTA;
 
-  while (si)
-    {
-      sp = (sp - si->len) & ~1;
-      write_memory (sp, si->data, si->len);
-      si = pop_stack_item (si);
-    }
+			if (E_NEXT_ARG_REG_DELTA > 0)
+				regs_remaining = (E_LAST_ARG_REG - regnum) + 1;
+			else
+				regs_remaining = (regnum - E_LAST_ARG_REG) + 1;
 
-  /* Finally, update the SP register. */
-  regcache_cooked_write_unsigned (regcache, E_SP_REGNUM, sp);
+			if (len <= regs_remaining)
+				/* value fits in remaining registers, store keeping left
+				aligned */
+			{
+				int b;
+				for (b = 0; b < (len & ~1); b += 2)
+				{
+					val = extract_unsigned_integer (&contents[b], 2, byte_order);
+					regcache_cooked_write_unsigned (regcache, regnum++, val);
+				}
+				if (b < len)
+				{
+					val = extract_unsigned_integer (&contents[b], 1, byte_order);
+					regcache_cooked_write_unsigned (regcache, regnum++, (val << 8));
+				}
+			}
+			else
+			{
+				/* arg will go onto stack */
+				regnum = E_LAST_ARG_REG;
+				si = push_stack_item (si, contents, len);
+			}
+		}
+	}
 
-  return sp;
+	while (si)
+	{
+		sp = (sp - si->len) & ~1;
+		write_memory (sp, si->data, si->len);
+		si = pop_stack_item (si);
+	}
+
+	//Push return address
+	sp -= 2;
+	write_memory (sp, (gdb_byte *)&bp_addr, 2);
+
+	/* Finally, update the SP register. */
+	regcache_cooked_write_unsigned (regcache, E_SP_REGNUM, sp);
+
+	//The SP value returned here is used to verify the dummy frame after the function has exited.
+	//When the function returns, it pops the return address from the stack. Thus, the SP value will
+	//be greater by sizeof(void *).
+	return sp + 2;
 }
 
 
 /* Given a return value in `regbuf' with a type `valtype', 
    extract and copy its value into `valbuf'. */
-static void
-msp430_extract_return_value (struct type *type,
-                             struct regcache *regcache,
-                             gdb_byte *valbuf)
+static void msp430_extract_return_value (struct type *type, struct regcache *regcache, gdb_byte *valbuf)
 {
+#if GDB_VERSION_INT >= 0x700
+  struct gdbarch *gdbarch = get_regcache_arch (regcache);
+  enum bfd_endian byte_order = gdbarch_byte_order (gdbarch);
+#endif
   int len;
   if (TYPE_LENGTH (type) == 1)
     {
       ULONGEST c;
       regcache_cooked_read_unsigned (regcache, RET1_REGNUM, &c);
+#if GDB_VERSION_INT >= 0x700
+      store_unsigned_integer (valbuf, 1, byte_order, c);
+#else
       store_unsigned_integer (valbuf, 1, c);
+#endif
     }
   else
     {
@@ -981,7 +1069,7 @@ msp430_extract_return_value (struct type *type,
       int off = 0;
       if (TYPE_LENGTH (type) & 1)
         {
-          regcache_cooked_read_part (regcache, RET1_REGNUM, 1, 1,
+          regcache_cooked_read_part (regcache, reg, 1, 1,
                                      (bfd_byte *)valbuf + off);
           off++;
           reg++;
@@ -989,23 +1077,29 @@ msp430_extract_return_value (struct type *type,
       /* Transfer the remaining registers. */
       for (; off < TYPE_LENGTH (type); reg++, off += 2)
         {
-          regcache_cooked_read (regcache, RET1_REGNUM + reg,
+          regcache_cooked_read (regcache, reg,
                                 (bfd_byte *) valbuf + off);
         }
     }
 }
 
 static enum return_value_convention
-msp430_return_value (struct gdbarch *gdbarch, struct type *type,
+#if GDB_VERSION_INT < 0x700
+msp430_return_value (struct gdbarch *gdbarch, struct type *valtype,
                         struct regcache *regcache,
                         gdb_byte *readbuf, const gdb_byte *writebuf)
+#else
+msp430_return_value (struct gdbarch *gdbarch, struct type *func_type,
+		  struct type *valtype, struct regcache *regcache,
+		  gdb_byte *readbuf, const gdb_byte *writebuf)
+#endif
 {
-  if (msp430_use_struct_convention (type))
+  if (msp430_use_struct_convention (valtype))
     return RETURN_VALUE_STRUCT_CONVENTION;
   if (writebuf)
-    msp430_store_return_value (type, regcache, writebuf);
+    msp430_store_return_value (valtype, regcache, writebuf);
   else if (readbuf)
-    msp430_extract_return_value (type, regcache, readbuf);
+    msp430_extract_return_value (valtype, regcache, readbuf);
   return RETURN_VALUE_REGISTER_CONVENTION;
 }
 
@@ -1078,8 +1172,32 @@ msp430_unwind_pc (struct gdbarch *gdbarch, struct frame_info *next_frame)
 /* Given a GDB frame, determine the address of the calling function's
    frame.  This will be used to create a new GDB frame struct. */
 
-static void
-msp430_frame_this_id (struct frame_info *next_frame,
+#if GDB_VERSION_INT >= 0x700
+static void msp430_frame_this_id (struct frame_info *this_frame,
+                      void **this_prologue_cache,
+                      struct frame_id *this_id)
+{
+  struct msp430_unwind_cache *info
+    = msp430_frame_unwind_cache (this_frame, this_prologue_cache);
+  CORE_ADDR base;
+  CORE_ADDR func;
+  struct frame_id id;
+
+  /* The FUNC is easy. */
+  func = get_frame_func (this_frame);
+
+  /* Hopefully the prologue analysis either correctly determined the
+     frame's base (which is the SP from the previous frame), or set
+     that base to "NULL".  */
+  base = info->prev_sp;
+  if (base == 0)
+    return;
+
+  id = frame_id_build (base, func);
+  (*this_id) = id;
+}
+#else
+static void msp430_frame_this_id (struct frame_info *next_frame,
                       void **this_prologue_cache,
                       struct frame_id *this_id)
 {
@@ -1112,27 +1230,45 @@ msp430_frame_this_id (struct frame_info *next_frame,
 
   (*this_id) = id;
 }
+#endif
 
+#if GDB_VERSION_INT < 0x700
 static void
-msp430_frame_prev_register (struct frame_info *next_frame,
+#else
+static struct value *
+#endif
+msp430_frame_prev_register (struct frame_info *associated_frame,
                             void **this_prologue_cache,
-                            int regnum,
+                            int regnum
+							
+#if GDB_VERSION_INT < 0x700
+							,
                             int *optimizedp,
                             enum lval_type *lvalp,
                             CORE_ADDR *addrp,
                             int *realnump,
-                            gdb_byte *bufferp)
+                            gdb_byte *bufferp
+#endif
+							
+							)
 {
   struct msp430_unwind_cache *info
-    = msp430_frame_unwind_cache (next_frame, this_prologue_cache);
-  trad_frame_get_prev_register (next_frame, info->saved_regs, regnum,
-                            optimizedp, lvalp, addrp, realnump, bufferp);
+    = msp430_frame_unwind_cache (associated_frame, this_prologue_cache);
+  return trad_frame_get_prev_register (associated_frame, info->saved_regs, regnum
+#if GDB_VERSION_INT < 0x700
+							, optimizedp, lvalp, addrp, realnump, bufferp
+#endif
+							);
 }
 
 static const struct frame_unwind msp430_frame_unwind = {
   NORMAL_FRAME,
   msp430_frame_this_id,
-  msp430_frame_prev_register
+  msp430_frame_prev_register,
+#if GDB_VERSION_INT >= 0x700
+  NULL,
+  default_frame_sniffer,
+#endif
 };
 
 static const struct frame_unwind *
@@ -1142,10 +1278,9 @@ msp430_frame_sniffer (struct frame_info *next_frame)
 }
 
 static CORE_ADDR
-msp430_frame_base_address (struct frame_info *next_frame, void **this_cache)
+msp430_frame_base_address (struct frame_info *associated_frame, void **this_cache)
 {
-  struct msp430_unwind_cache *info
-    = msp430_frame_unwind_cache (next_frame, this_cache);
+  struct msp430_unwind_cache *info = msp430_frame_unwind_cache (associated_frame, this_cache);
   return info->base;
 }
 
@@ -1161,12 +1296,25 @@ static const struct frame_base msp430_frame_base = {
    saved by save_dummy_frame_tos(), and the PC match the dummy frame's
    breakpoint. */
 
+  
+#if GDB_VERSION_INT < 0x700
 static struct frame_id
 msp430_unwind_dummy_id (struct gdbarch *gdbarch, struct frame_info *next_frame)
 {
   return frame_id_build (msp430_unwind_sp (gdbarch, next_frame),
                          frame_pc_unwind (next_frame));
 }
+#else
+
+static struct frame_id
+msp430_dummy_id (struct gdbarch *gdbarch, struct frame_info *this_frame)
+{
+  ULONGEST base;
+  base = get_frame_register_unsigned (this_frame, E_SP_REGNUM);
+  return frame_id_build (base, get_frame_pc (this_frame));
+}
+
+#endif
 
 static gdbarch_init_ftype msp430_gdbarch_init;
 
@@ -1250,13 +1398,22 @@ msp430_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
 
   set_gdbarch_print_registers_info (gdbarch, msp430_print_registers_info);
 
+#if GDB_VERSION_INT >= 0x700
+  frame_unwind_append_unwinder (gdbarch, &msp430_frame_unwind);
+#else
   frame_unwind_append_sniffer (gdbarch, msp430_frame_sniffer);
+#endif
+
   frame_base_set_default (gdbarch, &msp430_frame_base);
 
   /* Methods for saving / extracting a dummy frame's ID.  The ID's
      stack address must match the SP value returned by
      PUSH_DUMMY_CALL, and saved by generic_save_dummy_frame_tos. */
+#if GDB_VERSION_INT >= 0x700
+  set_gdbarch_dummy_id (gdbarch, msp430_dummy_id);
+#else
   set_gdbarch_unwind_dummy_id (gdbarch, msp430_unwind_dummy_id);
+#endif
 
   set_gdbarch_unwind_pc (gdbarch, msp430_unwind_pc);
 
@@ -1296,4 +1453,50 @@ _initialize_msp430_tdep (void)
                            &setlist,
                            &showlist);
   remote_timeout = 999999999;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+
+bool ProvideValidGlobalCache(msp430_global_cache *pCache)
+{
+	struct minimal_symbol *pSym = NULL;
+
+	if (pCache->cache_valid)
+		return true;
+	pSym = lookup_minimal_symbol ("__data_start", NULL, NULL);
+	if (!pSym)
+		return false;
+	pCache->min_data_ptr = pSym->ginfo.value.address;
+
+	pSym = lookup_minimal_symbol ("__stack", NULL, NULL);
+	if (!pSym)
+		return false;
+	pCache->max_data_ptr = pSym->ginfo.value.address - 1;
+
+	pSym = lookup_minimal_symbol ("__dtors_end", NULL, NULL);
+	if (!pSym)
+		return false;
+	pCache->min_code_ptr = pSym->ginfo.value.address;
+
+	pSym = lookup_minimal_symbol ("_etext", NULL, NULL);
+	if (!pSym)
+		return false;
+	pCache->max_code_ptr= pSym->ginfo.value.address - 1;
+
+	pCache->cache_valid = true;
+	return true;
+}
+
+bool IsValidCodePtr(msp430_global_cache *pCache, ULONGEST ptr)
+{
+	if (!ProvideValidGlobalCache(pCache))
+		return false;
+	return (ptr >= pCache->min_code_ptr) && (ptr <= pCache->max_code_ptr);
+}
+
+bool IsValidDataPtr(msp430_global_cache *pCache, ULONGEST ptr)
+{
+	if (!ProvideValidGlobalCache(pCache))
+		return false;
+	return (ptr >= pCache->min_data_ptr) && (ptr <= pCache->max_data_ptr);
 }

@@ -10,7 +10,7 @@
 #3.3.6 (patch directory gcc-3.4, additional configure.in patch involved)
 #4.2.4
 #4.3.4
-
+#4.4.2
 
 
 DIALOG=`which dialog`
@@ -20,7 +20,7 @@ if [ 0$DIALOG = 0 -a 0$1 != 0--defaults ]; then
 fi
 
 #Defaults
-GCC_VERSION=4.3.4
+GCC_VERSION=4.4.2
 GCC_PATCH_FOLDER=gcc-4.x
 GMP_VERSION=4.3.1
 MPFR_VERSION=2.4.1
@@ -30,30 +30,35 @@ BINUTILS_VERSION=2.19.1
 GNU_MIRROR=ftp.uni-kl.de
 BINPACKAGE_NAME=
 
-GDB_VERSION=6.8
-GDB_PATCH_FOLDER=gdb-6.x
-GDB_SRC_URL=ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$GDB_VERSION.tar.gz
-GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION
+GDB_VERSION=7.0
+INSIGHT_VERSION=6.8-1
+
+BASEDIR=`pwd`
 
 if [ 0$1 != 0--defaults ]; then
-	$DIALOG --menu "Select GCC version to build" 12 50 5 1 "gcc-4.3.4" 2 "gcc-4.2.4" 3 "gcc-3.3.6" 4 "gcc-3.2.3" 5 "none" 2>/tmp/dialog.ans
+	$DIALOG --menu "Select GCC version to build" 13 50 6 1 "gcc-4.4.2" 2 "gcc-4.3.4" 3 "gcc-4.2.4" 4 "gcc-3.3.6" 5 "gcc-3.2.3" 6 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		case `cat /tmp/dialog.ans` in
 		1)
-			GCC_VERSION=4.3.4
+			GCC_VERSION=4.4.4
 			GCC_PATCH_FOLDER=gcc-4.x
 			GMP_VERSION=4.3.1
 			MPFR_VERSION=2.4.1 ;;
 		2)
+			GCC_VERSION=4.3.4
+			GCC_PATCH_FOLDER=gcc-4.x
+			GMP_VERSION=4.3.1
+			MPFR_VERSION=2.4.1 ;;
+		3)
 			GCC_VERSION=4.2.4
 			GCC_PATCH_FOLDER=gcc-4.x ;;
-		3)
+		4)
 			GCC_VERSION=3.3.6
 			GCC_PATCH_FOLDER=gcc-3.4 ;;
-		4)
+		5)
 			GCC_VERSION=3.2.3
 			GCC_PATCH_FOLDER=gcc-3.3 ;;
-		5)
+		6)
 			GCC_VERSION= ;;
 		esac
 		rm /tmp/dialog.ans
@@ -63,18 +68,14 @@ if [ 0$1 != 0--defaults ]; then
 		exit
 	fi
 	
-	$DIALOG --menu "Select GDB version to build" 10 50 3 1 "gdb-5.1.1" 2 "gdb-6.8" 3 "none" 2>/tmp/dialog.ans
+	$DIALOG --menu "Select GDB version to build" 10 50 3 1 "gdb-7.0" 2 "gdb-6.8" 3 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		case `cat /tmp/dialog.ans` in
 		1)
-			GDB_VERSION=5.1.1
-			GDB_SRC_URL=http://downloads.sourceforge.net/project/mspgcc4/gdb-5.1.1.tar.gz?use_mirror=master
-			GDB_PATCH_FOLDER=gdb-5.1.1
+			GDB_VERSION=7.0
 			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION ;;
 		2)
 			GDB_VERSION=6.8
-			GDB_PATCH_FOLDER=gdb-6.x
-			GDB_SRC_URL=ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$GDB_VERSION.tar.gz
 			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION ;;
 		3)
 			GDB_VERSION=
@@ -86,8 +87,21 @@ if [ 0$1 != 0--defaults ]; then
 		exit
 	fi
 
+	$DIALOG --menu "Select GNU Insight version to build" 10 50 3 1 "insight-6.8-1" 2 "none" 2>/tmp/dialog.ans
+	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
+		case `cat /tmp/dialog.ans` in
+		1)
+			INSIGHT_VERSION=6.8-1 ;;
+		2)
+			INSIGHT_VERSION= ;;
+		esac
+		rm /tmp/dialog.ans
+	else
+		echo Build cancelled
+		exit
+	fi
 
-	$DIALOG --inputbox "Enter target GCC toolchain path" 7 50 "$TARGET_LOCATION" 2>/tmp/dialog.ans
+	$DIALOG --inputbox "Enter target toolchain path" 7 50 "$TARGET_LOCATION" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		TARGET_LOCATION=`cat /tmp/dialog.ans`
 		rm /tmp/dialog.ans
@@ -110,31 +124,6 @@ if [ 0$1 != 0--defaults ]; then
 	fi
 fi
 
-INSTALL_LAUNCHER=
-
-NEED_SUDO=0
-if [ ! -e $TARGET_LOCATION ]; then
-	mkdir $TARGET_LOCATION 2> /dev/null || NEED_SUDO=1
-fi
-touch $TARGET_LOCATION/test.dat 2>/dev/null || NEED_SUDO=1
-rm $TARGET_LOCATION/test.dat 2> /dev/null || NEED_SUDO=1
-
-if [ $NEED_SUDO = 1 ]; then
-	echo WARNING! Cannot write to $TARGET_LOCATION!
-	echo Please ensure your account is mentioned in /etc/sudoers and that sudo is installed
-	echo All binary installation tasks will be invoked using sudo.
-	sudo sleep 0 || exit 1
-	
-	INSTALL_LAUNCHER=sudo
-
-	if [ ! -e $TARGET_LOCATION ]; then
-		$INSTALL_LAUNCHER mkdir $TARGET_LOCATION || exit 1
-	fi
-	$INSTALL_LAUNCHER touch $TARGET_LOCATION/test.dat || exit 1
-	$INSTALL_LAUNCHER rm $TARGET_LOCATION/test.dat || exit 1
-	
-fi
-
 echo ---------------------------------------------------------------
 echo Building GCC $GCC_VERSION
 echo GDB version: $GDB_VERSION
@@ -142,145 +131,20 @@ echo Target location: $TARGET_LOCATION
 echo Binary package name: $BINPACKAGE_NAME
 echo ---------------------------------------------------------------
 
-mkdir build
-cd build
-
-TARGET_LOCATION_SED=`echo $TARGET_LOCATION | sed -e "s/\//\\\\\\\\\//g"`
-BASEDIR=`pwd`
-
-export PATH=$PATH:$TARGET_LOCATION/bin
-
-echo !!! If prompted for a password, just press ENTER !!!
-if [ -e mspgcc ]
-then
-	rm -r mspgcc
-fi
-
-mkdir mspgcc
+BUILD_DIR=build
 
 if [ x"$GCC_VERSION" != x"" ]; then
-	cd mspgcc
-	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gcc || exit 2
+	bash do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
+	bash do-gcc.sh $TARGET_LOCATION $GCC_VERSION $GNU_MIRROR $BUILD_DIR $GCC_PATCH_FOLDER $GMP_VERSION $MPFR_VERSION || exit 1
+	bash do-libc.sh $TARGET_LOCATION || exit 1
+fi
 
-	if [ -e ../../ports/gcc-4.x ]
-	then
-		echo Copying gcc-4.x port
-		cp -r ../../ports/gcc-4.x gcc
-	fi
-
-	if [ -e ../../msp$GCC_PATCH_FOLDER.patch ]
-	then
-		cd gcc/$GCC_PATCH_FOLDER
-		patch -p1 < ../../../../msp$GCC_PATCH_FOLDER.patch
-		cd ../..
-	fi
-
-	cd ..
-	wget -c ftp://$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2 || exit 3
-	wget -c ftp://$GNU_MIRROR/pub/gnu/binutils/binutils-$BINUTILS_VERSION.tar.bz2 || exit 4
-
-	if [ x"$GMP_VERSION" != x"" ]; then
-		wget -c ftp://$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2 || exit 4
-	fi
-
-	if [ x"$MPFR_VERSION" != x"" ]; then
-		wget -c http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2 || exit 4
-	fi
-
-	echo Unpacking binutils...
-	tar xjf binutils-$BINUTILS_VERSION.tar.bz2
-
-	cd binutils-$BINUTILS_VERSION
-
-	if [ -e ../../binutils-$BINUTILS_VERSION.patch ]
-	then
-		patch -p1 < ../../binutils-$BINUTILS_VERSION.patch
-	fi
-
-	./configure --prefix=$TARGET_LOCATION --target=msp430 || exit 5
-	make || exit 6
-	$INSTALL_LAUNCHER make install || exit 7
-	cd ..
-
-	echo Unpacking GCC...
-	tar xjf gcc-$GCC_VERSION.tar.bz2
-
-	cd gcc-$GCC_VERSION
-
-	if [ -e ../../gcc-$GCC_VERSION.patch ]
-	then
-		patch -p1 < ../../gcc-$GCC_VERSION.patch
-	fi
-
-	if [ x"$GMP_VERSION" != x"" ]; then
-		tar xjf ../gmp-$GMP_VERSION.tar.bz2 || exit 1
-		mv gmp-$GMP_VERSION gmp || exit 1
-	fi
-
-	if [ x"$MPFR_VERSION" != x"" ]; then
-		tar xjf ../mpfr-$MPFR_VERSION.tar.bz2 || exit 1
-		mv mpfr-$MPFR_VERSION mpfr || exit 1
-	fi
-
-	cp -r ../mspgcc/gcc/$GCC_PATCH_FOLDER/* . || exit 8
-	cd ..
-	mkdir buildgcc-$GCC_VERSION
-	cd buildgcc-$GCC_VERSION
-	`pwd`/../gcc-$GCC_VERSION/configure --prefix=$TARGET_LOCATION --target=msp430 --enable-languages=c,c++ || exit 9
-	make || exit 10
-	$INSTALL_LAUNCHER make install || exit 11
-	cd ..
-
-	cd mspgcc
-	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P msp430-libc || exit 2
-	cd msp430-libc
-	test -e ../../../msp430-libc.patch && patch -p1 < ../../../msp430-libc.patch 
-	mkdir src/msp1
-	mkdir src/msp2
-	cd ../..
-	#cat binutils-$BINUTILS_VERSION/gas/config/tc-msp430.c | perl ../fixprocs.pl 
-	cd mspgcc
-	cd msp430-libc/src
-	sed -e "s/\/usr\/local\/msp430/$TARGET_LOCATION_SED/" Makefile > Makefile.new
-	mv Makefile.new Makefile
-	make
-	$INSTALL_LAUNCHER make install || exit 13
-
-	echo "!<arch>" > 0lib.tmp
-	$INSTALL_LAUNCHER cp 0lib.tmp $TARGET_LOCATION/lib/libstdc++.a || exit 1
-	rm 0lib.tmp
-	$INSTALL_LAUNCHER cp $TARGET_LOCATION/msp430/include/sys/inttypes.h $TARGET_LOCATION/msp430/include/inttypes.h  || exit 1
-
-	cd $TARGET_LOCATION/msp430/lib/ldscripts
-	$INSTALL_LAUNCHER tar xjf $BASEDIR/../ports/ldscripts-new.tbz || exit 14
-
-	cd $BASEDIR
+if [ 0$INSIGHT_VERSION != 0 ]; then
+	bash do-gdb.sh $TARGET_LOCATION $INSIGHT_VERSION $GNU_MIRROR $BUILD_DIR insight || exit 1
 fi
 
 if [ 0$GDB_VERSION != 0 ]; then
-	test -e mspgcc || mkdir mspgcc
-	cd mspgcc
-	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gdb || exit 1
-	cd gdb
-	
-	if [ -e ../../../ports/gdb-6.x ]
-	then
-		echo Copying gdb-6.x port
-		cp -r ../../../ports/gdb-6.x .
-	fi
-
-	test -e ../../../msp430-gdb6x.tbz && tar xjf ../../../msp430-gdb6x.tbz
-	cd ../..
-	wget -c $GDB_SRC_URL -O gdb-$GDB_VERSION.tar.gz || exit 1
-	echo Unpacking GDB...
-	tar xzf gdb-$GDB_VERSION.tar.gz || exit 1
-
-	cd gdb-$GDB_VERSION
-	cp -r ../mspgcc/gdb/$GDB_PATCH_FOLDER/* .
-	test -e ../../gdb-$GDB_VERSION.patch && patch -p1 < ../../gdb-$GDB_VERSION.patch
-	./configure --prefix=$TARGET_LOCATION --target=msp430 || exit 1
-	make || exit 1
-	$INSTALL_LAUNCHER make install || exit 1
+	bash do-gdb.sh $TARGET_LOCATION $GDB_VERSION $GNU_MIRROR $BUILD_DIR gdb || exit 1
 fi
 
 if [ 0$BINPACKAGE_NAME != 0 ]; then

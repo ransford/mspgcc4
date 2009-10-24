@@ -598,9 +598,9 @@ rtx mpy_rtx, mpys_rtx, mac_rtx, macs_rtx, op2_rtx, reslo_rtx, reshi_rtx,
 
 
 static char __dummy[1024];
+rtx sym_ref(enum machine_mode mode,  char *arg);
 
-rtx sym_ref(enum machine_mode mode,
-			const char *arg)
+rtx sym_ref(enum machine_mode mode,  char *arg)
 {
   rtx rt;
   static int i = 0;
@@ -614,6 +614,8 @@ rtx sym_ref(enum machine_mode mode,
   return rt;
 }
 
+
+rtx gen_rtx_HWREG(const char *name);
 
 rtx gen_rtx_HWREG(const char *name)
 {
@@ -2255,6 +2257,10 @@ msp430_hard_regno_mode_ok (regno, mode)
   return 1;
 }
 
+#if GCC_VERSION_INT >= 0x440
+#define current_function_calls_alloca cfun->calls_alloca
+#endif
+
 int
 frame_pointer_required_p ()
 {
@@ -2911,7 +2917,7 @@ final_prescan_insn (insn, operand, num_operands)
       fprintf (asm_out_file, "/*DEBUG: 0x%x\t\t%d\t%d */\n",
 	       INSN_ADDRESSES (uid),
 	       INSN_ADDRESSES (uid) - last_insn_address,
-	       rtx_cost (PATTERN (insn), INSN));
+	       rtx_cost (PATTERN (insn), INSN, !optimize_size));
     }
   last_insn_address = INSN_ADDRESSES (uid);
 }
@@ -10093,7 +10099,7 @@ msp430_expand_builtin(tree exp, rtx target ATTRIBUTE_UNUSED,
   i = DECL_FUNCTION_CODE (fndecl);
   code = msp430builtins[i].md_code;
 
-  pos = ggc_alloc(16+strlen(fnname)+1);
+  pos = (char*)ggc_alloc(16+strlen(fnname)+1);
   snprintf(pos,16+strlen(fnname)+1,".L__FrameOffset_%s",fnname);
   
   symb = gen_rtx_REG(HImode,1);

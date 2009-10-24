@@ -19,7 +19,7 @@
 ## COMMON_PRE_CONFIG_FRAG
 
 SIM_OBJS = interp.o sim-load.o
-SIM_EXTRA_LIBS = -lm
+SIM_EXTRA_LIBS = -lm -lz
 SIM_EXTRA_CLEAN = msp430-clean
 
 ## COMMON_POST_CONFIG_FRAG

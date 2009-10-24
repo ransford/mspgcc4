@@ -1,0 +1,50 @@
+diff -urN gcc-orig/configure gcc-new/configure
+--- gcc-orig/configure	2009-04-25 07:55:24.000000000 +0200
++++ gcc-new/configure	2009-08-23 16:32:08.250000000 +0200
+@@ -2279,6 +2279,9 @@
+   avr-*-*)
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
+     ;;
++  msp430-*-*)
++    noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
++    ;;
+   bfin-*-*)
+     noconfigdirs="$noconfigdirs gdb"
+     if test x${is_cross_compiler} != xno ; then
+diff -urN gcc-orig/gcc/config.gcc gcc-new/gcc/config.gcc
+--- gcc-orig/gcc/config.gcc	2009-04-07 03:15:38.000000000 +0200
++++ gcc-new/gcc/config.gcc	2009-08-23 16:33:05.671875000 +0200
+@@ -831,6 +831,10 @@
+ 	tm_file="avr/avr.h dbxelf.h"
+ 	use_fixproto=yes
+ 	;;
++msp430-*-*)
++	tm_file="msp430/msp430.h dbxelf.h"
++	use_fixproto=yes
++	;;
+ bfin*-elf*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
+ 	tmake_file=bfin/t-bfin-elf
+diff -urN gcc-orig/gcc/configure gcc-new/gcc/configure
+--- gcc-orig/gcc/configure	2008-08-01 11:51:04.000000000 +0200
++++ gcc-new/gcc/configure	2009-08-31 20:39:56.234375000 +0200
+@@ -1561,6 +1561,7 @@
+ 
+ 
+ gcc_version=`cat $srcdir/BASE-VER`
++echo $gcc_version | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GCC_VERSION_INT\ 0x\\1\\2\\3/g > $srcdir/_gccver.h
+ 
+ # Determine the host, build, and target systems
+ ac_aux_dir=
+diff -urN gcc-orig/libgcc/config.host gcc-new/libgcc/config.host
+--- gcc-orig/libgcc/config.host	2008-11-20 18:09:54.000000000 +0100
++++ gcc-new/libgcc/config.host	2009-08-29 16:53:04.906250000 +0200
+@@ -244,6 +244,8 @@
+ 	;;
+ avr-*-*)
+ 	;;
++msp430-*-*)
++	;;
+ bfin*-elf*)
+         ;;
+ bfin*-uclinux*)

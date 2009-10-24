@@ -1506,7 +1506,12 @@ GO_IF_LEGITIMATE_ADDRESS (MODE, X, WIN)
    between two registers, you should define this macro to express the
    relative cost.  */
 
+#if GCC_VERSION_INT >= 0x440
+#define BRANCH_COST(a,b) 0
+#else
 #define BRANCH_COST 0
+#endif
+
 /* A C expression for the cost of a branch instruction.  A value of 1
    is the default; other values are interpreted relative to that.
 

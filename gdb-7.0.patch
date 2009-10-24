@@ -1,7 +1,7 @@
-diff -urN gdb-6.8/bfd/archures.c gdb-6.8.new/bfd/archures.c
---- gdb-6.8/bfd/archures.c	2008-02-04 14:15:50.000000000 -0500
-+++ gdb-6.8.new/bfd/archures.c	2009-09-09 05:14:51.000000000 -0400
-@@ -380,7 +380,13 @@
+diff -urN gdb-7.0-orig/bfd/archures.c gdb-7.0/bfd/archures.c
+--- gdb-7.0-orig/bfd/archures.c	2009-10-24 07:05:15.000000000 -0400
++++ gdb-7.0/bfd/archures.c	2009-10-24 07:06:02.000000000 -0400
+@@ -398,7 +398,13 @@
  .#define bfd_mach_msp14          14
  .#define bfd_mach_msp15          15
  .#define bfd_mach_msp16          16
@@ -15,7 +15,7 @@ diff -urN gdb-6.8/bfd/archures.c gdb-6.8.new/bfd/archures.c
  .#define bfd_mach_msp31          31
  .#define bfd_mach_msp32          32
  .#define bfd_mach_msp33          33
-@@ -388,6 +394,9 @@
+@@ -406,6 +412,9 @@
  .#define bfd_mach_msp42          42
  .#define bfd_mach_msp43          43
  .#define bfd_mach_msp44          44
@@ -25,10 +25,10 @@ diff -urN gdb-6.8/bfd/archures.c gdb-6.8.new/bfd/archures.c
  .  bfd_arch_xc16x,     {* Infineon's XC16X Series.               *}
  .#define bfd_mach_xc16x         1
  .#define bfd_mach_xc16xl        2
-diff -urN gdb-6.8/bfd/bfd-in2.h gdb-6.8.new/bfd/bfd-in2.h
---- gdb-6.8/bfd/bfd-in2.h	2008-02-20 10:17:56.000000000 -0500
-+++ gdb-6.8.new/bfd/bfd-in2.h	2009-09-09 05:14:51.000000000 -0400
-@@ -2057,7 +2057,13 @@
+diff -urN gdb-7.0-orig/bfd/bfd-in2.h gdb-7.0/bfd/bfd-in2.h
+--- gdb-7.0-orig/bfd/bfd-in2.h	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/bfd/bfd-in2.h	2009-10-24 07:06:02.000000000 -0400
+@@ -2065,7 +2065,13 @@
  #define bfd_mach_msp14          14
  #define bfd_mach_msp15          15
  #define bfd_mach_msp16          16
@@ -42,7 +42,7 @@ diff -urN gdb-6.8/bfd/bfd-in2.h gdb-6.8.new/bfd/bfd-in2.h
  #define bfd_mach_msp31          31
  #define bfd_mach_msp32          32
  #define bfd_mach_msp33          33
-@@ -2065,6 +2071,9 @@
+@@ -2073,6 +2079,9 @@
  #define bfd_mach_msp42          42
  #define bfd_mach_msp43          43
  #define bfd_mach_msp44          44
@@ -52,7 +52,7 @@ diff -urN gdb-6.8/bfd/bfd-in2.h gdb-6.8.new/bfd/bfd-in2.h
    bfd_arch_xc16x,     /* Infineon's XC16X Series.               */
  #define bfd_mach_xc16x         1
  #define bfd_mach_xc16xl        2
-@@ -4324,6 +4333,25 @@
+@@ -4409,6 +4418,25 @@
    BFD_RELOC_MSP430_16_BYTE,
    BFD_RELOC_MSP430_2X_PCREL,
    BFD_RELOC_MSP430_RL_PCREL,
@@ -78,9 +78,9 @@ diff -urN gdb-6.8/bfd/bfd-in2.h gdb-6.8.new/bfd/bfd-in2.h
  
  /* IQ2000 Relocations.  */
    BFD_RELOC_IQ2000_OFFSET_16,
-diff -urN gdb-6.8/bfd/cpu-msp430.c gdb-6.8.new/bfd/cpu-msp430.c
---- gdb-6.8/bfd/cpu-msp430.c	2007-07-03 10:26:40.000000000 -0400
-+++ gdb-6.8.new/bfd/cpu-msp430.c	2009-09-09 05:14:51.000000000 -0400
+diff -urN gdb-7.0-orig/bfd/cpu-msp430.c gdb-7.0/bfd/cpu-msp430.c
+--- gdb-7.0-orig/bfd/cpu-msp430.c	2009-10-24 07:05:15.000000000 -0400
++++ gdb-7.0/bfd/cpu-msp430.c	2009-10-24 07:06:02.000000000 -0400
 @@ -65,29 +65,56 @@
    /* msp430x16x.  */
    N (16, bfd_mach_msp16, "msp:16", FALSE, & arch_info_struct[7]),
@@ -146,9 +146,9 @@ diff -urN gdb-6.8/bfd/cpu-msp430.c gdb-6.8.new/bfd/cpu-msp430.c
  };
  
  const bfd_arch_info_type bfd_msp430_arch =
-diff -urN gdb-6.8/bfd/elf32-msp430.c gdb-6.8.new/bfd/elf32-msp430.c
---- gdb-6.8/bfd/elf32-msp430.c	2007-09-28 04:43:45.000000000 -0400
-+++ gdb-6.8.new/bfd/elf32-msp430.c	2009-09-09 05:14:51.000000000 -0400
+diff -urN gdb-7.0-orig/bfd/elf32-msp430.c gdb-7.0/bfd/elf32-msp430.c
+--- gdb-7.0-orig/bfd/elf32-msp430.c	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/bfd/elf32-msp430.c	2009-10-24 07:06:02.000000000 -0400
 @@ -90,7 +90,7 @@
  	 0xffff,		/* dst_mask */
  	 FALSE),		/* pcrel_offset */
@@ -838,10 +838,10 @@ diff -urN gdb-6.8/bfd/elf32-msp430.c gdb-6.8.new/bfd/elf32-msp430.c
  	}
      }
  
-diff -urN gdb-6.8/bfd/libbfd.h gdb-6.8.new/bfd/libbfd.h
---- gdb-6.8/bfd/libbfd.h	2008-02-20 12:42:36.000000000 -0500
-+++ gdb-6.8.new/bfd/libbfd.h	2009-09-09 05:14:51.000000000 -0400
-@@ -1947,6 +1947,25 @@
+diff -urN gdb-7.0-orig/bfd/libbfd.h gdb-7.0/bfd/libbfd.h
+--- gdb-7.0-orig/bfd/libbfd.h	2009-10-24 07:05:15.000000000 -0400
++++ gdb-7.0/bfd/libbfd.h	2009-10-24 07:06:02.000000000 -0400
+@@ -2004,6 +2004,25 @@
    "BFD_RELOC_MSP430_16_BYTE",
    "BFD_RELOC_MSP430_2X_PCREL",
    "BFD_RELOC_MSP430_RL_PCREL",
@@ -867,10 +867,10 @@ diff -urN gdb-6.8/bfd/libbfd.h gdb-6.8.new/bfd/libbfd.h
    "BFD_RELOC_IQ2000_OFFSET_16",
    "BFD_RELOC_IQ2000_OFFSET_21",
    "BFD_RELOC_IQ2000_UHI16",
-diff -urN gdb-6.8/bfd/reloc.c gdb-6.8.new/bfd/reloc.c
---- gdb-6.8/bfd/reloc.c	2008-02-20 10:17:56.000000000 -0500
-+++ gdb-6.8.new/bfd/reloc.c	2009-09-09 05:14:51.000000000 -0400
-@@ -4864,6 +4864,44 @@
+diff -urN gdb-7.0-orig/bfd/reloc.c gdb-7.0/bfd/reloc.c
+--- gdb-7.0-orig/bfd/reloc.c	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/bfd/reloc.c	2009-10-24 07:06:02.000000000 -0400
+@@ -4993,6 +4993,44 @@
    BFD_RELOC_MSP430_2X_PCREL
  ENUMX
    BFD_RELOC_MSP430_RL_PCREL
@@ -915,10 +915,10 @@ diff -urN gdb-6.8/bfd/reloc.c gdb-6.8.new/bfd/reloc.c
  ENUMDOC
    msp430 specific relocation codes
  
-diff -urN gdb-6.8/gdb/configure.tgt gdb-6.8.new/gdb/configure.tgt
---- gdb-6.8/gdb/configure.tgt	2008-02-11 16:58:41.000000000 -0500
-+++ gdb-6.8.new/gdb/configure.tgt	2009-09-09 05:14:39.000000000 -0400
-@@ -319,6 +319,17 @@
+diff -urN gdb-7.0-orig/gdb/configure.tgt gdb-7.0/gdb/configure.tgt
+--- gdb-7.0-orig/gdb/configure.tgt	2009-10-24 07:05:15.000000000 -0400
++++ gdb-7.0/gdb/configure.tgt	2009-10-24 07:06:02.000000000 -0400
+@@ -351,6 +351,17 @@
  	gdb_sim=../sim/mn10300/libsim.a
  	;;
  
@@ -936,24 +936,24 @@ diff -urN gdb-6.8/gdb/configure.tgt gdb-6.8.new/gdb/configure.tgt
  mt-*-*)
  	# Target: Morpho Technologies ms1 processor
  	gdb_target_obs="mt-tdep.o"
-diff -urN gdb-6.8/gdb/Makefile.in gdb-6.8.new/gdb/Makefile.in
---- gdb-6.8/gdb/Makefile.in	2008-03-17 08:15:08.000000000 -0400
-+++ gdb-6.8.new/gdb/Makefile.in	2009-10-24 13:43:42.000000000 -0400
-@@ -1339,6 +1339,11 @@
+diff -urN gdb-7.0-orig/gdb/Makefile.in gdb-7.0/gdb/Makefile.in
+--- gdb-7.0-orig/gdb/Makefile.in	2009-10-24 07:05:15.000000000 -0400
++++ gdb-7.0/gdb/Makefile.in	2009-10-24 13:38:27.000000000 -0400
+@@ -1149,6 +1149,11 @@
+ 	-rm -f libgdb.a
  	$(AR) q libgdb.a $(LIBGDB_OBS)
  	$(RANLIB) libgdb.a
- 
++	
 +_gdbver.h:
 +	cat $(srcdir)/version.in | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GDB_VERSION_INT\ 0x\\1\\20/g > _gdbver.h
 +
 +msp430-tdep.o: _gdbver.h
-+
+ 
  # This is useful when debugging GDB, because some Unix's don't let you run GDB
  # on itself without copying the executable.  So "make gdb1" will make
- # gdb and put a copy in gdb1, and you can run it with "gdb gdb1".
-diff -urN gdb-6.8/include/elf/msp430.h gdb-6.8.new/include/elf/msp430.h
---- gdb-6.8/include/elf/msp430.h	2005-05-10 06:21:10.000000000 -0400
-+++ gdb-6.8.new/include/elf/msp430.h	2009-09-09 05:14:51.000000000 -0400
+diff -urN gdb-7.0-orig/include/elf/msp430.h gdb-7.0/include/elf/msp430.h
+--- gdb-7.0-orig/include/elf/msp430.h	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/include/elf/msp430.h	2009-10-24 07:06:02.000000000 -0400
 @@ -33,6 +33,13 @@
  #define E_MSP430_MACH_MSP430x14  14
  #define E_MSP430_MACH_MSP430x15  15
@@ -1004,9 +1004,9 @@ diff -urN gdb-6.8/include/elf/msp430.h gdb-6.8.new/include/elf/msp430.h
  
  END_RELOC_NUMBERS (R_MSP430_max)
  
-diff -urN gdb-6.8/include/opcode/msp430.h gdb-6.8.new/include/opcode/msp430.h
---- gdb-6.8/include/opcode/msp430.h	2005-05-10 06:21:13.000000000 -0400
-+++ gdb-6.8.new/include/opcode/msp430.h	2009-09-09 05:14:51.000000000 -0400
+diff -urN gdb-7.0-orig/include/opcode/msp430.h gdb-7.0/include/opcode/msp430.h
+--- gdb-7.0-orig/include/opcode/msp430.h	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/include/opcode/msp430.h	2009-10-24 07:06:02.000000000 -0400
 @@ -25,7 +25,7 @@
    int ol;	/* Operand length words.  */
    int am;	/* Addr mode.  */
@@ -1332,31 +1332,9 @@ diff -urN gdb-6.8/include/opcode/msp430.h gdb-6.8.new/include/opcode/msp430.h
    /* End of instruction set.  */
    { NULL, 0, 0, 0, 0 }
  };
-diff -urN gdb-6.8/opcodes/Makefile.am gdb-6.8.new/opcodes/Makefile.am
---- gdb-6.8/opcodes/Makefile.am	2007-12-21 12:04:04.000000000 -0500
-+++ gdb-6.8.new/opcodes/Makefile.am	2009-09-09 05:14:17.000000000 -0400
-@@ -155,6 +155,7 @@
- 	m10300-opc.c \
- 	mmix-dis.c \
- 	mmix-opc.c \
-+	msp430-dis.c \
- 	mt-asm.c \
- 	mt-desc.c \
- 	mt-dis.c \
-diff -urN gdb-6.8/opcodes/Makefile.in gdb-6.8.new/opcodes/Makefile.in
---- gdb-6.8/opcodes/Makefile.in	2007-12-21 12:04:04.000000000 -0500
-+++ gdb-6.8.new/opcodes/Makefile.in	2009-09-09 05:14:17.000000000 -0400
-@@ -384,6 +384,7 @@
- 	m10300-opc.c \
- 	mmix-dis.c \
- 	mmix-opc.c \
-+	msp430-dis.c \
- 	mt-asm.c \
- 	mt-desc.c \
- 	mt-dis.c \
-diff -urN gdb-6.8/opcodes/msp430-dis.c gdb-6.8.new/opcodes/msp430-dis.c
---- gdb-6.8/opcodes/msp430-dis.c	2007-07-05 05:49:02.000000000 -0400
-+++ gdb-6.8.new/opcodes/msp430-dis.c	2009-09-09 05:14:51.000000000 -0400
+diff -urN gdb-7.0-orig/opcodes/msp430-dis.c gdb-7.0/opcodes/msp430-dis.c
+--- gdb-7.0-orig/opcodes/msp430-dis.c	2009-10-24 07:05:13.000000000 -0400
++++ gdb-7.0/opcodes/msp430-dis.c	2009-10-24 07:06:02.000000000 -0400
 @@ -51,12 +51,153 @@
    return bfd_getl16 (buffer);
  }
@@ -2649,42 +2627,40 @@ diff -urN gdb-6.8/opcodes/msp430-dis.c gdb-6.8.new/opcodes/msp430-dis.c
 +    (*prin) (stream, "%s", comm2);
    return cmd_len;
  }
-diff -urN gdb-6.8/sim/configure gdb-6.8.new/sim/configure
---- gdb-6.8/sim/configure	2008-02-05 19:40:05.000000000 -0500
-+++ gdb-6.8.new/sim/configure	2009-09-09 05:14:17.000000000 -0400
-@@ -284,6 +284,7 @@
- ac_subdirs_all="$ac_subdirs_all mcore"
- ac_subdirs_all="$ac_subdirs_all mips"
- ac_subdirs_all="$ac_subdirs_all mn10300"
-+ac_subdirs_all="$ac_subdirs_all msp430"
- ac_subdirs_all="$ac_subdirs_all sh64"
- ac_subdirs_all="$ac_subdirs_all sh"
- ac_subdirs_all="$ac_subdirs_all erc32"
-@@ -3499,6 +3500,13 @@
+diff -urN gdb-7.0-orig/sim/configure gdb-7.0/sim/configure
+--- gdb-7.0-orig/sim/configure	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/sim/configure	2009-10-24 07:11:48.000000000 -0400
+@@ -648,6 +648,7 @@
+ mcore
+ mips
+ mn10300
++msp430
+ moxie
+ sh64
+ sh
+@@ -3694,6 +3695,11 @@
  
- 	   igen=yes
+ 	   testsuite=yes
  	   ;;
 +       msp430*-*-*)
-+
-+
-+subdirs="$subdirs msp430"
++	   subdirs="$subdirs msp430"
 +
 +	   igen=yes
 +	   ;;
         sh64*-*-*)
+            subdirs="$subdirs sh64"
  
- 
-diff -urN gdb-6.8/sim/configure.ac gdb-6.8.new/sim/configure.ac
---- gdb-6.8/sim/configure.ac	2008-02-05 19:40:05.000000000 -0500
-+++ gdb-6.8.new/sim/configure.ac	2009-09-09 05:14:17.000000000 -0400
-@@ -94,6 +94,10 @@
+diff -urN gdb-7.0-orig/sim/configure.ac gdb-7.0/sim/configure.ac
+--- gdb-7.0-orig/sim/configure.ac	2009-10-24 07:05:14.000000000 -0400
++++ gdb-7.0/sim/configure.ac	2009-10-24 07:12:23.000000000 -0400
+@@ -106,6 +106,10 @@
             AC_CONFIG_SUBDIRS(mn10300)
  	   igen=yes
  	   ;;
 +       msp430*-*-*)
-+    	    AC_CONFIG_SUBDIRS(msp430)
-+	    igen=yes
-+	    ;;
-        sh64*-*-*)
-            AC_CONFIG_SUBDIRS(sh64)
++           AC_CONFIG_SUBDIRS(msp430)
++	   igen=yes
++	   ;;
+        moxie-*-*)
+ 	   AC_CONFIG_SUBDIRS(moxie)
  	   testsuite=yes
