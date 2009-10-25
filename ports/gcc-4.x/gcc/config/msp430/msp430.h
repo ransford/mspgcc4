@@ -1030,11 +1030,19 @@ typedef struct msp430_args {
    store anything in `CUMULATIVE_ARGS'; however, the data structure
    must exist and should not be empty, so use `int'.  */
 
-#define DWARF2_UNWIND_INFO 1
 
-#define INCOMING_RETURN_ADDR_RTX gen_rtx_MEM (VOIDmode, gen_rtx_REG (VOIDmode, STACK_POINTER_REGNUM))
+/*
+	Correct DWARF2 unwind info generation requires prologue and epilogue
+	to be expanded into series of INSNs, so that DWARF2 info generator
+	can analyze those INSNs. Currently, prologue and epilogue are printed
+	to the output file as raw text, so, unwind info cannot be generated.
+*/
 
-   
+/*
+  #define DWARF2_UNWIND_INFO 1
+  #define INCOMING_RETURN_ADDR_RTX gen_rtx_MEM (VOIDmode, gen_rtx_REG (VOIDmode, STACK_POINTER_REGNUM))
+*/
+  
    
    
 #define INIT_CUMULATIVE_ARGS(CUM, FNTYPE, LIBNAME, FNDECL, N_NAMED_ARGS ) \

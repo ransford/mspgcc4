@@ -134,17 +134,17 @@ echo ---------------------------------------------------------------
 BUILD_DIR=build
 
 if [ x"$GCC_VERSION" != x"" ]; then
-	bash do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
-	bash do-gcc.sh $TARGET_LOCATION $GCC_VERSION $GNU_MIRROR $BUILD_DIR $GCC_PATCH_FOLDER $GMP_VERSION $MPFR_VERSION || exit 1
-	bash do-libc.sh $TARGET_LOCATION || exit 1
+	sh do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
+	sh do-gcc.sh $TARGET_LOCATION $GCC_VERSION $GNU_MIRROR $BUILD_DIR $GCC_PATCH_FOLDER $GMP_VERSION $MPFR_VERSION || exit 1
+	sh do-libc.sh $TARGET_LOCATION || exit 1
 fi
 
 if [ 0$INSIGHT_VERSION != 0 ]; then
-	bash do-gdb.sh $TARGET_LOCATION $INSIGHT_VERSION $GNU_MIRROR $BUILD_DIR insight || exit 1
+	sh do-gdb.sh $TARGET_LOCATION $INSIGHT_VERSION $GNU_MIRROR $BUILD_DIR insight || exit 1
 fi
 
 if [ 0$GDB_VERSION != 0 ]; then
-	bash do-gdb.sh $TARGET_LOCATION $GDB_VERSION $GNU_MIRROR $BUILD_DIR gdb || exit 1
+	sh do-gdb.sh $TARGET_LOCATION $GDB_VERSION $GNU_MIRROR $BUILD_DIR gdb || exit 1
 fi
 
 if [ 0$BINPACKAGE_NAME != 0 ]; then
