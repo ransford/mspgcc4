@@ -29,6 +29,8 @@ TARGET_LOCATION_SED=`echo $TARGET_LOCATION | sed -e "s/\//\\\\\\\\\//g"`
 mkdir mspgcc
 cd mspgcc
 
+test -e msp430-libc && rm -rf msp430-libc
+
 cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P msp430-libc || exit 2
 cd msp430-libc
 test -e $INITIAL_DIR/msp430-libc.patch && patch -p1 < $INITIAL_DIR/msp430-libc.patch 
