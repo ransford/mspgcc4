@@ -5,16 +5,21 @@
 #  "Wirelessly Accessible Sensor Populations (WASP)".
 
 INITIAL_DIR=`pwd`
+BUILD_DIR=build
 
 if [ 0$1 = 0 ]; then
-	echo "Usage:   do-libc.sh <toolchain target dir> [--fetch-only]"
+	echo "Usage:   do-libc.sh <toolchain target dir> [<build dir>] [--fetch-only]"
 	echo "Example: do-libc.sh /opt/msp430-gcc-latest"
 	exit 1
 fi
 
 TARGET_LOCATION=$1
 
-if [ 0$2 = 0--fetch-only ]; then
+if [ 0$2 != 0 ]; then
+	BUILD_DIR=$2
+fi
+
+if [ 0$3 = 0--fetch-only ]; then
 	FETCH_ONLY=1
 fi
 

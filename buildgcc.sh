@@ -136,7 +136,7 @@ BUILD_DIR=build
 if [ x"$GCC_VERSION" != x"" ]; then
 	sh do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
 	sh do-gcc.sh $TARGET_LOCATION $GCC_VERSION $GNU_MIRROR $BUILD_DIR $GCC_PATCH_FOLDER $GMP_VERSION $MPFR_VERSION || exit 1
-	sh do-libc.sh $TARGET_LOCATION || exit 1
+	sh do-libc.sh $TARGET_LOCATION $BUILD_DIR || exit 1
 fi
 
 if [ 0$INSIGHT_VERSION != 0 ]; then

@@ -111,3 +111,18 @@ diff -urN msp430-libc/src/stdlib/utoa.c msp430-libc.new/src/stdlib/utoa.c
      } while ((unsigned int)num > 0);
  
      temp_loc--;
+diff -urN msp430-libc/include/msp430x47xx.h snew/msp430x47xx.h
+--- msp430-libc.new/include/msp430x47xx.h	Sun Jul 26 07:53:27 2009
++++ msp430-libc/include/msp430x47xx.h	Sun Oct 25 21:34:15 2009
+@@ -72,9 +72,9 @@
+     || defined(__MSP430_4783__) || defined(__MSP430_4793__)
+ #define __MSP430_SD16IV_BASE__    0x110
+ #define __MSP430_SD16MEM_BASE__   0x112
+-#elif defined(__MSP430_47166__) || defined(__MSP430_47176__) || 
++#elif defined(__MSP430_47166__) || defined(__MSP430_47176__) || \
+ defined(__MSP430_47186__) || defined(__MSP430_47196__) \
+-    || defined(__MSP430_47167__) || defined(__MSP430_47177__) || 
++    || defined(__MSP430_47167__) || defined(__MSP430_47177__) || \
+ defined(__MSP430_47187__) || defined(__MSP430_47197__)
+ #define __MSP430_SD16IV_BASE__    0x1AE
+ #define __MSP430_SD16MEM_BASE__   0x110
