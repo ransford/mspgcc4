@@ -40,7 +40,7 @@ if [ 0$1 != 0--defaults ]; then
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		case `cat /tmp/dialog.ans` in
 		1)
-			GCC_VERSION=4.4.4
+			GCC_VERSION=4.4.2
 			GCC_PATCH_FOLDER=gcc-4.x
 			GMP_VERSION=4.3.1
 			MPFR_VERSION=2.4.1 ;;
