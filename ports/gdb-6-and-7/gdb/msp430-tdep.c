@@ -384,6 +384,7 @@ typedef struct _parsed_prologue
 	int locals_block_size;
 	int register_offsets[NUM_REGS];
 	int flags;
+	int sp_already_decremented_by;	//Value between 0 (first instruction of prologue is about to execute) and frame_size (prologue has completed)
 } parsed_prologue;
 
 static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, parsed_prologue *parsed)
@@ -398,11 +399,13 @@ static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, pa
   int framesize;
   int register_offsets[NUM_REGS];
   int pushed_reg_count = 0;
+  int sp_already_decremented_by = 0;
   char *name;
   int vpc = 0;
-  CORE_ADDR start_addr ;
+  CORE_ADDR start_addr;
   int i;
   int reti = 0;
+  CORE_ADDR original_pc = pc;
 
   msp430_real_fp = E_SP_REGNUM;        /* Wild guess */
     
@@ -417,6 +420,7 @@ static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, pa
   /* If the debugger is entry function, give up. */
   if (func_addr == entry_point_address ())
     return 0xfffful & pc;
+
 
   /* At the start of a function, our frame is in the stack pointer. */
   flags = MY_FRAME_IN_SP;
@@ -519,6 +523,10 @@ static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, pa
     insn = get_insn(pc + vpc, gdbarch);
     if ((insn & 0xfff0) != push_rn)
       break;
+
+	if (original_pc > (pc + vpc))
+		sp_already_decremented_by += 2;	//This 'push' instruction has already been executed
+
     rn  = insn & 15;
     vpc += 2;
     pushed_reg_count++;
@@ -571,12 +579,17 @@ static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, pa
     vpc += 2;
     insn = get_insn(pc + vpc, gdbarch);
   }
-    
+
+  if (original_pc > (pc + vpc - 2))
+	  sp_already_decremented_by += framesize;	//The sp decreasing instruction has already been executed
+
   /* check if fp loaded */
   if (insn == load_fp)
   {
     msp430_real_fp = E_SP_REGNUM;
-    flags = MY_FRAME_IN_FP;
+
+	if (original_pc > (pc + vpc))
+		flags = MY_FRAME_IN_FP;	//Frame is already in FP only if the FP loading instruction is already executed
     vpc += 2;
   }
 
@@ -587,6 +600,11 @@ static CORE_ADDR msp430_scan_prologue (struct gdbarch *gdbarch, CORE_ADDR pc, pa
 	  parsed->flags = flags;
 	  parsed->locals_block_size = framesize;
 	  parsed->saved_register_block_size = pushed_reg_count * 2;
+	  
+	  if (sp_already_decremented_by > (parsed->saved_register_block_size + parsed->locals_block_size))
+		  sp_already_decremented_by = parsed->saved_register_block_size + parsed->locals_block_size;
+
+	  parsed->sp_already_decremented_by = sp_already_decremented_by;
   }
 
   /* Return addr of first non-prologue insn. */
@@ -626,91 +644,19 @@ struct msp430_unwind_cache
   /* How far the SP and r4 (FP) have been offset from the start of
      the stack frame (as defined by the previous frame's stack
      pointer). */
-  LONGEST sp_offset;
-  LONGEST fp_offset;
+//  LONGEST sp_offset;
+//  LONGEST fp_offset;
   int uses_frame;
   /* Table indicating the location of each and every register. */
   struct trad_frame_saved_reg *saved_regs;
   msp430_global_cache global_cache;
 };
 
-#if 0
-static int
-prologue_find_regs (struct msp430_unwind_cache *info,
-                    unsigned short op,
-                    CORE_ADDR addr)
+
+static int DetectPushedArgumentsSize(CORE_ADDR FirstInstructionAfterCall)
 {
-  int n;
-
-  /* st  rn, @-sp */
-  if ((op & 0x7E1F) == 0x6C1F)
-    {
-      n = (op & 0x1E0) >> 5;
-      info->sp_offset -= 2;
-      info->saved_regs[n].addr = info->sp_offset;
-      return 1;
-    }
-
-  /* st2w  rn, @-sp */
-  else if ((op & 0x7E3F) == 0x6E1F)
-    {
-      n = (op & 0x1E0) >> 5;
-      info->sp_offset -= 4;
-      info->saved_regs[n + 0].addr = info->sp_offset + 0;
-      info->saved_regs[n + 1].addr = info->sp_offset + 2;
-      return 1;
-    }
-
-  /* subi  sp, n */
-  if ((op & 0x7FE1) == 0x01E1)
-    {
-      n = (op & 0x1E) >> 1;
-      if (n == 0)
-        n = 16;
-      info->sp_offset -= n;
-      return 1;
-    }
-
-  /* mv  r11, sp */
-  if (op == 0x417E)
-    {
-      info->uses_frame = 1;
-      info->fp_offset = info->sp_offset;
-      return 1;
-    }
-
-  /* st  rn, @r11 */
-  if ((op & 0x7E1F) == 0x6816)
-    {
-      n = (op & 0x1E0) >> 5;
-      info->saved_regs[n].addr = info->fp_offset;
-      return 1;
-    }
-
-  /* nop */
-  if (op == 0x5E00)
-    return 1;
-
-  /* st  rn, @sp */
-  if ((op & 0x7E1F) == 0x681E)
-    {
-      n = (op & 0x1E0) >> 5;
-      info->saved_regs[n].addr = info->sp_offset;
-      return 1;
-    }
-
-  /* st2w  rn, @sp */
-  if ((op & 0x7E3F) == 0x3A1E)
-    {
-      n = (op & 0x1E0) >> 5;
-      info->saved_regs[n + 0].addr = info->sp_offset + 0;
-      info->saved_regs[n + 1].addr = info->sp_offset + 2;
-      return 1;
-    }
-
-  return 0;
+	return 0;
 }
-#endif
 
 /* Put here the code to store, into fi->saved_regs, the addresses of
    the saved registers of frame described by FRAME_INFO.  This
@@ -738,7 +684,8 @@ msp430_frame_unwind_cache (struct frame_info *associated_frame,
 	ULONGEST this_base;
 	int i;*/
 
-	ULONGEST this_pc, this_sp, sp_iter;
+	ULONGEST this_pc, this_sp, this_fp, sp_iter;
+	ULONGEST frame_bottom;	//Either SP or FP, depending on whether FP is used
 
 	struct msp430_unwind_cache *info;
 
@@ -750,17 +697,18 @@ msp430_frame_unwind_cache (struct frame_info *associated_frame,
 	info->saved_regs = trad_frame_alloc_saved_regs (associated_frame);
 
 	//info->size = 0;
-	info->sp_offset = 0;
-	info->uses_frame = 0;
+	//info->sp_offset = 0;
 
 	//Extract PC and SP (start of frame) for THIS frame.
 
 #if GDB_VERSION_INT >= 0x700
-	this_sp = get_frame_sp (this_frame);
 	this_pc = get_frame_pc (this_frame);
+	this_sp = get_frame_sp (this_frame);
+	this_fp = get_frame_register_unsigned(this_frame, E_FP_REGNUM);
 #else
-	this_sp = frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
 	this_pc = frame_unwind_register_unsigned (next_frame, E_PC_REGNUM);
+	this_sp = frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
+	this_fp = frame_unwind_register_unsigned (next_frame, E_FP_REGNUM);
 #endif
 
 	if (!this_sp || !this_pc)
@@ -770,14 +718,25 @@ msp430_frame_unwind_cache (struct frame_info *associated_frame,
 		return info;
 
 	msp430_scan_prologue(gdbarch, this_pc, &parsed);
+	frame_bottom = this_sp;
+
 	if (parsed.valid)
 	{
-		ULONGEST saved_return_ptr = this_sp + parsed.locals_block_size + parsed.saved_register_block_size;
-		ULONGEST retptr = get_frame_memory_unsigned (associated_frame, saved_return_ptr, TargetPointerSize);
+		ULONGEST saved_return_ptr, retptr;
+		info->uses_frame = ((parsed.flags & MY_FRAME_IN_FP) != 0);
+		if (info->uses_frame && this_fp)
+			frame_bottom = this_fp;
+
+		saved_return_ptr = frame_bottom + parsed.sp_already_decremented_by;//  parsed.locals_block_size + parsed.saved_register_block_size;
+		retptr = get_frame_memory_unsigned (associated_frame, saved_return_ptr, TargetPointerSize);
 		if (IsValidCodePtr(&info->global_cache, retptr))
 		{
 			int i;
 			info->prev_sp = saved_return_ptr + TargetPointerSize;
+			
+			if (!info->uses_frame)
+				info->prev_sp += DetectPushedArgumentsSize(retptr);
+			
 			info->base = saved_return_ptr;
 			
 			//Read and save pushed register values, discovered by msp430_scan_prologue()
@@ -788,6 +747,9 @@ msp430_frame_unwind_cache (struct frame_info *associated_frame,
 					continue;
 				if (parsed.register_offsets[i] == -1)
 					continue;
+
+				if (parsed.register_offsets[i] > parsed.sp_already_decremented_by)
+					continue;	//We are now in the middle of the prologue and this register has not yet been saved to stack.
 
 				saved_reg_addr = info->base - parsed.register_offsets[i];
 				reg_val = get_frame_memory_unsigned(associated_frame, saved_reg_addr, TargetPointerSize);
@@ -804,7 +766,7 @@ msp430_frame_unwind_cache (struct frame_info *associated_frame,
 
 	//We failed to rebuild frame structure based on function prologue. Just scan the stack for the next valid code address and assume it is a return address.
 
-	for (sp_iter = this_sp; sp_iter <= info->global_cache.max_data_ptr; sp_iter += TargetPointerSize)	//Traverse stack towards the top
+	for (sp_iter = frame_bottom; sp_iter <= info->global_cache.max_data_ptr; sp_iter += TargetPointerSize)	//Traverse stack towards the top
 	{
 		ULONGEST ptr = get_frame_memory_unsigned (associated_frame, sp_iter, TargetPointerSize);
 		if (IsValidCodePtr(&info->global_cache, ptr))	//If a valid pointer was found on stack, assume it is the return pointer
