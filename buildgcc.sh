@@ -110,7 +110,7 @@ if [ 0$1 != 0--defaults ]; then
 		exit
 	fi
 	
-	if [ test -e $TARGET_LOCATION/bin/msp430-as ]; then
+	if [ -e $TARGET_LOCATION/bin/msp430-as ]; then
 		$DIALOG --yesno "Looks like binutils are already installed in $TARGET_LOCATION. Skip building binutils?" 5 50
 		if [ $? = 0 ]; then
 			SKIP_BINUTILS=1
