@@ -109,6 +109,13 @@ if [ 0$1 != 0--defaults ]; then
 		echo Build cancelled
 		exit
 	fi
+	
+	if [ test -e $TARGET_LOCATION/bin/msp430-as ]; then
+		$DIALOG --yesno "Looks like binutils are already installed in $TARGET_LOCATION. Skip building binutils?" 5 50
+		if [ $? = 0 ]; then
+			SKIP_BINUTILS=1
+		fi
+	fi
 
 	$DIALOG --yesno "Create binary package after build?" 5 50
 	if [ $? = 0 ]; then
@@ -134,7 +141,9 @@ echo ---------------------------------------------------------------
 BUILD_DIR=build
 
 if [ x"$GCC_VERSION" != x"" ]; then
-	sh do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
+	if [ x"$SKIP_BINUTILS" != x"1" ]; then
+		sh do-binutils.sh $TARGET_LOCATION $BINUTILS_VERSION $GNU_MIRROR $BUILD_DIR || exit 1
+	fi
 	sh do-gcc.sh $TARGET_LOCATION $GCC_VERSION $GNU_MIRROR $BUILD_DIR $GCC_PATCH_FOLDER $GMP_VERSION $MPFR_VERSION || exit 1
 	sh do-libc.sh $TARGET_LOCATION $BUILD_DIR || exit 1
 fi
