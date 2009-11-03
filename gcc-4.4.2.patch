@@ -14,7 +14,7 @@ diff -urN gcc-4.4.2-orig/configure gcc-4.4.2-new/configure
 diff -urN gcc-4.4.2-orig/gcc/config.gcc gcc-4.4.2-new/gcc/config.gcc
 --- gcc-4.4.2-orig/gcc/config.gcc	2009-09-13 09:01:13.000000000 -0400
 +++ gcc-4.4.2-new/gcc/config.gcc	2009-10-25 07:30:29.000000000 -0400
-@@ -804,6 +804,10 @@
+@@ -804,6 +804,12 @@
  avr-*-*)
  	tm_file="avr/avr.h dbxelf.h"
  	;;

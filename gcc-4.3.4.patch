@@ -14,7 +14,7 @@ diff -urN gcc-orig/configure gcc-new/configure
 diff -urN gcc-orig/gcc/config.gcc gcc-new/gcc/config.gcc
 --- gcc-orig/gcc/config.gcc	2009-04-07 03:15:38.000000000 +0200
 +++ gcc-new/gcc/config.gcc	2009-08-23 16:33:05.671875000 +0200
-@@ -831,6 +831,10 @@
+@@ -831,6 +831,12 @@
  	tm_file="avr/avr.h dbxelf.h"
  	use_fixproto=yes
  	;;
