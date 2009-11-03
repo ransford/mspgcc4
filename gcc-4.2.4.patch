@@ -20,6 +20,8 @@ diff -urN gcc-orig/gcc/config.gcc gcc-new/gcc/config.gcc
  	;;
 +msp430-*-*)
 +	tm_file="msp430/msp430.h dbxelf.h"
++	c_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
++	cxx_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
 +	use_fixproto=yes
 +	;;
  bfin*-elf*)

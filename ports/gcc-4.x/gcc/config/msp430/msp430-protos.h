@@ -223,18 +223,6 @@ extern const char * zeroextendhisi PARAMS ((rtx insn, rtx operands[], int *len))
 extern const char * zeroextendhidi PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char * zeroextendsidi PARAMS ((rtx insn, rtx operands[], int *len));
 
-extern const char * msp430_emit_blt0si PARAMS ((rtx operands[], int len));
-extern const char * msp430_emit_beq PARAMS ((rtx operands[], int len));
-extern const char * msp430_emit_bne PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bgt PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bgtu PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_blt PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bltu PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bge PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bgeu PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_ble PARAMS ((rtx operands[], int len));          
-extern const char * msp430_emit_bleu PARAMS ((rtx operands[], int len));          
-
 extern const char * msp430_pushsisf PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char * msp430_pushdi   PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char * msp430_pushhi   PARAMS ((rtx insn, rtx operands[], int *len));

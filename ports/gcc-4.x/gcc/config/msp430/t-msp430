@@ -128,3 +128,22 @@ LIBGCC = stmp-multilib
 INSTALL_LIBGCC = install-multilib
 
 ##STMP_FIXINC =
+
+msp430-cbranch.o: $(srcdir)/config/msp430/msp430-cbranch.c $(CONFIG_H) $(SYSTEM_H) \
+    coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H)
+	$(CC) -c $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) $(srcdir)/config/msp430/msp430-cbranch.c
+
+msp430-emit-cbranch.o: $(srcdir)/config/msp430/msp430-cbranch.c $(CONFIG_H) $(SYSTEM_H) \
+    coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H)
+	$(CC) -c $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) $(srcdir)/config/msp430/msp430-emit-cbranch.c
+
+msp430-builtins.o: $(srcdir)/config/msp430/msp430-builtins.c $(CONFIG_H) $(SYSTEM_H) \
+    coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H)
+	$(CC) -c $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) $(srcdir)/config/msp430/msp430-builtins.c
+
+msp430-function.o: $(srcdir)/config/msp430/msp430-function.c $(CONFIG_H) $(SYSTEM_H) \
+    coretypes.h $(TM_H) $(TREE_H) output.h $(C_COMMON_H)
+	$(CC) -c $(ALL_CFLAGS) $(ALL_CPPFLAGS) $(INCLUDES) $(srcdir)/config/msp430/msp430-function.c
+
+
+	

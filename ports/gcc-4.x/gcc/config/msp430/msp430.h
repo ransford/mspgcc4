@@ -747,7 +747,7 @@ referred_reload_class(X,CLASS)
 
 /*  This is an undocumented variable which describes
     how GCC will push a data */
-#define STACK_PUSH_CODE POST_DEC
+#define STACK_PUSH_CODE PRE_DEC
 
 #define STACK_GROWS_DOWNWARD
 /* Define this macro if pushing a word onto the stack moves the stack
@@ -3031,6 +3031,31 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 #define DBX_REGISTER_NUMBER(r) (r)
 
 /*--------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+struct machine_function GTY(())
+{
+  /* 'true' - if the current function is a leaf function.  */
+  int is_leaf;
+
+  /* 'true' - if current function is a naked function.  */
+  int is_naked;
+
+  /* 'true' - if current function is an interrupt function 
+     as specified by the "interrupt" attribute.  */
+  int is_interrupt;
+
+  /* 'true' - if current function is a 'task' function 
+     as specified by the "OS_task" attribute.  */
+  int is_OS_task;
+ 
+  int is_noint_hwmul;
+  
+  int is_critical;
+  
+  int is_reenterant;
+  
+  int is_wakeup;
+};
 
 #ifdef RTX_CODE
 extern int default_rtx_costs (rtx X ATTRIBUTE_UNUSED, enum rtx_code code, enum rtx_code outer_code ATTRIBUTE_UNUSED);
