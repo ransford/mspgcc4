@@ -464,9 +464,9 @@ const char *msp430_emit_return (rtx insn ATTRIBUTE_UNUSED, rtx operands[] ATTRIB
 {
 	return_issued = 1;
 	if (msp430_critical_function_p (current_function_decl) || interrupt_function_p(current_function_decl))
-		return "ret";
+		return "reti";
 
-	return "reti";
+	return "ret";
 }
 
 void msp430_output_addr_vec_elt (FILE *stream, int value)
