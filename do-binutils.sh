@@ -39,7 +39,7 @@ fi
 
 INSTALL_LAUNCHER=`sh do-detect-sudo.sh $TARGET_LOCATION` || exit 1
 
-mkdir $BUILD_DIR
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR || exit 1
 
 export PATH=$PATH:$TARGET_LOCATION/bin
@@ -62,7 +62,7 @@ then
 fi
 
 cd ..
-mkdir binutils-$BINUTILS_VERSION-build
+mkdir -p binutils-$BINUTILS_VERSION-build
 cd binutils-$BINUTILS_VERSION-build
 
 `pwd`/../binutils-$BINUTILS_VERSION/configure --prefix=$TARGET_LOCATION --target=msp430 || exit 1

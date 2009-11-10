@@ -60,7 +60,7 @@ esac
 
 INSTALL_LAUNCHER=`sh do-detect-sudo.sh $TARGET_LOCATION` || exit 1
 
-mkdir $BUILD_DIR
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR || exit 1
 
 export PATH=$PATH:$TARGET_LOCATION/bin
@@ -80,7 +80,7 @@ fi
 test -e $INITIAL_DIR/$PKG_NAME-$PKG_VERSION.patch && patch -p1 < $INITIAL_DIR/$PKG_NAME-$PKG_VERSION.patch
 
 cd ..
-mkdir $PKG_NAME-$PKG_VERSION-build
+mkdir -p $PKG_NAME-$PKG_VERSION-build
 cd $PKG_NAME-$PKG_VERSION-build
 
 `pwd`/../$PKG_NAME-$PKG_VERSION/configure --prefix=$TARGET_LOCATION --target=msp430 || exit 1

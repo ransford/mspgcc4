@@ -62,7 +62,7 @@ fi
 
 INSTALL_LAUNCHER=`sh do-detect-sudo.sh $TARGET_LOCATION` || exit 1
 
-mkdir $BUILD_DIR
+mkdir -p $BUILD_DIR
 cd $BUILD_DIR || exit 1
 
 export PATH=$PATH:$TARGET_LOCATION/bin
@@ -74,7 +74,7 @@ if [ 0$NO_FETCH != 01 ]; then
 		rm -rf mspgcc
 	fi
 
-	mkdir mspgcc
+	mkdir -p mspgcc
 	cd mspgcc
 	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gcc || exit 2
 
@@ -133,7 +133,7 @@ fi
 
 cp -rf ../mspgcc/gcc/$GCC_PATCH_FOLDER/* . || exit 8
 cd ..
-mkdir gcc-$GCC_VERSION-build
+mkdir -p gcc-$GCC_VERSION-build
 cd gcc-$GCC_VERSION-build
 `pwd`/../gcc-$GCC_VERSION/configure --prefix=$TARGET_LOCATION --target=msp430 --enable-languages=c,c++ || exit 9
 make || exit 10
