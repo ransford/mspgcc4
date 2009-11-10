@@ -80,7 +80,7 @@ if [ 0$NO_FETCH != 01 ]; then
 
 	if [ -e $INITIAL_DIR/ports/gcc-4.x ]
 	then
-		echo Copying gcc-4.x port
+		echo "Copying gcc-4.x port"
 		cp -r $INITIAL_DIR/ports/gcc-4.x gcc
 	fi
 
@@ -104,11 +104,11 @@ if [ 0$NO_FETCH != 01 ]; then
 fi
 
 if [ 0$FETCH_ONLY = 01 ]; then
-	echo GCC $GCC_VERSION downloaded successfully
+	echo "GCC $GCC_VERSION downloaded successfully"
 	exit 0
 fi
 
-echo Unpacking GCC...
+echo "Unpacking GCC..."
 tar xjf gcc-$GCC_VERSION.tar.bz2
 
 cd gcc-$GCC_VERSION
@@ -125,7 +125,7 @@ if [ x"$GMP_VERSION" != x"-" ]; then
 fi
 
 if [ x"$MPFR_VERSION" != x"-" ]; then
-	echo Unpacking MPFR...
+	echo "Unpacking MPFR..."
 	tar xjf ../mpfr-$MPFR_VERSION.tar.bz2 || exit 1
 	rm -rf mpfr
 	mv mpfr-$MPFR_VERSION mpfr || exit 1

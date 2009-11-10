@@ -47,11 +47,11 @@ export PATH=$PATH:$TARGET_LOCATION/bin
 wget -c ftp://$GNU_MIRROR/pub/gnu/binutils/binutils-$BINUTILS_VERSION.tar.bz2 || exit 1
 
 if [ 0$FETCH_ONLY = 01 ]; then
-	echo Binutils $BINUTILS_VERSION downloaded successfully
+	echo "Binutils $BINUTILS_VERSION downloaded successfully"
 	exit 0
 fi
 
-echo Unpacking binutils...
+echo "Unpacking binutils..."
 tar xjf binutils-$BINUTILS_VERSION.tar.bz2
 
 cd binutils-$BINUTILS_VERSION

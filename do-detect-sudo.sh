@@ -22,9 +22,9 @@ touch $TARGET_LOCATION/test.dat 2>/dev/null || NEED_SUDO=1
 rm $TARGET_LOCATION/test.dat 2> /dev/null || NEED_SUDO=1
 
 if [ $NEED_SUDO = 1 ]; then
-	echo WARNING! Cannot write to $TARGET_LOCATION! 1>&2
-	echo Please ensure your account is mentioned in /etc/sudoers and that sudo is installed 1>&2
-	echo All binary installation tasks will be invoked using sudo. 1>&2
+	echo "WARNING! Cannot write to $TARGET_LOCATION! 1>&2"
+	echo "Please ensure your account is mentioned in /etc/sudoers and that sudo is installed 1>&2"
+	echo "All binary installation tasks will be invoked using sudo. 1>&2"
 	sudo sleep 0 || exit 1
 	
 	INSTALL_LAUNCHER=sudo
@@ -37,4 +37,4 @@ if [ $NEED_SUDO = 1 ]; then
 
 fi
 
-echo $INSTALL_LAUNCHER
+echo "$INSTALL_LAUNCHER"

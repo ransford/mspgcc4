@@ -66,14 +66,14 @@ cd $BUILD_DIR || exit 1
 export PATH=$PATH:$TARGET_LOCATION/bin
 
 wget -c $PKG_SRC_URL -O $PKG_NAME-$PKG_VERSION.tar.bz2 || exit 1
-echo Unpacking $PKG_NAME...
+echo "Unpacking $PKG_NAME..."
 tar xjf $PKG_NAME-$PKG_VERSION.tar.bz2 || exit 1
 
 cd $PKG_NAME-$PKG_VERSION
 cp -rf $INITIAL_DIR/ports/gdb-6-and-7/* . || exit 1
 
 if [ 0$FETCH_ONLY = 01 ]; then
-	echo $PKG_NAME $PKG_VERSION downloaded successfully
+	echo "$PKG_NAME $PKG_VERSION downloaded successfully"
 	exit 0
 fi
 

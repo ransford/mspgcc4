@@ -48,7 +48,7 @@ sed -e "s/\/usr\/local\/msp430/$TARGET_LOCATION_SED/" Makefile > Makefile.new
 mv Makefile.new Makefile
 
 if [ 0$FETCH_ONLY = 01 ]; then
-	echo msp430 libc downloaded successfully
+	echo "msp430 libc downloaded successfully"
 	exit 0
 fi
 

@@ -66,7 +66,7 @@ if [ 0$1 != 0--defaults ]; then
 		rm /tmp/dialog.ans
 		TARGET_LOCATION=/opt/msp430-gcc-$GCC_VERSION
 	else
-		echo Build cancelled
+		echo "Build cancelled"
 		exit
 	fi
 	
@@ -85,7 +85,7 @@ if [ 0$1 != 0--defaults ]; then
 		esac
 		rm /tmp/dialog.ans
 	else
-		echo Build cancelled
+		echo "Build cancelled"
 		exit
 	fi
 
@@ -99,7 +99,7 @@ if [ 0$1 != 0--defaults ]; then
 		esac
 		rm /tmp/dialog.ans
 	else
-		echo Build cancelled
+		echo "Build cancelled"
 		exit
 	fi
 
@@ -108,7 +108,7 @@ if [ 0$1 != 0--defaults ]; then
 		TARGET_LOCATION=`cat /tmp/dialog.ans`
 		rm /tmp/dialog.ans
 	else
-		echo Build cancelled
+		echo "Build cancelled"
 		exit
 	fi
 	
@@ -127,18 +127,20 @@ if [ 0$1 != 0--defaults ]; then
 			BINPACKAGE_NAME=`cat /tmp/dialog.ans`
 			rm /tmp/dialog.ans
 		else
-			echo Build cancelled
+			echo "Build cancelled"
 			exit
 		fi
 	fi
 fi
 
-echo ---------------------------------------------------------------
-echo Building GCC $GCC_VERSION
-echo GDB version: $GDB_VERSION
-echo Target location: $TARGET_LOCATION
-echo Binary package name: $BINPACKAGE_NAME
-echo ---------------------------------------------------------------
+cat <<_EOF
+---------------------------------------------------------------
+Building GCC $GCC_VERSION
+GDB version: $GDB_VERSION
+Target location: $TARGET_LOCATION
+Binary package name: $BINPACKAGE_NAME
+---------------------------------------------------------------
+_EOF
 
 BUILD_DIR=build
 
@@ -159,13 +161,15 @@ if [ 0$GDB_VERSION != 0 ]; then
 fi
 
 if [ 0$BINPACKAGE_NAME != 0 ]; then
-	echo Creating binary package...
+	echo "Creating binary package..."
 	cd $TARGET_LOCATION
 	tar cjf $BASEDIR/$BINPACKAGE_NAME *
 	cd $BASEDIR
 fi
 
-echo ---------------------------------------------------------------------------------
-echo Build succeeded
-echo Do not forget to add $TARGET_LOCATION/bin to your PATH environment variable
-echo ---------------------------------------------------------------------------------
+cat <<_EOF
+---------------------------------------------------------------------------------
+Build succeeded
+Do not forget to add $TARGET_LOCATION/bin to your PATH environment variable
+---------------------------------------------------------------------------------
+_EOF
