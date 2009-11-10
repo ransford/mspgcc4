@@ -4,6 +4,8 @@
 # Framework 6 Information Society Technologies Project
 #  "Wirelessly Accessible Sensor Populations (WASP)".
 
+set -eu
+
 INITIAL_DIR=`pwd`
 BUILD_DIR=build
 
