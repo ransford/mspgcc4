@@ -50,10 +50,10 @@ while [ $# -ge 1 ] ; do
 	shift
 done
 
-INSTALL_LAUNCHER="$(sh do-detect-sudo.sh $TARGET_LOCATION)"
+INSTALL_LAUNCHER="$(sh do-detect-sudo.sh "$TARGET_LOCATION")"
 
 mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR "
+cd "$BUILD_DIR"
 
 export PATH="$PATH:$TARGET_LOCATION/bin"
 TARGET_LOCATION_SED="$(echo $TARGET_LOCATION | sed -e "s,/,\\\\,g")"
