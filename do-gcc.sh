@@ -33,7 +33,7 @@ if [ $# = 0 ]; then
 	exit 1
 fi
 
-TARGET_LOCATION="$1"
+TARGET_LOCATION="$1" ; shift
 if [ $# -ge 1 ] ; then GCC_VERSION="$1" ; shift ; fi
 if [ $# -ge 1 ] ; then GNU_MIRROR="$1" ; shift ; fi
 if [ $# -ge 1 ] ; then BUILD_DIR="$1" ; shift ; fi
