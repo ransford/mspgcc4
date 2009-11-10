@@ -6,6 +6,8 @@
 
 set -eu
 
+. ./buildgcc.subr
+
 INITIAL_DIR="$(pwd)"
 BUILD_DIR=build
 FETCH_ONLY=0
@@ -58,7 +60,7 @@ if [ "_$FETCH_ONLY" = _1 ]; then
 	exit 0
 fi
 
-make
+make -j$(num_cpus)
 $INSTALL_LAUNCHER make install
 
 echo '!<arch>' > 0lib.tmp

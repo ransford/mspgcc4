@@ -66,7 +66,7 @@ mkdir -p "binutils-$BINUTILS_VERSION-build"
 cd "binutils-$BINUTILS_VERSION-build"
 
 "$(pwd)/../binutils-$BINUTILS_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430
-make
+make -j$(num_cpus)
 $INSTALL_LAUNCHER make install
 
 cd "$INITIAL_DIR"
