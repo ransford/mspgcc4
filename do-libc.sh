@@ -8,6 +8,7 @@ set -eu
 
 INITIAL_DIR=`pwd`
 BUILD_DIR=build
+FETCH_ONLY=0
 
 if [ 0$1 = 0 ]; then
 	echo "Usage:   do-libc.sh <toolchain target dir> [<build dir>] [--fetch-only]"
@@ -27,13 +28,13 @@ fi
 
 INSTALL_LAUNCHER=`sh do-detect-sudo.sh $TARGET_LOCATION` || exit 1
 
-mkdir $BUILD_DIR
-cd $BUILD_DIR || exit 1
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
 export PATH=$PATH:$TARGET_LOCATION/bin
 TARGET_LOCATION_SED=`echo $TARGET_LOCATION | sed -e "s/\//\\\\\\\\\//g"`
 
-mkdir mspgcc
+mkdir -p mspgcc
 cd mspgcc
 
 test -e msp430-libc && rm -rf msp430-libc
