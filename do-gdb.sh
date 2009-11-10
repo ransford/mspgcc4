@@ -84,7 +84,10 @@ cd ..
 mkdir -p "$PKG_NAME-$PKG_VERSION-build"
 cd "$PKG_NAME-$PKG_VERSION-build"
 
-"$(pwd)/../$PKG_NAME-$PKG_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430
+"$(pwd)/../$PKG_NAME-$PKG_VERSION/configure" \
+	"--prefix=$TARGET_LOCATION" \
+	--target=msp430 \
+	--disable-werror
 make -j$(num_cpus)
 $INSTALL_LAUNCHER make install
 
