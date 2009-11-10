@@ -57,19 +57,19 @@ insight)
 	;;
 esac
 
-INSTALL_LAUNCHER=$(sh do-detect-sudo.sh "$TARGET_LOCATION") 
+INSTALL_LAUNCHER=$(sh do-detect-sudo.sh "$TARGET_LOCATION")
 
 mkdir -p "$BUILD_DIR"
-cd "$BUILD_DIR" 
+cd "$BUILD_DIR"
 
 export PATH="$PATH:$TARGET_LOCATION/bin"
 
-wget -c "$PKG_SRC_URL" -O "$PKG_NAME-$PKG_VERSION.tar.bz2" 
+wget -c "$PKG_SRC_URL" -O "$PKG_NAME-$PKG_VERSION.tar.bz2"
 echo "Unpacking $PKG_NAME..."
-tar xjf "$PKG_NAME-$PKG_VERSION.tar.bz2" 
+tar xjf "$PKG_NAME-$PKG_VERSION.tar.bz2"
 
 cd "$PKG_NAME-$PKG_VERSION"
-cp -rf "$INITIAL_DIR"/ports/gdb-6-and-7/* . 
+cp -rf "$INITIAL_DIR"/ports/gdb-6-and-7/* .
 
 if [ $FETCH_ONLY = 1 ]; then
 	echo "$PKG_NAME $PKG_VERSION downloaded successfully"
@@ -84,8 +84,8 @@ cd ..
 mkdir -p "$PKG_NAME-$PKG_VERSION-build"
 cd "$PKG_NAME-$PKG_VERSION-build"
 
-"$(pwd)/../$PKG_NAME-$PKG_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430 
+"$(pwd)/../$PKG_NAME-$PKG_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430
 make -j$(num_cpus)
-"$INSTALL_LAUNCHER make install 
+$INSTALL_LAUNCHER make install
 
 cd "$INITIAL_DIR"
