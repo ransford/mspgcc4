@@ -13,10 +13,12 @@
 #4.4.2
 
 
-DIALOG=`which dialog`
-if [ 0$DIALOG = 0 -a 0$1 != 0--defaults ]; then
-	echo Dialog package not found and --defaults not specified
-	echo Either install dialog package, or run 'buildgcc --defaults'
+
+: ${DIALOG=dialog}
+if ! $DIALOG --version >/dev/null 2>&1 && [ _$1 != _--defaults ]; then
+	echo "Dialog package not found and --defaults not specified"
+	echo "Either install dialog package, or run 'buildgcc --defaults'"
+	exit 1
 fi
 
 #Defaults
