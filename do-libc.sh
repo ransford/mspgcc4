@@ -52,7 +52,7 @@ if [ 0$FETCH_ONLY = 01 ]; then
 	exit 0
 fi
 
-make
+PATH=$TARGET_LOCATION/bin:$PATH make
 $INSTALL_LAUNCHER make install || exit 13
 
 echo "!<arch>" > 0lib.tmp
