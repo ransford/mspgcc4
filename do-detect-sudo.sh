@@ -17,6 +17,7 @@ set -eu
 
 istgtwritable() {
 	(
+		set -eu
 		$INSTALL_LAUNCHER mkdir -p "$TARGET_LOCATION"
 		$INSTALL_LAUNCHER touch "$TARGET_LOCATION"/test.dat
 		$INSTALL_LAUNCHER rm -f "$TARGET_LOCATION"/test.dat
