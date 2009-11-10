@@ -1,0 +1,12 @@
+- offer "install-strip" to get Ubuntu 9.10 amd64 installed size from 250 MB to
+  just under 100 MB
+
+- check that most of the things don't discard expensive material (downloads,
+  checkouts, builds, configure caches)
+
+- remove code duplication in the various do-*.sh scripts, see num_cpus and the
+  sourced buildgcc.subr file for a sample
+
+- offer alternative to the not widely spread dialog
+
+- support command-line configuration for tools
