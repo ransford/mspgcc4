@@ -21,3 +21,12 @@ num_cpus() {
 		*)	echo 1
 	esac
 }
+
+find_gnumake() {
+	for i in gmake make ; do
+		case "$($i --version 2>/dev/null | head -n1)" in
+			"GNU "[mM]ake*) echo $i ; return ;;
+		esac
+	done
+	exit 1
+}
