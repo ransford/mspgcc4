@@ -3359,7 +3359,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x1121" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x1121" || "${MSP430_NAME}" = "msp430x1122" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x1121" -o "${MSP430_NAME}" = "msp430x1122" ] ; then
  ARCH=msp:110
  ROM_START=0xf000
  ROM_SIZE=0x0fe0
@@ -3397,7 +3397,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x1222" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x122" || "${MSP430_NAME}" = "msp430x1222" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x122" -o "${MSP430_NAME}" = "msp430x1222" ] ; then
  ARCH=msp:12
  ROM_START=0xf000
  ROM_SIZE=0xfe0
@@ -3408,7 +3408,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x123" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x123" || "${MSP430_NAME}" = "msp430x1232" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x123" -o "${MSP430_NAME}" = "msp430x1232" ] ; then
  ARCH=msp:12
  ROM_START=0xe000
  ROM_SIZE=0x1fe0
@@ -3437,7 +3437,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x1331" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x133" || "${MSP430_NAME}" = "msp430x1331" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x133" -o "${MSP430_NAME}" = "msp430x1331" ] ; then
  ARCH=msp:13
  ROM_START=0xe000
  ROM_SIZE=0x1fe0
@@ -3448,7 +3448,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x135" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x135" || "${MSP430_NAME}" = "msp430x1351" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x135" -o "${MSP430_NAME}" = "msp430x1351" ] ; then
  ARCH=msp:13
  ROM_START=0xc000
  ROM_SIZE=0x3fe0
@@ -3468,7 +3468,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 -fi
 -
 -if [ "${MSP430_NAME}" = "msp430x147" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x147" ||  "${MSP430_NAME}" = "msp430x1471" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x147" -o  "${MSP430_NAME}" = "msp430x1471" ] ; then
  ARCH=msp:14
  ROM_START=0x8000
  ROM_SIZE=0x7fe0
@@ -3480,7 +3480,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x148" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x148" || "${MSP430_NAME}" = "msp430x1481" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x148" -o "${MSP430_NAME}" = "msp430x1481" ] ; then
  ARCH=msp:14
  ROM_START=0x4000
  ROM_SIZE=0xbfe0
@@ -3492,7 +3492,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x149" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x149" || "${MSP430_NAME}" = "msp430x1491" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x149" -o "${MSP430_NAME}" = "msp430x1491" ] ; then
  ARCH=msp:14
  ROM_START=0x1100
  ROM_SIZE=0xeee0
@@ -3592,7 +3592,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2001" || "${MSP430_NAME}" = "msp430x2002" || "${MSP430_NAME}" = "msp430x2003" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2001" -o "${MSP430_NAME}" = "msp430x2002" -o "${MSP430_NAME}" = "msp430x2003" ] ; then
 +ARCH=msp:20
 +ROM_START=0xFC00
 +ROM_SIZE=0x03e0
@@ -3601,7 +3601,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2011" || "${MSP430_NAME}" = "msp430x2012" || "${MSP430_NAME}" = "msp430x2013" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2011" -o "${MSP430_NAME}" = "msp430x2012" -o "${MSP430_NAME}" = "msp430x2013" ] ; then
 +ARCH=msp:20
 +ROM_START=0xF800
 +ROM_SIZE=0x07e0
@@ -3620,7 +3620,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x2111" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x2111" || "${MSP430_NAME}" = "msp430x2112" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2111" -o "${MSP430_NAME}" = "msp430x2112" ] ; then
  ARCH=msp:21
  ROM_START=0xF800
  ROM_SIZE=0x07e0
@@ -3631,7 +3631,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x2121" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x2121" || "${MSP430_NAME}" = "msp430x2122" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2121" -o "${MSP430_NAME}" = "msp430x2122" ] ; then
  ARCH=msp:21
  ROM_START=0xf000
  ROM_SIZE=0x0fe0
@@ -3642,7 +3642,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x2131" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x2131" || "${MSP430_NAME}" = "msp430x2132" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2131" -o "${MSP430_NAME}" = "msp430x2132" ] ; then
  ARCH=msp:21
  ROM_START=0xe000
  ROM_SIZE=0x1fe0
@@ -3652,7 +3652,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2232" || "${MSP430_NAME}" = "msp430x2234" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2232" -o "${MSP430_NAME}" = "msp430x2234" ] ; then
 +ARCH=msp:22
 +ROM_START=0xe000
 +ROM_SIZE=0x1fe0
@@ -3661,7 +3661,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2252" || "${MSP430_NAME}" = "msp430x2254" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2252" -o "${MSP430_NAME}" = "msp430x2254" ] ; then
 +ARCH=msp:22
 +ROM_START=0xc000
 +ROM_SIZE=0x3fe0
@@ -3670,7 +3670,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2272" || "${MSP430_NAME}" = "msp430x2274" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2272" -o "${MSP430_NAME}" = "msp430x2274" ] ; then
 +ARCH=msp:22
 +ROM_START=0x8000
 +ROM_SIZE=0x7fe0
@@ -3724,7 +3724,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x247" || "${MSP430_NAME}" = "msp430x2471" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x247" -o "${MSP430_NAME}" = "msp430x2471" ] ; then
 +ARCH=msp:24
 +ROM_START=0x8000
 +ROM_SIZE=0x7fe0
@@ -3733,7 +3733,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x248" || "${MSP430_NAME}" = "msp430x2481" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x248" -o "${MSP430_NAME}" = "msp430x2481" ] ; then
 +ARCH=msp:24
 +ROM_START=0x4000
 +ROM_SIZE=0xbfe0
@@ -3742,7 +3742,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x249" || "${MSP430_NAME}" = "msp430x2491" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x249" -o "${MSP430_NAME}" = "msp430x2491" ] ; then
 +ARCH=msp:24
 +ROM_START=0x1100
 +ROM_SIZE=0xeee0
@@ -3760,7 +3760,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2416" || "${MSP430_NAME}" = "msp430x2616" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2416" -o "${MSP430_NAME}" = "msp430x2616" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x2416" ] ; then
 +ARCH=msp:241
 +else
@@ -3777,7 +3777,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2417" || "${MSP430_NAME}" = "msp430x2617" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2417" -o "${MSP430_NAME}" = "msp430x2617" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x2417" ] ; then
 +ARCH=msp:241
 +else
@@ -3794,7 +3794,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2418" || "${MSP430_NAME}" = "msp430x2618" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2418" -o "${MSP430_NAME}" = "msp430x2618" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x2418" ] ; then
 +ARCH=msp:241
 +else
@@ -3811,7 +3811,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x2419" || "${MSP430_NAME}" = "msp430x2619" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x2419" -o "${MSP430_NAME}" = "msp430x2619" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x2419" ] ; then
 +ARCH=msp:241
 +else
@@ -3955,7 +3955,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x425" || "${MSP430_NAME}" = "msp430x4250" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x425" -o "${MSP430_NAME}" = "msp430x4250" ] ; then
 +ARCH=msp:42
 +ROM_START=0xc000
 +ROM_SIZE=0x3fe0
@@ -3977,7 +3977,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x427" || "${MSP430_NAME}" = "msp430x4270" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x427" -o "${MSP430_NAME}" = "msp430x4270" ] ; then
 +ARCH=msp:42
 +ROM_START=0x8000
 +ROM_SIZE=0x7fe0
@@ -3991,7 +3991,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +fi
 +
 +
-+if [[ "${MSP430_NAME}" = "msp430x435" || "${MSP430_NAME}" = "msp430x4351" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x435" -o "${MSP430_NAME}" = "msp430x4351" ] ; then
  ARCH=msp:43
  ROM_START=0xc000
  ROM_SIZE=0x3fe0
@@ -4002,7 +4002,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x436" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x436" || "${MSP430_NAME}" = "msp430x4361" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x436" -o "${MSP430_NAME}" = "msp430x4361" ] ; then
  ARCH=msp:43
  ROM_START=0xa000
  ROM_SIZE=0x5fe0
@@ -4013,7 +4013,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430x437" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430x437" || "${MSP430_NAME}" = "msp430x4371" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x437" -o "${MSP430_NAME}" = "msp430x4371" ] ; then
  ARCH=msp:43
  ROM_START=0x8000
  ROM_SIZE=0x7fe0
@@ -4055,9 +4055,9 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430xE423" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430xE423" ||  "${MSP430_NAME}" = "msp430xW423" 
-+     || "${MSP430_NAME}" = "msp430xE4232" 
-+   ]] ; then
++if [ "${MSP430_NAME}" = "msp430xE423" -o  "${MSP430_NAME}" = "msp430xW423" \
++     -o "${MSP430_NAME}" = "msp430xE4232" \
++   ] ; then
  ARCH=msp:42
  ROM_START=0xe000
  ROM_SIZE=0x1fe0
@@ -4077,9 +4077,9 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430xE425" || "${MSP430_NAME}" = "msp430xW425"
-+    || "${MSP430_NAME}" = "msp430xG4250" || "${MSP430_NAME}" = "msp430xE4252" 
-+   ]] ; then
++if [ "${MSP430_NAME}" = "msp430xE425" -o "${MSP430_NAME}" = "msp430xW425" \
++    -o "${MSP430_NAME}" = "msp430xG4250" -o "${MSP430_NAME}" = "msp430xE4252" \
++   ] ; then
  ARCH=msp:42
  ROM_START=0xc000
  ROM_SIZE=0x3fe0
@@ -4103,9 +4103,9 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
  fi
  
 -if [ "${MSP430_NAME}" = "msp430xE427" ] ; then
-+if [[ "${MSP430_NAME}" = "msp430xE427" || "${MSP430_NAME}" = "msp430xW427"
-+    || "${MSP430_NAME}" = "msp430xG4270" || "${MSP430_NAME}" = "msp430xE4272" 
-+   ]] ; then
++if [ "${MSP430_NAME}" = "msp430xE427" -o "${MSP430_NAME}" = "msp430xW427" \
++    -o "${MSP430_NAME}" = "msp430xG4270" -o "${MSP430_NAME}" = "msp430xE4272" \
++   ] ; then
  ARCH=msp:42
  ROM_START=0x8000
  ROM_SIZE=0x7fe0
@@ -4225,7 +4225,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x4783" ||  "${MSP430_NAME}" = "msp430x4784" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x4783" -o "${MSP430_NAME}" = "msp430x4784" ] ; then
 +ARCH=msp:47
 +ROM_START=0x4000
 +ROM_SIZE=0xbfe0
@@ -4234,7 +4234,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
  fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x4793" ||  "${MSP430_NAME}" = "msp430x4794" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x4793" -o "${MSP430_NAME}" = "msp430x4794" ] ; then
 +ARCH=msp:47
 +ROM_START=0x1100
 +ROM_SIZE=0xeee0
@@ -4243,7 +4243,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffe0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x47166" ||  "${MSP430_NAME}" = "msp430x47167" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x47166" -o "${MSP430_NAME}" = "msp430x47167" ] ; then
 +ARCH=msp:471
 +ROM_START=0x2100
 +ROM_SIZE=0x16f00
@@ -4256,7 +4256,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x47176" ||  "${MSP430_NAME}" = "msp430x47177" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x47176" -o "${MSP430_NAME}" = "msp430x47177" ] ; then
 +ARCH=msp:471
 +ROM_START=0x3100
 +ROM_SIZE=0x16f00
@@ -4269,7 +4269,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x47186" ||  "${MSP430_NAME}" = "msp430x47187" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x47186" -o "${MSP430_NAME}" = "msp430x47187" ] ; then
 +ARCH=msp:471
 +ROM_START=0x3100
 +ROM_SIZE=0x1cf00
@@ -4282,7 +4282,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x47196" ||  "${MSP430_NAME}" = "msp430x47197" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x47196" -o "${MSP430_NAME}" = "msp430x47197" ] ; then
 +ARCH=msp:471
 +ROM_START=0x2100
 +ROM_SIZE=0x1df00
@@ -4295,7 +4295,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xffc0
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x5418" || "${MSP430_NAME}" = "msp430x5419" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x5418" -o "${MSP430_NAME}" = "msp430x5419" ] ; then
 +ARCH=msp:54
 +ROM_START=0x5c00
 +ROM_SIZE=0x20000
@@ -4308,7 +4308,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xff80
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x5435" || "${MSP430_NAME}" = "msp430x5436" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x5435" -o "${MSP430_NAME}" = "msp430x5436" ] ; then
 +ARCH=msp:54
 +ROM_START=0x5c00
 +ROM_SIZE=0x30000
@@ -4321,7 +4321,7 @@ diff -urN binutils-2.19.1/ld/emulparams/msp430all.sh binutils-2.19.1.new/ld/emul
 +VECTORS_START=0xff80
 +fi
 +
-+if [[ "${MSP430_NAME}" = "msp430x5437" || "${MSP430_NAME}" = "msp430x5438" ]] ; then
++if [ "${MSP430_NAME}" = "msp430x5437" -o "${MSP430_NAME}" = "msp430x5438" ] ; then
 +ARCH=msp:54
 +ROM_START=0x5c00
 +ROM_SIZE=0x40000
@@ -5451,8 +5451,8 @@ diff -urN binutils-2.19.1/ld/scripttempl/elf32msp430.sc binutils-2.19.1.new/ld/s
 +HEAP_MEMORY_MSP430="heap(rwx)         : ORIGIN = $HEAP_START,    LENGTH = $HEAP_LENGTH"
  fi
  
-+ROM_END=$((ROM_START + ROM_SIZE))
-+if (( ROM_END > 65536 ))
++ROM_END=$(( $ROM_START + $ROM_SIZE ))
++if [ $ROM_END -gt 65536 ]
 +then
 +NEAR_ROM_SIZE=$(printf "0x%x" $(( $VECTORS_START - $ROM_START )) )
 +FAR_ROM_SIZE=$(printf  "0x%x" $(( $ROM_START + $ROM_SIZE - 0x10000 )) )
