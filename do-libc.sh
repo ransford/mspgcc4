@@ -22,7 +22,7 @@ TARGET_LOCATION="$1"
 shift
 
 if [ $# -ge 1 ] ; then
-	BUILD_DIR="$2"
+	BUILD_DIR="$1"
 	shift
 fi
 
@@ -51,7 +51,7 @@ cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -n -A
 rm -rf msp430-libc
 mkdir msp430-libc
 cd msp430-libc
-( cd msp430-libc.pristine && tar cf - .) | ( tar xpf - )
+( cd ../msp430-libc.pristine && tar cf - .) | ( tar xpf - )
 if [ -e "$INITIAL_DIR/msp430-libc.patch" ] ; then 
 	patch -p1 -N -i "$INITIAL_DIR/msp430-libc.patch"
 fi
