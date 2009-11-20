@@ -32,6 +32,12 @@ fi
 
 INSTALL_LAUNCHER="$(sh do-detect-sudo.sh "$TARGET_LOCATION")"
 
+GNUMAKE=$(find_gnumake)
+if [ -z "$GNUMAKE" ] ; then
+	echo >&2 "GNU make not found, aborting!"
+	exit 1
+fi
+
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -60,8 +66,8 @@ if [ "_$FETCH_ONLY" = _1 ]; then
 	exit 0
 fi
 
-make -j$(num_cpus)
-$INSTALL_LAUNCHER make install
+$GNUMAKE -j$(num_cpus)
+$INSTALL_LAUNCHER $GNUMAKE install
 
 echo '!<arch>' > 0lib.tmp
 $INSTALL_LAUNCHER cp 0lib.tmp "$TARGET_LOCATION/lib/libstdc++.a"

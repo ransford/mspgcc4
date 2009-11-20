@@ -52,6 +52,12 @@ done
 
 INSTALL_LAUNCHER="$(sh do-detect-sudo.sh "$TARGET_LOCATION")"
 
+GNUMAKE=$(find_gnumake)
+if [ -z "$GNUMAKE" ] ; then
+	echo >&2 "GNU make not found, aborting!"
+	exit 1
+fi
+
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -123,7 +129,7 @@ cd ..
 mkdir -p "gcc-$GCC_VERSION-build"
 cd "gcc-$GCC_VERSION-build"
 "$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++
-make -j$(num_cpus)
-$INSTALL_LAUNCHER make install
+$GNUMAKE -j$(num_cpus)
+$INSTALL_LAUNCHER $GNUMAKE install
 
 cd "$INITIAL_DIR"
