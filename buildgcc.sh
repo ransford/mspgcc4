@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # This work is partially financed by the European Commission under the
 # Framework 6 Information Society Technologies Project
