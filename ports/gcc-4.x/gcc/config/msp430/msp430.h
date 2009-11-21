@@ -1038,12 +1038,9 @@ typedef struct msp430_args {
 	to the output file as raw text, so, unwind info cannot be generated.
 */
 
-/*
-  #define DWARF2_UNWIND_INFO 1
-  #define INCOMING_RETURN_ADDR_RTX gen_rtx_MEM (VOIDmode, gen_rtx_REG (VOIDmode, STACK_POINTER_REGNUM))
-*/
-  
-   
+#define DWARF2_UNWIND_INFO 1
+#define INCOMING_RETURN_ADDR_RTX gen_rtx_MEM (VOIDmode, gen_rtx_REG (VOIDmode, STACK_POINTER_REGNUM))
+#define EPILOGUE_USES(REGNO) msp430_epilogue_uses(REGNO)
    
 #define INIT_CUMULATIVE_ARGS(CUM, FNTYPE, LIBNAME, FNDECL, N_NAMED_ARGS ) \
 init_cumulative_args (&(CUM), FNTYPE, LIBNAME, FNDECL)
@@ -3055,6 +3052,8 @@ struct machine_function GTY(())
   int is_reenterant;
   
   int is_wakeup;
+  
+  int is_signal;
 };
 
 #ifdef RTX_CODE

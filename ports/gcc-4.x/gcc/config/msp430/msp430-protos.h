@@ -28,8 +28,8 @@ extern void   asm_file_start            PARAMS ((FILE *file));
 extern void   asm_file_end              PARAMS ((FILE *file));
 extern void   msp430_init_once          PARAMS ((void));
 extern void   msp430_override_options   PARAMS ((void));
-extern void   function_prologue         PARAMS ((FILE *file, int size));
-extern void   function_epilogue         PARAMS ((FILE *file, int size));
+/*extern void   function_prologue         PARAMS ((FILE *file, int size));
+extern void   function_epilogue         PARAMS ((FILE *file, int size));*/
 extern void   gas_output_limited_string PARAMS ((FILE *file, const char *str));
 extern void   gas_output_ascii          PARAMS ((FILE *file, const char *str,
 							 size_t length));
@@ -272,6 +272,9 @@ extern int      msp430_ashrsi3          PARAMS ((rtx [] ));
 extern int      msp430_lshrhi3          PARAMS ((rtx [] ));
 extern int      msp430_lshrsi3          PARAMS ((rtx [] ));
 
+extern void expand_prologue (void);
+extern void expand_epilogue (void);
+extern int msp430_epilogue_uses (int regno);
 
 #endif /* RTX_CODE */
 

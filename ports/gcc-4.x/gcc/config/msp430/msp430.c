@@ -308,8 +308,8 @@ void msp430_init_builtins (void);
 rtx msp430_expand_builtin (tree, rtx, rtx, enum machine_mode, int);
 
 /* Defined in msp430-function.c */
-void msp430_function_prologue (FILE * file, HOST_WIDE_INT);
-void msp430_function_epilogue (FILE * file, HOST_WIDE_INT);
+void msp430_function_end_prologue (FILE * file);
+void msp430_function_begin_epilogue (FILE * file);
 
 static struct machine_function *msp430_init_machine_status (void)
 {
@@ -331,10 +331,18 @@ PARAMS ((tree *, tree, tree, int, bool *));
 #define TARGET_ASM_FILE_START_FILE_DIRECTIVE true
 #undef TARGET_ASM_FILE_END
 #define TARGET_ASM_FILE_END msp430_file_end
-#undef 	TARGET_ASM_FUNCTION_PROLOGUE
+
+/* Hardcoded prologue/epilogue was replaced by flexible expand_prologue()/expand_epilogue() */
+/*#undef 	TARGET_ASM_FUNCTION_PROLOGUE
 #define TARGET_ASM_FUNCTION_PROLOGUE msp430_function_prologue
 #undef 	TARGET_ASM_FUNCTION_EPILOGUE
-#define TARGET_ASM_FUNCTION_EPILOGUE msp430_function_epilogue
+#define TARGET_ASM_FUNCTION_EPILOGUE msp430_function_epilogue*/
+
+#undef TARGET_ASM_FUNCTION_END_PROLOGUE
+#define TARGET_ASM_FUNCTION_END_PROLOGUE msp430_function_end_prologue
+#undef TARGET_ASM_FUNCTION_BEGIN_EPILOGUE
+#define TARGET_ASM_FUNCTION_BEGIN_EPILOGUE msp430_function_begin_epilogue
+
 #undef 	TARGET_ATTRIBUTE_TABLE
 #define TARGET_ATTRIBUTE_TABLE msp430_attribute_table
 #undef 	TARGET_SECTION_TYPE_FLAGS
@@ -809,11 +817,7 @@ int code;
 		abort ();
 }
 
-void
-print_operand (file, x, code)
-FILE *file;
-rtx x;
-int code;
+void print_operand (FILE *file, rtx x, int code)
 {
 	int shift = 0;
 	int ml = GET_MODE_SIZE (x->mode);
@@ -865,7 +869,13 @@ int code;
 	else if (GET_CODE (x) == CONST_INT)
 	{
 		if (code != 'F')
-			fprintf (file, "#%s(%d)", trim_array[shift], INTVAL (x));
+		{
+			int intval = INTVAL (x);
+			if (!shift && !(intval & ~0xFFFF)) /* For improved ASM readability, omit #llo(const) for small constants*/
+				fprintf (file, "#%d", intval);	
+			else
+				fprintf (file, "#%s(%d)", trim_array[shift], intval);
+		}
 		else
 			fprintf (file, "%d", INTVAL (x));
 	}
@@ -1585,36 +1595,6 @@ enum reg_class class;
 	return class;
 }
 
-/* cfp minds the fact that the function may save r2 */
-int
-initial_elimination_offset (from, to)
-int from;
-int to;
-{
-	int reg;
-	if (from == FRAME_POINTER_REGNUM && to == STACK_POINTER_REGNUM)
-		return 0;
-	else
-	{
-		int interrupt_func_p = interrupt_function_p (current_function_decl);
-		int cfp = msp430_critical_function_p (current_function_decl);
-		int leaf_func_p = leaf_function_p ();
-		int offset = interrupt_func_p ? 0 : (cfp ? 2 : 0);
-
-		for (reg = 4; reg < 16; ++reg)
-		{
-			if ((!leaf_func_p && call_used_regs[reg] && (interrupt_func_p))
-				|| (df_regs_ever_live_p(reg)
-				&& (!call_used_regs[reg] || interrupt_func_p)))
-			{
-				offset += 2;
-			}
-		}
-		return get_frame_size () + offset + 2;
-	}
-	return 0;
-}
-
 int
 adjust_insn_length (insn, len)
 rtx insn;
@@ -2234,7 +2214,7 @@ msp430_peep2_scratch_safe (scratch)
 rtx scratch;
 {
 	if ((interrupt_function_p (current_function_decl)
-		|| signal_function_p (current_function_decl)) && leaf_function_p ())
+		|| signal_function_p (current_function_decl)) && cfun->machine->is_leaf)
 	{
 		int first_reg = true_regnum (scratch);
 		int last_reg;
@@ -8177,14 +8157,14 @@ int *len;
 	return "";
 }
 
-int
-dead_or_set_in_peep (which, insn, x)
-int which;
-rtx insn ATTRIBUTE_UNUSED;
-rtx x;
+int dead_or_set_in_peep (int which, rtx insn ATTRIBUTE_UNUSED, rtx x)
 {
+	extern int peep2_current_count;
 	rtx r;
 	rtx next;
+
+	if (which > peep2_current_count)
+		return 0;
 
 	next = peep2_next_insn (which);
 	if (!next)
