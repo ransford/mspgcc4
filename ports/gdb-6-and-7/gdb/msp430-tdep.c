@@ -1,3 +1,12 @@
+/* This work is partially financed by the European Commission under the
+* Framework 6 Information Society Technologies Project
+* "Wirelessly Accessible Sensor Populations (WASP)".
+*/
+
+/*
+	GDB 6.x/7.x port by Ivan Shcherbakov <mspgcc@sysprogs.org>
+*/
+
 /* Target-dependent code for the Texas Instruments MSP430 MCUs.
 
    Copyright 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003 Free Software
@@ -44,6 +53,7 @@
 #include "sim-regno.h"
 #include "disasm.h"
 #include "trad-frame.h"
+#include "dwarf2-frame.h"
 
 #include "gdb_assert.h"
 
@@ -658,15 +668,172 @@ static int DetectPushedArgumentsSize(CORE_ADDR FirstInstructionAfterCall)
 	return 0;
 }
 
+static struct msp430_unwind_cache *msp430_build_unwind_cache_from_epilogue(struct frame_info *associated_frame, void **this_prologue_cache)
+{
+	//Note that on GDB v7 associated_frame is the curent frame, while on gdb v6, it is the next frame
+#if GDB_VERSION_INT >= 0x700
+	struct frame_info *this_frame = associated_frame;
+#else
+	struct frame_info *next_frame = associated_frame;
+#endif
+
+	const int TargetPointerSize = 2;
+
+	struct gdbarch *gdbarch = get_frame_arch (associated_frame);
+
+	ULONGEST this_pc, this_sp;
+	ULONGEST frame_bottom;	//Either SP or FP, depending on whether FP is used
+
+	int insn, pc_off = 0, i, prev_sp = 0;
+
+	int register_offsets[E_NUM_REGS];
+
+	struct msp430_unwind_cache *info;
+
+
+#if GDB_VERSION_INT >= 0x700
+	if (frame_relative_level (this_frame) != 0)
+#else
+	if (frame_relative_level (next_frame) != -1)
+#endif
+		return NULL;
+
+	if ((*this_prologue_cache))
+		return (*this_prologue_cache);
+
+	//Extract PC and SP (start of frame) for THIS frame.
+#if GDB_VERSION_INT >= 0x700
+	this_pc = get_frame_pc (this_frame);
+	this_sp = get_frame_sp (this_frame);
+#else
+	this_pc = frame_unwind_register_unsigned (next_frame, E_PC_REGNUM);
+	this_sp = frame_unwind_register_unsigned (next_frame, E_SP_REGNUM);
+#endif
+
+	if (!this_sp || !this_pc)
+		return info;	//Cannot extract any useful frame information
+
+	memset(register_offsets, -1, sizeof(register_offsets));
+
+	for (pc_off = 0; pc_off <= 16; pc_off += 2)
+	{
+		insn = get_insn (this_pc + pc_off, gdbarch);
+		if ((insn & 0xFFF0) == 0x4130)
+		{	/* This is a POP instruction */
+			int poppedRegNum = insn & 0x000F;
+			register_offsets[poppedRegNum] = pc_off;
+			if (poppedRegNum == E_PC_REGNUM)
+			{
+				prev_sp = this_sp + pc_off + 2;
+				break;
+			}
+		}
+		else if (insn == 0x1300)
+		{	/* This is a "reti" instruction */
+			register_offsets[E_PSW_REGNUM] = pc_off;
+			register_offsets[E_PC_REGNUM] = pc_off + 2;
+			prev_sp = this_sp + pc_off + 4;
+			break;
+		}
+		else
+			return NULL;
+	}
+
+	info = FRAME_OBSTACK_ZALLOC (struct msp430_unwind_cache);
+	(*this_prologue_cache) = info;
+	info->saved_regs = trad_frame_alloc_saved_regs (associated_frame);
+
+	for (i = 0; i < E_NUM_REGS; i++)
+	{
+		if (register_offsets[i] != -1)
+		{
+			ULONGEST reg_val = get_frame_memory_unsigned(associated_frame, this_sp +register_offsets[i], 2);
+			trad_frame_set_value (info->saved_regs, i, reg_val);
+		}
+	}
+
+	if (prev_sp)
+		trad_frame_set_value (info->saved_regs, E_SP_REGNUM, prev_sp);
+
+	info->prev_sp = prev_sp;
+	info->base = prev_sp;
+
+	return info;
+}
+
+static struct msp430_unwind_cache *msp430_build_unwind_cache_from_epilogue(struct frame_info *associated_frame, void **this_prologue_cache);
+
+#if GDB_VERSION_INT >= 0x700
+static void msp430_epilogue_frame_this_id (struct frame_info *this_frame,
+										   void **this_prologue_cache,
+struct frame_id *this_id)
+{
+	struct msp430_unwind_cache *info = msp430_build_unwind_cache_from_epilogue (this_frame, this_prologue_cache);
+	CORE_ADDR base;
+	CORE_ADDR func;
+	struct frame_id id;
+
+	if (!info)
+		return;
+
+	/* The FUNC is easy. */
+	func = get_frame_func (this_frame);
+
+	/* Hopefully the prologue analysis either correctly determined the
+	frame's base (which is the SP from the previous frame), or set
+	that base to "NULL".  */
+	base = info->prev_sp;
+	if (base == 0)
+		return;
+
+	id = frame_id_build (base, func);
+	(*this_id) = id;
+}
+#else
+static void msp430_epilogue_frame_this_id (struct frame_info *next_frame,
+										   void **this_prologue_cache,
+struct frame_id *this_id)
+{
+	struct msp430_unwind_cache *info
+		= msp430_build_unwind_cache_from_epilogue (next_frame, this_prologue_cache);
+	CORE_ADDR base;
+	CORE_ADDR func;
+	struct frame_id id;
+
+	/* The FUNC is easy. */
+	func = frame_func_unwind (next_frame, NORMAL_FRAME);
+
+	/* Hopefully the prologue analysis either correctly determined the
+	frame's base (which is the SP from the previous frame), or set
+	that base to "NULL".  */
+	base = info->prev_sp;
+	if (base == 0)
+		return;
+
+	id = frame_id_build (base, func);
+
+	/* Check that we're not going round in circles with the same frame
+	ID (but avoid applying the test to sentinel frames which do go
+	round in circles).  Can't use frame_id_eq() as that doesn't yet
+	compare the frame's PC value.  */
+	if (frame_relative_level (next_frame) >= 0
+		&& get_frame_type (next_frame) != DUMMY_FRAME
+		&& frame_id_eq (get_frame_id (next_frame), id))
+		return;
+
+	(*this_id) = id;
+}
+#endif
+
+/* -------------------------------------------------------------------------------------------------- */
+
 /* Put here the code to store, into fi->saved_regs, the addresses of
    the saved registers of frame described by FRAME_INFO.  This
    includes special registers such as pc and fp saved in special ways
    in the stack frame.  sp is even more special: the address we return
    for it IS the sp for the next frame. */
 
-static struct msp430_unwind_cache *
-msp430_frame_unwind_cache (struct frame_info *associated_frame,
-						   void **this_prologue_cache)
+static struct msp430_unwind_cache * msp430_frame_unwind_cache (struct frame_info *associated_frame, void **this_prologue_cache)
 {
 	//Note that on GDB v7 associated_frame is the curent frame, while on gdb v6, it is the next frame
 #if GDB_VERSION_INT >= 0x700
@@ -1223,6 +1390,13 @@ msp430_frame_prev_register (struct frame_info *associated_frame,
 							);
 }
 
+static int msp430_epilogue_frame_sniffer (const struct frame_unwind *self, struct frame_info *this_frame, void **this_cache)
+{
+	struct msp430_unwind_cache *info = msp430_build_unwind_cache_from_epilogue (this_frame, this_cache);
+	return (info != NULL);
+}
+
+
 static const struct frame_unwind msp430_frame_unwind = {
   NORMAL_FRAME,
   msp430_frame_this_id,
@@ -1231,6 +1405,14 @@ static const struct frame_unwind msp430_frame_unwind = {
   NULL,
   default_frame_sniffer,
 #endif
+};
+
+static const struct frame_unwind msp430_epilogue_frame_unwind = {
+	NORMAL_FRAME,
+	msp430_epilogue_frame_this_id,
+	msp430_frame_prev_register,
+	NULL,
+	msp430_epilogue_frame_sniffer,
 };
 
 static const struct frame_unwind *
@@ -1361,11 +1543,16 @@ msp430_gdbarch_init (struct gdbarch_info info, struct gdbarch_list *arches)
   set_gdbarch_print_registers_info (gdbarch, msp430_print_registers_info);
 
 #if GDB_VERSION_INT >= 0x700
+  frame_unwind_append_unwinder (gdbarch, &msp430_epilogue_frame_unwind);
+  dwarf2_append_unwinders (gdbarch);
   frame_unwind_append_unwinder (gdbarch, &msp430_frame_unwind);
 #else
+  frame_unwind_prepend_unwinder(gdbarch, &msp430_epilogue_frame_unwind);
+  frame_unwind_append_sniffer (gdbarch, dwarf2_frame_sniffer);
   frame_unwind_append_sniffer (gdbarch, msp430_frame_sniffer);
 #endif
 
+  
   frame_base_set_default (gdbarch, &msp430_frame_base);
 
   /* Methods for saving / extracting a dummy frame's ID.  The ID's
