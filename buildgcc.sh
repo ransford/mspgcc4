@@ -121,7 +121,7 @@ if [ 0$1 != 0--defaults ]; then
 
 	$DIALOG --yesno "Create binary package after build?" 5 50
 	if [ $? = 0 ]; then
-		BINPACKAGE_NAME=mspgcc-$GCC_VERSION$GDB_PACKAGE_SUFFIX.tbz
+		BINPACKAGE_NAME="mspgcc-$GCC_VERSION$GDB_PACKAGE_SUFFIX.tar.bz2"
 		$DIALOG --inputbox "Enter binary package name" 7 50 "$BINPACKAGE_NAME" 2>/tmp/dialog.ans
 		if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 			BINPACKAGE_NAME="$(cat /tmp/dialog.ans)"
@@ -137,8 +137,8 @@ cat <<_EOF
 ---------------------------------------------------------------
 Building GCC $GCC_VERSION
 GDB version: $GDB_VERSION
-Target location: $TARGET_LOCATION
-Binary package name: $BINPACKAGE_NAME
+Target location: "$TARGET_LOCATION"
+Binary package name: "$BINPACKAGE_NAME"
 ---------------------------------------------------------------
 _EOF
 
