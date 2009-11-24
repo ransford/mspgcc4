@@ -160,16 +160,17 @@ if [ 0$GDB_VERSION != 0 ]; then
 	sh do-gdb.sh "$TARGET_LOCATION" "$GDB_VERSION" "$GNU_MIRROR" "$BUILD_DIR" gdb || exit 1
 fi
 
-if [ 0$BINPACKAGE_NAME != 0 ]; then
-	echo "Creating binary package..."
-	cd $TARGET_LOCATION
-	tar cjf $BASEDIR/$BINPACKAGE_NAME *
-	cd $BASEDIR
-fi
-
 cat <<_EOF
 -------------------------------------------------------------------------------
 Build succeeded
 Do not forget to add $TARGET_LOCATION/bin to your PATH environment variable
 -------------------------------------------------------------------------------
 _EOF
+
+if [ -n "$BINPACKAGE_NAME" ]; then
+	echo "Creating binary package..."
+	cd "$TARGET_LOCATION"
+	tar cjf "$BASEDIR/$BINPACKAGE_NAME" *
+	ls -ldq "$BASEDIR/$BINPACKAGE_NAME"
+	cd "$BASEDIR"
+fi
