@@ -35,12 +35,12 @@ BINPACKAGE_NAME=
 GDB_VERSION=7.0
 INSIGHT_VERSION=6.8-1
 
-BASEDIR=`pwd`
+BASEDIR="$(pwd)"
 
 if [ 0$1 != 0--defaults ]; then
 	$DIALOG --menu "Select GCC version to build" 13 50 6 1 "gcc-4.4.2" 2 "gcc-4.3.4" 3 "gcc-4.2.4" 4 "gcc-3.3.6" 5 "gcc-3.2.3" 6 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
-		case `cat /tmp/dialog.ans` in
+		case "$(cat /tmp/dialog.ans)" in
 		1)
 			GCC_VERSION=4.4.2
 			GCC_PATCH_FOLDER=gcc-4.x
@@ -72,7 +72,7 @@ if [ 0$1 != 0--defaults ]; then
 	
 	$DIALOG --menu "Select GDB version to build" 10 50 3 1 "gdb-7.0" 2 "gdb-6.8" 3 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
-		case `cat /tmp/dialog.ans` in
+		case "$(cat /tmp/dialog.ans)" in
 		1)
 			GDB_VERSION=7.0
 			GDB_PACKAGE_SUFFIX=_gdb_$GDB_VERSION ;;
@@ -91,7 +91,7 @@ if [ 0$1 != 0--defaults ]; then
 
 	$DIALOG --menu "Select GNU Insight version to build" 10 50 3 1 "insight-6.8-1" 2 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
-		case `cat /tmp/dialog.ans` in
+		case "$(cat /tmp/dialog.ans)" in
 		1)
 			INSIGHT_VERSION=6.8-1 ;;
 		2)
@@ -105,7 +105,7 @@ if [ 0$1 != 0--defaults ]; then
 
 	$DIALOG --inputbox "Enter target toolchain path" 7 50 "$TARGET_LOCATION" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
-		TARGET_LOCATION=`cat /tmp/dialog.ans`
+		TARGET_LOCATION="$(cat /tmp/dialog.ans)"
 		rm /tmp/dialog.ans
 	else
 		echo "Build cancelled"
@@ -124,7 +124,7 @@ if [ 0$1 != 0--defaults ]; then
 		BINPACKAGE_NAME=mspgcc-$GCC_VERSION$GDB_PACKAGE_SUFFIX.tbz
 		$DIALOG --inputbox "Enter binary package name" 7 50 "$BINPACKAGE_NAME" 2>/tmp/dialog.ans
 		if [ $? = 0 -a -e /tmp/dialog.ans ]; then
-			BINPACKAGE_NAME=`cat /tmp/dialog.ans`
+			BINPACKAGE_NAME="$(cat /tmp/dialog.ans)"
 			rm /tmp/dialog.ans
 		else
 			echo "Build cancelled"
