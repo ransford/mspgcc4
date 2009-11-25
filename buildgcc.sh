@@ -37,7 +37,7 @@ INSIGHT_VERSION=6.8-1
 
 BASEDIR="$(pwd)"
 
-if [ 0$1 != 0--defaults ]; then
+if [ $# -ge 1 ] && [ "_$1" != _--defaults ]; then
 	$DIALOG --menu "Select GCC version to build" 13 50 6 1 "gcc-4.4.2" 2 "gcc-4.3.4" 3 "gcc-4.2.4" 4 "gcc-3.3.6" 5 "gcc-3.2.3" 6 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		case "$(cat /tmp/dialog.ans)" in
@@ -144,7 +144,7 @@ _EOF
 
 BUILD_DIR=build
 
-if [ x"$GCC_VERSION" != x"" ]; then
+if [ -n "$GCC_VERSION" ]; then
 	if [ x"$SKIP_BINUTILS" != x"1" ]; then
 		sh do-binutils.sh "$TARGET_LOCATION" "$BINUTILS_VERSION" "$GNU_MIRROR" "$BUILD_DIR" || exit 1
 	fi
@@ -152,11 +152,11 @@ if [ x"$GCC_VERSION" != x"" ]; then
 	sh do-libc.sh "$TARGET_LOCATION" "$BUILD_DIR" || exit 1
 fi
 
-if [ 0$INSIGHT_VERSION != 0 ]; then
+if [ -n "$INSIGHT_VERSION" ]; then
 	sh do-gdb.sh "$TARGET_LOCATION" "$INSIGHT_VERSION" "$GNU_MIRROR" "$BUILD_DIR" insight || exit 1
 fi
 
-if [ 0$GDB_VERSION != 0 ]; then
+if [ -n "$GDB_VERSION" ]; then
 	sh do-gdb.sh "$TARGET_LOCATION" "$GDB_VERSION" "$GNU_MIRROR" "$BUILD_DIR" gdb || exit 1
 fi
 
