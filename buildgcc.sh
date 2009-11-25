@@ -152,12 +152,12 @@ if [ -n "$GCC_VERSION" ]; then
 	sh do-libc.sh "$TARGET_LOCATION" "$BUILD_DIR" || exit 1
 fi
 
-if [ -n "$INSIGHT_VERSION" ]; then
-	sh do-gdb.sh "$TARGET_LOCATION" "$INSIGHT_VERSION" "$GNU_MIRROR" "$BUILD_DIR" insight || exit 1
-fi
-
 if [ -n "$GDB_VERSION" ]; then
 	sh do-gdb.sh "$TARGET_LOCATION" "$GDB_VERSION" "$GNU_MIRROR" "$BUILD_DIR" gdb || exit 1
+fi
+
+if [ -n "$INSIGHT_VERSION" ]; then
+	sh do-gdb.sh "$TARGET_LOCATION" "$INSIGHT_VERSION" "$GNU_MIRROR" "$BUILD_DIR" insight || exit 1
 fi
 
 cat <<_EOF
