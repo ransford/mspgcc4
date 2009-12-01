@@ -16,7 +16,6 @@
 
 set -eu
 
-VERSION_TAG=`cat _version_tag.txt`
 GCC_VERSION="4.3.4"
 GCC_PATCH_FOLDER="gcc-4.x"
 GMP_VERSION="4.3.1"
@@ -26,12 +25,6 @@ BUILD_DIR="build"
 INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
 NO_FETCH=0
-
-WIN32_OPTS=
-
-if [ 0$SYSTEMROOT != 0 ]; then
-	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG
-fi
 
 if [ $# = 0 ]; then
 	echo "Usage:   do-gcc.sh <toolchain target dir> [<gcc_version>] [<GNU mirror site>] [<build dir>] [<GCC patch folder>] [<GMP version>] [<MPFR version>] [--fetch-only/--no-fetch]"
@@ -99,7 +92,7 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	if [ x"$MPFR_VERSION" != x"-" ]; then
-		wget "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
+		wget -c "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
 	fi
 fi
 
@@ -135,14 +128,7 @@ cp -rf ../mspgcc/gcc/"$GCC_PATCH_FOLDER"/* .
 cd ..
 mkdir -p "gcc-$GCC_VERSION-build"
 cd "gcc-$GCC_VERSION-build"
-
-if [ 0`uname -o` = 0Msys ]; then
-	"$(pwd -W)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --disable-nls
-	GNUMAKE=mingw32-make
-else
-	"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS
-fi
-
+"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++
 $GNUMAKE -j$(num_cpus)
 $INSTALL_LAUNCHER $GNUMAKE install
 
