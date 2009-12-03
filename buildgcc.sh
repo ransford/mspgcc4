@@ -38,7 +38,7 @@ INSIGHT_VERSION=6.8-1
 BASEDIR="$(pwd)"
 SKIP_BINUTILS=0
 
-if [ $# -ge 1 ] && [ "_$1" != _--defaults ]; then
+if [ $# -lt 1 ] || [ "_$1" != _--defaults ]; then
 	$DIALOG --menu "Select GCC version to build" 13 50 6 1 "gcc-4.4.2" 2 "gcc-4.3.4" 3 "gcc-4.2.4" 4 "gcc-3.3.6" 5 "gcc-3.2.3" 6 "none" 2>/tmp/dialog.ans
 	if [ $? = 0 -a -e /tmp/dialog.ans ]; then
 		case "$(cat /tmp/dialog.ans)" in
