@@ -530,11 +530,13 @@ void msp430_init_once (void)
 	return;
 }
 
-static int reg_class_tab[16] = {
+static char error_here_if_register_count_invalid[(FIRST_VIRTUAL_REGISTER == 17) ? 1 : -1];
+static int reg_class_tab[FIRST_VIRTUAL_REGISTER] = {
 	PC_REG, STACK_REGS, CG_REGS, CG_REGS,
-	GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS,
-	GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS,
-	GENERAL_REGS, GENERAL_REGS	/* r0 - r15 */
+	GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, 
+	GENERAL_REGS, GENERAL_REGS, GENERAL_REGS, GENERAL_REGS,
+	GENERAL_REGS, GENERAL_REGS,	GENERAL_REGS, GENERAL_REGS,	/* r0 - r15 */
+	GENERAL_REGS,	/* regp */
 };
 
 
@@ -557,11 +559,10 @@ int msp430_regno_ok_for_base_p (int r)
 }
 
 enum reg_class
-msp430_regno_reg_class (
-						int r)
+msp430_regno_reg_class (int r)
 {
-	if (r < FIRST_PSEUDO_REGISTER)
-	return reg_class_tab[r];
+	if (r < (sizeof(reg_class_tab) / sizeof(reg_class_tab[0])))
+		return reg_class_tab[r];
 
 	return NO_REGS;
 }
@@ -8450,4 +8451,12 @@ msp430_address_costs (rtx x)
 		break;
 	}
 	return COSTS_N_INSNS (3);
+}
+
+void msp430_expand_mov_intptr (rtx dest, rtx src)
+{
+  if (push_operand (dest, HImode) && ! general_no_elim_operand (src, HImode))
+	src = copy_to_mode_reg (HImode, src);
+
+  emit_insn (gen_rtx_SET (VOIDmode, dest, src));
 }

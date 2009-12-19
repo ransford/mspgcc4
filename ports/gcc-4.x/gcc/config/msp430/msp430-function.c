@@ -99,7 +99,7 @@ void msp430_function_end_prologue (FILE * file)
 	}
 	else
 	{
-		int offset = initial_elimination_offset (0, 0) - 2;
+		int offset = initial_elimination_offset (ARG_POINTER_REGNUM, STACK_POINTER_REGNUM) - 2;
 		fprintf (file, "\t/* prologue ends here (frame size = %d) */\n", (unsigned)frameSize);
 		fprintf (file, ".L__FrameSize_%s=0x%x\n", functionName, (unsigned)frameSize);
 		fprintf (file, ".L__FrameOffset_%s=0x%x\n", functionName, (unsigned)offset);
@@ -194,7 +194,7 @@ void expand_prologue (void)
 		return;
 
 	stack_reserve = msp430_get_stack_reserve();
-	offset = initial_elimination_offset (0, 0) - 2;
+	offset = initial_elimination_offset (ARG_POINTER_REGNUM, STACK_POINTER_REGNUM) - 2;
 
 	msp430_current_frame_offset = offset;
 
@@ -225,7 +225,7 @@ void expand_prologue (void)
 
 				prologue_size += 1;
 			}
-
+			
 			if (size)
 				prologue_size += 2;
 			if (size == 1 || size == 2 || size == 4 || size == 8)
@@ -247,6 +247,8 @@ void expand_prologue (void)
 			}
 			prologue_size += 2;
 		}
+		if ((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)
+			msp430_fh_sub_sp_const(crtl->outgoing_args_size);
 	}
 	else	/* not a main() function */
 	{
@@ -324,7 +326,7 @@ void expand_prologue (void)
 			if (!optimize && !optimize_size
 				&& df_regs_ever_live_p(ARG_POINTER_REGNUM))
 			{
-				int o = initial_elimination_offset (0, 0) - size;
+				int o = initial_elimination_offset (ARG_POINTER_REGNUM, STACK_POINTER_REGNUM) - size;
 				
 				/* fprintf (file, "\tmov\tr1, r%d\n", ARG_POINTER_REGNUM);
 				fprintf (file, "\tadd\t#%d, r%d\n", o, ARG_POINTER_REGNUM); */
@@ -371,7 +373,10 @@ void expand_prologue (void)
 				prologue_size += 2;
 		}
 
-		/* disable interrupt for reentrant function */
+		if ((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)
+			msp430_fh_sub_sp_const(crtl->outgoing_args_size);
+
+			/* disable interrupt for reentrant function */
 		if (!cfun->machine->is_interrupt && cfun->machine->is_reenterant)
 		{
 			prologue_size += 1;
@@ -434,9 +439,12 @@ void expand_epilogue (void)
 
 	if (main_p)
 	{
-		if (size)
+		int totalsize = (size + 1) & ~1;
+		if ((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)
+			totalsize += crtl->outgoing_args_size;
+		if (totalsize)
 		{
-			msp430_fh_add_sp_const((size + 1) & ~1);
+			msp430_fh_add_sp_const(totalsize);
 			/*fprintf (file, "\tadd\t#%d, r1\n", (size + 1) & ~1);*/
 		}
 		/*fprintf (file, "\tbr\t#%s\n", msp430_endup);*/
@@ -447,7 +455,11 @@ void expand_epilogue (void)
 	}
 	else
 	{
-		if (ree)
+		int totalsize = (size + 1) & ~1;
+		if ((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)
+			totalsize += crtl->outgoing_args_size;
+
+			if (ree)
 		{
 			/*fprintf (file, "\teint\n");*/
 
@@ -456,10 +468,10 @@ void expand_epilogue (void)
 			epilogue_size += 1;
 		}
 
-		if (size)
+		if (totalsize)
 		{
 			/*fprintf (file, "\tadd\t#%d, r1\n", (size + 1) & ~1);*/
-			msp430_fh_add_sp_const((size + 1) & ~1);
+			msp430_fh_add_sp_const(totalsize);
 
 			if (size == 1 || size == 2 || size == 4 || size == 8)
 				epilogue_size += 1;
@@ -758,6 +770,10 @@ int msp430_empty_epilogue (void)
 /* cfp minds the fact that the function may save r2 */
 int initial_elimination_offset (int from, int to)
 {
+	int outgoingArgsSize = 0;
+	if((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)
+		outgoingArgsSize = crtl->outgoing_args_size;
+
 	/*
 		'Reloading' is mapping pseudo-registers into hardware registers and stack slots.
 		More information here: http://gcc.gnu.org/onlinedocs/gccint/RTL-passes.html
@@ -772,12 +788,14 @@ int initial_elimination_offset (int from, int to)
 
 	int reg;
 	if (from == FRAME_POINTER_REGNUM && to == STACK_POINTER_REGNUM)
-		return 0;
-	else
+		return outgoingArgsSize;
+	else if (from == ARG_POINTER_REGNUM)
 	{
 		int interrupt_func_p = interrupt_function_p (current_function_decl);
 		int cfp = msp430_critical_function_p (current_function_decl);
 		int offset = interrupt_func_p ? 0 : (cfp ? 2 : 0);
+		
+		gcc_assert((to == FRAME_POINTER_REGNUM) || (to == STACK_POINTER_REGNUM));
 
 		for (reg = 4; reg < 16; ++reg)
 		{
@@ -788,7 +806,10 @@ int initial_elimination_offset (int from, int to)
 				offset += 2;
 			}
 		}
-		return get_frame_size () + offset + 2;
+		if (to == FRAME_POINTER_REGNUM)
+			return get_frame_size () + offset + 2;
+		else
+			return get_frame_size () + offset + 2 + outgoingArgsSize;
 	}
-	return 0;
+	gcc_unreachable();
 }

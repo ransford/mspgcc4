@@ -86,3 +86,21 @@
   return (code == PLUS || code == MINUS || code == AND || code == IOR || code == XOR);
 })
 
+;; True for any non-virtual or eliminable register.  Used in places where
+;; instantiation of such a register may cause the pattern to not be recognized.
+(define_predicate "register_no_elim_operand"
+  (match_operand 0 "register_operand")
+{
+  if (GET_CODE (op) == SUBREG)
+    op = SUBREG_REG (op);
+  return !(op == arg_pointer_rtx
+	   || op == frame_pointer_rtx
+	   || IN_RANGE (REGNO (op),
+			FIRST_PSEUDO_REGISTER, LAST_VIRTUAL_REGISTER));
+})
+
+;; Return false if this is any eliminable register.  Otherwise general_operand.
+(define_predicate "general_no_elim_operand"
+  (if_then_else (match_code "reg,subreg")
+    (match_operand 0 "register_no_elim_operand")
+    (match_operand 0 "general_operand")))

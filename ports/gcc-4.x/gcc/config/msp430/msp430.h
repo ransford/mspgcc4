@@ -197,11 +197,13 @@ int msp430_current_function_noint_hwmul_function_p(void);
    characters.  This is used in `cpp', which cannot make use of
    `WCHAR_TYPE'.  */
 
-#define FIRST_PSEUDO_REGISTER 16
+#define FIRST_PSEUDO_REGISTER 17
 /* Number of hardware registers known to the compiler.  They receive
    numbers 0 through `FIRST_PSEUDO_REGISTER-1'; thus, the first
    pseudo register's number really is assigned the number
    `FIRST_PSEUDO_REGISTER'.  */
+
+/*#define DWARF_FRAME_REGISTERS 16*/
 
 #define FIXED_REGISTERS {\
   1,1,/* r0 r1 == PC  SP */\
@@ -212,6 +214,7 @@ int msp430_current_function_noint_hwmul_function_p(void);
   0,0,/* r10 r11 */\
   0,0,/* r12 r13 */\
   0,0,/* r14 r15 */\
+  1, /* argp register */\
 }
 /* An initializer that says which registers are used for fixed
    purposes all throughout the compiled code and are therefore not
@@ -241,6 +244,7 @@ int msp430_current_function_noint_hwmul_function_p(void);
     0,0,/* r10 r11 */				\
     1,1,/* r12 r13 */				\
     1,1,/* r14 r15 */				\
+	1, \
 }
 /* Like `FIXED_REGISTERS' but has 1 for each register that is
    clobbered (in general) by function calls as well as for fixed
@@ -432,10 +436,10 @@ enum reg_class {
   {0x00000004ul},	/* r2		*/	\
   {0x00000008ul},	/* r3		*/	\
   {0x0000000cul},	/* r2,r3	*/	\
-  {0x0000fff2ul}, /* r4 - r15,r1  */      \
-  {0x0000fff2ul}, /* r4 - r15,r1  */      \
-  {0x0000fff0ul},	/* r4 - r15	*/	\
-  {0x0000fffful}	/* ALL_REGS */		\
+  {0x0001fff2ul}, /* r4 - r15,r1  */      \
+  {0x0001fff2ul}, /* r4 - r15,r1  */      \
+  {0x0001fff0ul},	/* r4 - r15	*/	\
+  {0x0001fffful}	/* ALL_REGS */		\
 }
 /* An initializer containing the contents of the register classes, as
    integers which are bit masks.  The Nth integer specifies the
@@ -749,6 +753,9 @@ referred_reload_class(X,CLASS)
     how GCC will push a data */
 #define STACK_PUSH_CODE PRE_DEC
 
+#define PUSH_ARGS !TARGET_ACCUMULATE_OUTGOING_ARGS
+#define ACCUMULATE_OUTGOING_ARGS TARGET_ACCUMULATE_OUTGOING_ARGS
+
 #define STACK_GROWS_DOWNWARD
 /* Define this macro if pushing a word onto the stack moves the stack
    pointer to a smaller address.
@@ -808,7 +815,10 @@ referred_reload_class(X,CLASS)
    the hardware determines which register this is.  On other
    machines, you can choose any register you wish for this purpose.  */
 
-#define ARG_POINTER_REGNUM 5
+/* We use a pseudo-register called "argp" to represent argument pointer.
+	As the register is marked as fixed, it will always be eliminated
+	(replaced by sp + offset).*/
+#define ARG_POINTER_REGNUM 16
 /* The register number of the arg pointer register, which is used to
    access the function's argument list.  On some machines, this is
    the same as the frame pointer register.  On some machines, the
@@ -857,8 +867,9 @@ referred_reload_class(X,CLASS)
    information.  */
 
 #define ELIMINABLE_REGS {			\
+   {ARG_POINTER_REGNUM, STACK_POINTER_REGNUM}, \
+   {ARG_POINTER_REGNUM, FRAME_POINTER_REGNUM}, \
    {FRAME_POINTER_REGNUM, STACK_POINTER_REGNUM}, \
-   {ARG_POINTER_REGNUM, STACK_POINTER_REGNUM} \
 }
 /* If defined, this macro specifies a table of register pairs used to
    eliminate unneeded registers that point into the stack frame.  If
@@ -887,6 +898,11 @@ referred_reload_class(X,CLASS)
    pointer is specified first since that is the preferred elimination.  */
 
 #define CAN_ELIMINATE(FROM, TO) 1
+/*#define CAN_ELIMINATE(FROM, TO) (((FROM) == ARG_POINTER_REGNUM		   \
+				  && (TO) == FRAME_POINTER_REGNUM)	   \
+				 || (((FROM) == FRAME_POINTER_REGNUM)	   \
+				     && ! FRAME_POINTER_REQUIRED	   \
+				     ))*/
 /* A C expression that returns non-zero if the compiler is allowed to
    try to replace register number FROM-REG with register number
    TO-REG.  This macro need only be defined if `ELIMINABLE_REGS' is
@@ -2170,7 +2186,7 @@ sprintf (STRING, "*.%s%d", PREFIX, NUM)
 
 #define REGISTER_NAMES {				\
   "r0","r1","r2","r3","r4","r5","r6","r7",		\
-  "r8","r9","r10","r11","r12","r13","r14","r15"		\
+  "r8","r9","r10","r11","r12","r13","r14","r15","argp"		\
 }
 /* A C initializer containing the assembler's names for the machine
    registers, each one as a C string constant.  This is what

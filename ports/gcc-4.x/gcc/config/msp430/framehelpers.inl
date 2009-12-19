@@ -21,7 +21,8 @@ Functions beginning with msp430_fh_ are prologue/epilogue (frame) helpers.
 static inline void msp430_fh_emit_push_reg(int reg_num)
 {
 	rtx pushword = gen_rtx_MEM (HImode, gen_rtx_PRE_DEC (HImode, stack_pointer_rtx));
-	rtx insn = emit_insn(gen_rtx_SET(VOIDmode, pushword, gen_rtx_REG (HImode, reg_num)));
+	//rtx insn = emit_insn(gen_rtx_SET(VOIDmode, pushword, gen_rtx_REG (HImode, reg_num)));
+	rtx insn = emit_insn(gen_pushhi_prologue(gen_rtx_REG (HImode, reg_num), pushword));
 	RTX_FRAME_RELATED_P(insn) = 1;
 }
 
@@ -37,7 +38,8 @@ static inline void msp430_fh_emit_pop_reg(int reg_num)
 static inline void msp430_fh_sub_sp_const(int num_bytes)
 {
 	rtx insn = emit_move_insn (stack_pointer_rtx,
-		gen_rtx_MINUS (HImode, stack_pointer_rtx, gen_int_mode (num_bytes, HImode)));
+//		gen_rtx_MINUS (HImode, stack_pointer_rtx, gen_int_mode (num_bytes, HImode)));
+		gen_rtx_PLUS (HImode, stack_pointer_rtx, gen_int_mode (-num_bytes, HImode)));
 	RTX_FRAME_RELATED_P(insn) = 1;
 }
 
