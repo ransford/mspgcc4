@@ -62,7 +62,7 @@ int msp430_current_function_noint_hwmul_function_p(void);
 
 #define OVERRIDE_OPTIONS msp430_override_options()
 
-#define FRAME_POINTER_CFA_OFFSET(FNDECL) 0
+/*#define FRAME_POINTER_CFA_OFFSET(FNDECL) 0*/
 #define CAN_DEBUG_WITHOUT_FP
 /* Define this macro if debugging can be performed even without a
    frame pointer.  If this macro is defined, GNU CC will turn on the
