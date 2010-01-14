@@ -7944,13 +7944,43 @@ int self_push (rtx x)
 	return 0;
 }
 
+const char * msp430_emit_call (rtx operands[])
+{
+	rtx x = operands[0];
+	rtx c;
+	rtx r;
+
+	if (GET_CODE (x) == MEM)
+	{
+		c = XEXP (x, 0);
+
+		if (REG_P (c) && REGNO (c) == 1)
+		{
+			OUT_INSN (NULL, "call\t2(%E0)", operands);
+			return "";
+		}
+
+		if (GET_CODE (c) == PLUS)
+		{
+			r = XEXP (c, 0);
+			if (REG_P (r) && REGNO (r) == 1)
+			{
+				OUT_INSN (NULL, "call\t2+%A0", operands);
+				return "";
+			}
+		}
+	}
+
+	OUT_INSN(NULL, "call\t%0", operands);
+	return "";
+}
+
 /* difficult pushes.
 if planets are not aligned, the combiner does not allocate
 r4 as a frame pointer. Instead, it uses stack pointer for frame.
 If there is a va_arg call and non-register local var has to be passed 
 as a function parameter, the push X(r1) in SI, SF and DI modes will
 corrupt passed var. The following minds this fact */
-
 
 const char *
 msp430_pushqi (insn, operands, len)

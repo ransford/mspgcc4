@@ -357,20 +357,20 @@ void expand_prologue (void)
 				msp430_fh_add_sp_const(added);
 			}
 
-			if (frame_pointer_needed)
-			{
-				/*fprintf (file, "\tmov\tr1,r%d\n", FRAME_POINTER_REGNUM);*/
-
-				insn = emit_move_insn (frame_pointer_rtx, stack_pointer_rtx);
-				RTX_FRAME_RELATED_P (insn) = 1;
-
-				prologue_size += 1;
-			}
-
 			if (size == 1 || size == 2 || size == 4 || size == 8)
 				prologue_size += 1;
 			else
 				prologue_size += 2;
+		}
+
+		if (frame_pointer_needed)
+		{
+			/*fprintf (file, "\tmov\tr1,r%d\n", FRAME_POINTER_REGNUM);*/
+
+			insn = emit_move_insn (frame_pointer_rtx, stack_pointer_rtx);
+			RTX_FRAME_RELATED_P (insn) = 1;
+
+			prologue_size += 1;
 		}
 
 		if ((ACCUMULATE_OUTGOING_ARGS) && (!cfun->machine->is_leaf || cfun->calls_alloca) && crtl->outgoing_args_size)

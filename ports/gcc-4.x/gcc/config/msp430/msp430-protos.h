@@ -227,6 +227,7 @@ extern const char * msp430_pushsisf PARAMS ((rtx insn, rtx operands[], int *len)
 extern const char * msp430_pushdi   PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char * msp430_pushhi   PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char * msp430_pushqi   PARAMS ((rtx insn, rtx operands[], int *len));
+extern const char * msp430_emit_call (rtx operands[]);
 
 extern const char * msp430_emit_return PARAMS ((rtx insn, rtx operands[], int *len));
 extern const char *msp430_cbranch PARAMS ((rtx insn, rtx operands[], int *len, int is_cc0_branch));

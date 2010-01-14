@@ -934,7 +934,8 @@ flow()
         }
       else if (opcode&0x100)
         {
-          if ((insn & ~0x7f) != 0x1200) srp = msp430_single_operands( insn );
+			if ((opcode != CALL) && (opcode != PUSH))
+				srp = msp430_single_operands( insn );
         }
 
       alu.insns += 1;
@@ -982,8 +983,9 @@ flow()
           msp430_write_integer(sp,tmp, 2);
           break;
         case CALL:
-          tmp = READ_SRC(srp);
           sp -= 2;
+          srp = msp430_single_operands( insn );
+          tmp = READ_SRC(srp);
           msp430_write_integer(sp,pc, 2);
           pc = tmp;
           break;

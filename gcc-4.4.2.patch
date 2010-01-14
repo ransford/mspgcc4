@@ -132,3 +132,22 @@ diff -urN gcc-4.4.2-orig/libgcc/config.host gcc-4.4.2-new/libgcc/config.host
  bfin*-elf*)
          ;;
  bfin*-uclinux*)
+diff -urN gcc-4.4.2-orig/gcc/expr.c gcc-4.4.2-new/gcc/expr.c
+--- gcc-4.4.2-orig/gcc/expr.c    Thu Aug 20 00:52:11 2009
++++ gcc-4.4.2-new/gcc/expr.c    Tue Jan 12 23:32:05 2010
+@@ -952,13 +952,13 @@
+       if (USE_LOAD_PRE_DECREMENT (mode) && data.reverse && ! data.autinc_from)
+        {
+          data.from_addr = copy_addr_to_reg (plus_constant (from_addr, len));
+          data.autinc_from = 1;
+          data.explicit_inc_from = -1;
+        }
+-      if (USE_LOAD_POST_INCREMENT (mode) && ! data.autinc_from)
++      if (USE_LOAD_POST_INCREMENT (mode) && !data.reverse && !
+data.autinc_from)
+        {
+          data.from_addr = copy_addr_to_reg (from_addr);
+          data.autinc_from = 1;
+          data.explicit_inc_from = 1;
+        }
+       if (!data.autinc_from && CONSTANT_P (from_addr))
