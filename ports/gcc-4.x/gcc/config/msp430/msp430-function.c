@@ -255,6 +255,22 @@ void expand_prologue (void)
 		/* Here, we've got a chance to jump to prologue saver */
 		num_saved_regs = msp430_func_num_saved_regs ();
 
+		if (!cfun->machine->is_interrupt && cfun->machine->is_critical)
+		{
+			prologue_size += 3;
+			/*fprintf (file, "\tpush\tr2\n");
+			fprintf (file, "\tdint\n");
+			if (!size)
+				fprintf (file, "\tnop\n");*/
+
+			insn = emit_insn (gen_push_sreg()); /* Pushing R2 using normal push creates a faulty INSN */
+			RTX_FRAME_RELATED_P (insn) = 1;
+			
+			insn = emit_insn (gen_disable_interrupt());
+			if (!size)
+				insn = emit_insn (gen_nop());
+		}
+
 		if ((TARGET_SAVE_PROLOGUE || save_prologue_p)
 			&& !cfun->machine->is_interrupt && !arg_register_used[12] && num_saved_regs > 4)
 		{
@@ -296,25 +312,6 @@ void expand_prologue (void)
 					prologue_size += 1;
 				}
 			}
-		}
-
-		fflush(stdout);
-
-		if (!cfun->machine->is_interrupt && cfun->machine->is_critical)
-		{
-			prologue_size += 3;
-			/*fprintf (file, "\tpush\tr2\n");
-			fprintf (file, "\tdint\n");
-			if (!size)
-				fprintf (file, "\tnop\n");*/
-
-			insn = emit_insn (gen_push_sreg()); /* Pushing R2 using normal push creates a faulty INSN */
-			RTX_FRAME_RELATED_P (insn) = 1;
-			
-			insn = emit_insn (gen_disable_interrupt());
-			if (!size)
-				insn = emit_insn (gen_nop());
-
 		}
 
 		if (size)
@@ -400,7 +397,6 @@ void expand_epilogue (void)
 	int cfp = cfun->machine->is_critical;
 	int ree = cfun->machine->is_reenterant;
 	int save_prologue_p = msp430_save_prologue_function_p (current_function_decl);
-	int still_return = 1;
 	/*int function_size;*/
 	HOST_WIDE_INT size = get_frame_size();
 
@@ -479,23 +475,6 @@ void expand_epilogue (void)
 				epilogue_size += 2;
 		}
 
-		if (!interrupt_func_p && cfp)
-		{
-			epilogue_size += 1;
-			if (msp430_saved_regs_frame () == 2) /* "Critical" functions use "reti" to restore saved flags */
-			{
-				/*fprintf (file, "\treti\n");	*/
-				emit_jump_insn (gen_return ());
-
-				still_return = 0;
-			}
-			else
-			{
-				/*fprintf (file, "\tpop\tr2\n");*/
-				msp430_fh_emit_pop_reg(2);
-			}
-		}
-
 		if ((TARGET_SAVE_PROLOGUE || save_prologue_p)
 			&& !interrupt_func_p && msp430_func_num_saved_regs () > 2)
 		{
@@ -525,28 +504,15 @@ void expand_epilogue (void)
 				}
 			}
 
-			if (interrupt_func_p)
+			if (interrupt_func_p && wakeup_func_p)
 			{
-				if (wakeup_func_p)
-				{
-					/*fprintf (file, "\tbic\t#0xf0,0(r1)\n");*/
-					msp430_fh_bic_deref_sp(0xF0);
-					epilogue_size += 3;
-				}
-
-				/*fprintf (file, "\treti\n");*/
-				emit_jump_insn (gen_return ());
-				epilogue_size += 1;
+				/*fprintf (file, "\tbic\t#0xf0,0(r1)\n");*/
+				msp430_fh_bic_deref_sp(0xF0);
+				epilogue_size += 3;
 			}
-			else
-			{
-				if (still_return)
-				{
-					emit_jump_insn (gen_return ());
-					/*fprintf (file, "\tret\n");*/
-				}
-				epilogue_size += 1;
-			}
+			emit_jump_insn (gen_return ());
+			/*fprintf (file, "\tret\n");*/
+			epilogue_size += 1;
 		}
 	}
 

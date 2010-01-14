@@ -33,7 +33,7 @@ static inline int msp430_critical_function_p (tree func)
 
 static inline int msp430_reentrant_function_p (tree func)
 {
-	return msp430_attribute_exists(func, "reenterant");
+	return msp430_attribute_exists(func, "reentrant");
 }
 
 static inline int noint_hwmul_function_p (tree func)
