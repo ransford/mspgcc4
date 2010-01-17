@@ -10,11 +10,17 @@
 
 . ./buildgcc.subr
 
+VERSION_TAG=$(cat _version_tag.txt)
 BINUTILS_VERSION=2.19.1
 GNU_MIRROR=ftp.uni-kl.de
 BUILD_DIR=build
 INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
+WIN32_OPTS=
+
+if [ $(uname -o) = Msys ]; then
+	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG
+fi
 
 set -eu
 
@@ -65,7 +71,7 @@ cd ..
 mkdir -p "binutils-$BINUTILS_VERSION-build"
 cd "binutils-$BINUTILS_VERSION-build"
 
-"$(pwd)/../binutils-$BINUTILS_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430 --disable-werror
+"$(pwd)/../binutils-$BINUTILS_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430 --disable-werror $WIN32_OPTS --disable-nls
 make -j$(num_cpus)
 $INSTALL_LAUNCHER make install
 
