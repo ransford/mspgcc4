@@ -136,10 +136,10 @@ mkdir -p "gcc-$GCC_VERSION-build"
 cd "gcc-$GCC_VERSION-build"
 
 if [ $(uname -o) = Msys ]; then
-	"$(pwd -W)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --disable-nls
+	"$(pwd -W)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --disable-nls --with-pkgversion="MSPGCC4 $VERSION_TAG"
 	GNUMAKE=mingw32-make
 else
-	"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS
+	"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --with-pkgversion="MSPGCC4 $VERSION_TAG"
 fi
 
 $GNUMAKE -j$(num_cpus)
