@@ -3015,8 +3015,6 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 
 #define MULTILIB_DEFAULTS { "mmcu=msp430x110" }
 
-#define LINKER_NAME "msp430-ld"
-
 #define TEST_HARD_REG_CLASS(CLASS, REGNO) \
   TEST_HARD_REG_BIT (reg_class_contents[ (int) (CLASS)], REGNO)
 

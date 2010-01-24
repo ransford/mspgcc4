@@ -47,9 +47,11 @@ done
 case "$PKG_NAME" in
 gdb)
 	PKG_SRC_URL="ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$PKG_VERSION.tar.bz2"
+	GDB_CFG_EXTRA_FLAGS=
 	;;
 insight)
 	PKG_SRC_URL="ftp://sourceware.org/pub/insight/releases/insight-$PKG_VERSION.tar.bz2"
+	GDB_CFG_EXTRA_FLAGS="--enable-gdbtk"
 	;;
 *)
 	echo "Package name must be either gdb or insight."
@@ -93,7 +95,7 @@ cd "$PKG_NAME-$PKG_VERSION-build"
 "$(pwd)/../$PKG_NAME-$PKG_VERSION/configure" \
 	"--prefix=$TARGET_LOCATION" \
 	--target=msp430 \
-	--disable-werror
+	--disable-werror $GDB_CFG_EXTRA_FLAGS
 $GNUMAKE -j$(num_cpus) MAKE=$GNUMAKE -e
 $INSTALL_LAUNCHER $GNUMAKE install MAKE=$GNUMAKE -e
 

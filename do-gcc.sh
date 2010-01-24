@@ -128,6 +128,10 @@ if [ x"$MPFR_VERSION" != x"-" ]; then
 	tar xjf "../mpfr-$MPFR_VERSION.tar.bz2"
 	rm -rf mpfr
 	mv "mpfr-$MPFR_VERSION" mpfr
+	if [ $(uname -o) = Msys ]; then
+		echo "echo \"#!/bin/sh\" > libtool" >> mpfr/configure
+		echo "echo \"/bin/libtool \\\$*\" >> libtool" >> mpfr/configure
+	fi
 fi
 
 cp -rf ../mspgcc/gcc/"$GCC_PATCH_FOLDER"/* .
@@ -143,6 +147,14 @@ else
 fi
 
 $GNUMAKE -j$(num_cpus)
+
+if [ $(uname -o) = Msys ]; then
+	if [ -e gcc/Makefile ]; then
+		test -e gcc/Makefile.mgwbak || cp gcc/Makefile gcc/Makefile.mgwbak
+		sed -e "s,-I/\([a-z]\)/,-I\\1:/,g" < gcc/Makefile.mgwbak > gcc/Makefile
+	fi
+fi
+
 $INSTALL_LAUNCHER $GNUMAKE install
 
 cd "$INITIAL_DIR"
