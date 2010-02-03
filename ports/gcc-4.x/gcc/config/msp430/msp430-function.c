@@ -234,7 +234,7 @@ void expand_prologue (void)
 		else
 		{
 			/*fprintf (file, "\tmov\t#(%s-%d), r1\n", msp430_init_stack, size + stack_reserve);*/
-			msp430_fh_load_sp_with_sym_plus_off(msp430_init_stack, size + stack_reserve);
+			msp430_fh_load_sp_with_sym_plus_off(msp430_init_stack, -(size + stack_reserve));
 
 			if (frame_pointer_needed)
 			{
