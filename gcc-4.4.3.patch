@@ -1,0 +1,146 @@
+diff -urN gcc-4.4.2/configure.orig gcc-4.4.2/configure
+--- gcc-4.4.2/configure.orig	2010-01-15 18:58:52.355557300 +0100
++++ gcc-4.4.2/configure	2010-01-15 19:05:32.338914800 +0100
+@@ -2360,6 +2360,9 @@
+   avr-*-*)
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
+     ;;
++  msp430-*-*)
++    noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
++    ;;
+   bfin-*-*)
+     noconfigdirs="$noconfigdirs gdb"
+     if test x${is_cross_compiler} != xno ; then
+diff -urN gcc-4.4.2/gcc/config.gcc.orig gcc-4.4.2/gcc/config.gcc
+--- gcc-4.4.2/gcc/config.gcc.orig	2010-01-15 18:58:52.371182200 +0100
++++ gcc-4.4.2/gcc/config.gcc	2010-01-15 19:05:32.354539700 +0100
+@@ -804,6 +804,12 @@
+ avr-*-*)
+ 	tm_file="avr/avr.h dbxelf.h"
+ 	;;
++msp430-*-*)
++	tm_file="msp430/msp430.h dbxelf.h"
++	c_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
++	cxx_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
++	use_fixproto=yes
++	;;
+ bfin*-elf*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
+ 	tmake_file=bfin/t-bfin-elf
+diff -urN gcc-4.4.2/gcc/configure.orig gcc-4.4.2/gcc/configure
+--- gcc-4.4.2/gcc/configure.orig	2010-01-15 18:58:52.386807100 +0100
++++ gcc-4.4.2/gcc/configure	2010-01-15 19:05:32.401414500 +0100
+@@ -1595,6 +1595,7 @@
+ 
+ 
+ gcc_version=`cat $srcdir/BASE-VER`
++echo $gcc_version | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GCC_VERSION_INT\ 0x\\1\\2\\3/g > $srcdir/_gccver.h
+ 
+ # Determine the host, build, and target systems
+ ac_aux_dir=
+diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
+--- gcc-4.4.2/gcc/loop-invariant.c.orig	2010-01-15 18:58:52.418057100 +0100
++++ gcc-4.4.2/gcc/loop-invariant.c	2010-01-15 19:05:32.432664500 +0100
+@@ -1171,11 +1171,13 @@
+   rtx reg, set, dest, note;
+   struct use *use;
+   bitmap_iterator bi;
++  int n_validated;
+ 
+   if (inv->reg)
+     return true;
+   if (!repr->move)
+     return false;
++  n_validated = num_validated_changes ();
+   /* If this is a representative of the class of equivalent invariants,
+      really move the invariant.  Otherwise just replace its use with
+      the register used for the representative.  */
+@@ -1200,7 +1202,17 @@
+       reg = gen_reg_rtx_and_attrs (dest);
+ 
+       /* Try replacing the destination by a new pseudoregister.  */
+-      if (!validate_change (inv->insn, &SET_DEST (set), reg, false))
++      validate_change (inv->insn, &SET_DEST (set), reg, true);
++
++      /* Replace the uses we know to be dominated.  It saves work for copy
++	 propagation, and also it is necessary so that dependent invariants
++	 are computed right.  */
++      /* Note that we must test the changes for validity, lest we might
++	 rip apart a match_dup between a use and a clobber.  */
++      if (inv->def)
++	for (use = inv->def->uses; use; use = use->next)
++	  validate_change (use->insn, use->pos, reg, true);
++      if (!apply_change_group ())
+ 	goto fail;
+       df_insn_rescan (inv->insn);
+ 
+@@ -1219,9 +1231,23 @@
+     }
+   else
+     {
+-      if (!move_invariant_reg (loop, repr->invno))
+-	goto fail;
++      /* Replace the uses we know to be dominated.  It saves work for copy
++	 propagation, and also it is necessary so that dependent invariants
++	 are computed right.  */
+       reg = repr->reg;
++      if (inv->def)
++        for (use = inv->def->uses; use; use = use->next)
++	  validate_change (use->insn, use->pos, reg, true);
++
++      if (verify_changes (n_validated)
++	  && move_invariant_reg (loop, repr->invno))
++	confirm_change_group ();
++      else
++	{
++	  cancel_changes (n_validated);
++	  goto fail;
++	}
++
+       set = single_set (inv->insn);
+       emit_insn_after (gen_move_insn (SET_DEST (set), reg), inv->insn);
+       delete_insn (inv->insn);
+@@ -1230,17 +1256,9 @@
+ 
+   inv->reg = reg;
+ 
+-  /* Replace the uses we know to be dominated.  It saves work for copy
+-     propagation, and also it is necessary so that dependent invariants
+-     are computed right.  */
+   if (inv->def)
+-    {
+-      for (use = inv->def->uses; use; use = use->next)
+-	{
+-	  *use->pos = reg;
+-	  df_insn_rescan (use->insn);
+-	}      
+-    }
++    for (use = inv->def->uses; use; use = use->next)
++      df_insn_rescan (use->insn);
+ 
+   return true;
+ 
+diff -urN gcc-4.4.2/libgcc/config.host.orig gcc-4.4.2/libgcc/config.host
+--- gcc-4.4.2/libgcc/config.host.orig	2010-01-15 18:58:52.418057100 +0100
++++ gcc-4.4.2/libgcc/config.host	2010-01-15 19:05:32.432664500 +0100
+@@ -224,6 +224,8 @@
+     # Make HImode functions for AVR
+     tmake_file=${cpu_type}/t-avr
+ 	;;
++msp430-*-*)
++	;;
+ bfin*-elf*)
+         ;;
+ bfin*-uclinux*)
+diff -urN gcc-4.4.2/gcc/expr.c.orig gcc-4.4.2/gcc/expr.c
+--- gcc-4.4.2/gcc/expr.c.orig	2010-01-15 18:58:52.433682100 +0100
++++ gcc-4.4.2/gcc/expr.c	2010-01-15 19:05:32.448289500 +0100
+@@ -955,7 +955,7 @@
+ 	  data.autinc_from = 1;
+ 	  data.explicit_inc_from = -1;
+ 	}
+-      if (USE_LOAD_POST_INCREMENT (mode) && ! data.autinc_from)
++      if (USE_LOAD_POST_INCREMENT (mode) && !data.reverse && !data.autinc_from)
+ 	{
+ 	  data.from_addr = copy_addr_to_reg (from_addr);
+ 	  data.autinc_from = 1;

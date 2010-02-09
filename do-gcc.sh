@@ -150,13 +150,10 @@ else
 	"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --with-pkgversion="MSPGCC4_$VERSION_TAG"
 fi
 
-$GNUMAKE -j$(num_cpus)
-
 if [ $(uname -o) = Msys ]; then
-	if [ -e gcc/Makefile ]; then
-		test -e gcc/Makefile.mgwbak || cp gcc/Makefile gcc/Makefile.mgwbak
-		sed -e "s,-I/\([a-z]\)/,-I\\1:/,g" < gcc/Makefile.mgwbak > gcc/Makefile
-	fi
+	../../mingw-gccwa.pl $TARGET_LOCATION
+else
+	$GNUMAKE -j$(num_cpus)
 fi
 
 $INSTALL_LAUNCHER $GNUMAKE install
