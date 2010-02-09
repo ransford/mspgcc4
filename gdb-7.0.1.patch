@@ -945,7 +945,7 @@ diff -urN gdb-7.0-orig/gdb/Makefile.in gdb-7.0/gdb/Makefile.in
  	$(RANLIB) libgdb.a
 +	
 +_gdbver.h:
-+	cat $(srcdir)/version.in | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GDB_VERSION_INT\ 0x\\1\\20/g > _gdbver.h
++	cat $(srcdir)/version.in | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GDB_VERSION_INT\ 0x\\1\\2\\3/g > _gdbver.h
 +
 +msp430-tdep.o: _gdbver.h
  

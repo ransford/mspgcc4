@@ -182,7 +182,7 @@ if ($SCRIPTFILE ne '')
 {
 	mkdir $BUILD_DIR;
 	open F, ">$BUILD_DIR/$SCRIPTFILE" || die "Cannot open script $BUILD_DIR/$SCRIPTFILE for writing";
-	print F "#!/bin/sh\ncd ..\n";
+	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
 	print F "$_\n" foreach @COMMANDS;
 	close F;
 	if (AskYesNo("$SCRIPTFILE created successfully. Run it now"))
