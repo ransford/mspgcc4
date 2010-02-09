@@ -75,7 +75,11 @@ if [ $NO_FETCH != 1 ]; then
 
 	mkdir -p mspgcc
 	cd mspgcc
-	cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gcc
+	if [ $GCC_PATCH_FOLDER != gcc-4.x ]; then
+		cvs -z3 -d:pserver:anonymous@mspgcc.cvs.sourceforge.net:/cvsroot/mspgcc co -P gcc
+	else
+		mkdir gcc
+	fi
 
 	if [ -e "$INITIAL_DIR/ports/gcc-4.x" ]
 	then
@@ -98,7 +102,7 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	if [ x"$MPFR_VERSION" != x"-" ]; then
-		wget -c "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
+		wget "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
 	fi
 fi
 
