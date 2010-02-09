@@ -110,6 +110,7 @@ enum msp430_arch
 	MSP430_ISA_44 = 44,
 	MSP430_ISA_46 = 46,
 	MSP430_ISA_47 = 47,
+	MSP430_ISA_471 = 471,
 	MSP430_ISA_54 = 54,
 };
 
@@ -284,6 +285,16 @@ static struct mcu_type_s msp430_mcu_types[] = {
 	{"msp430x4784",  MSP430_ISA_47, 1},
 	{"msp430x4793",  MSP430_ISA_47, 1},
 	{"msp430x4794",  MSP430_ISA_47, 1},
+        
+	{"msp430x47166", MSP430_ISA_471, 1},
+	{"msp430x47176", MSP430_ISA_471, 1},
+	{"msp430x47186", MSP430_ISA_471, 1},
+	{"msp430x47196", MSP430_ISA_471, 1},
+
+	{"msp430x47167", MSP430_ISA_471, 1},
+	{"msp430x47177", MSP430_ISA_471, 1},
+	{"msp430x47187", MSP430_ISA_471, 1},
+	{"msp430x47197", MSP430_ISA_471, 1},
 
 	/* F5xxx family */
 	{"msp430x5418",  MSP430_ISA_54, 1},
@@ -292,6 +303,16 @@ static struct mcu_type_s msp430_mcu_types[] = {
 	{"msp430x5436",  MSP430_ISA_54, 1},
 	{"msp430x5437",  MSP430_ISA_54, 1},
 	{"msp430x5438",  MSP430_ISA_54, 1},
+
+	/* CC430 family */
+	{"cc430x5123",   MSP430_ISA_54, 1},
+	{"cc430x5125",   MSP430_ISA_54, 1},
+	{"cc430x6125",   MSP430_ISA_54, 1},
+	{"cc430x6135",   MSP430_ISA_54, 1},
+	{"cc430x6126",   MSP430_ISA_54, 1},
+	{"cc430x5137",   MSP430_ISA_54, 1},
+	{"cc430x6127",   MSP430_ISA_54, 1},
+	{"cc430x6137",   MSP430_ISA_54, 1},
 
 	{NULL, 0, 0}
 };
@@ -1477,6 +1498,7 @@ static void msp430_file_start (void)
 	{
 		switch (msp430_get_arch())
 		{
+		case MSP430_ISA_471:
 		case MSP430_ISA_47:
 			fprintf (file, "/* Hardware multiplier registers: */\n"
 				"__MPY=0x130\n"

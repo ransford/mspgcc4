@@ -118,7 +118,11 @@ MULTILIB_MATCHES = \
 	mmcu?msp2=mmcu?msp430x4794 \
 	mmcu?msp2=mmcu?msp430x5418 mmcu?msp2=mmcu?msp430x5419 \
 	mmcu?msp2=mmcu?msp430x5435 mmcu?msp2=mmcu?msp430x5436 mmcu?msp2=mmcu?msp430x5437 \
-	mmcu?msp2=mmcu?msp430x5438
+	mmcu?msp2=mmcu?msp430x5438 \
+	mmcu?msp2=mmcu?cc430x5123 \
+	mmcu?msp2=mmcu?cc430x5125 mmcu?msp2=mmcu?cc430x6125 mmcu?msp2=mmcu?cc430x6135 \
+	mmcu?msp2=mmcu?cc430x6126 \
+	mmcu?msp2=mmcu?cc430x5137 mmcu?msp2=mmcu?cc430x6127 mmcu?msp2=mmcu?cc430x6137
 #todo: 47xx has 32*32 HW MUL
 #todo: 54xx has 32*32 HW MUL
 
