@@ -138,7 +138,7 @@ $TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -o` eq "M
 
 if (AskYesNo("Create binary package after build?", 1))
 {
-	$BINPACKAGE = AskForString("Enter binary package name", 50, "msp430-gcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".tbz");
+	$BINPACKAGE = AskForString("Enter binary package name", 50, "msp430-gcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".tar.bz2");
 }
 
 $SKIP_BINUTILS = AskYesNo("Looks like binutils are already installed in $TARGETPATH. Skip building binutils?") if (-e "$TARGETPATH/bin/msp430-as");

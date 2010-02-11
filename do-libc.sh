@@ -75,6 +75,6 @@ rm 0lib.tmp
 $INSTALL_LAUNCHER cp "$TARGET_LOCATION/msp430/include/sys/inttypes.h" "$TARGET_LOCATION/msp430/include/inttypes.h"
 
 cd "$TARGET_LOCATION/msp430/lib/ldscripts"
-$INSTALL_LAUNCHER tar xjf "$INITIAL_DIR/ports/ldscripts-new.tbz"
+$INSTALL_LAUNCHER tar xjf "$INITIAL_DIR/ports/ldscripts-new.tar.bz2"
 
 cd "$INITIAL_DIR"
