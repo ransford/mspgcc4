@@ -151,7 +151,7 @@ else
 fi
 
 if [ $(uname -o) = Msys ]; then
-	../../mingw-gccwa.pl $TARGET_LOCATION
+	../../mingw32-gccwa.pl $TARGET_LOCATION
 else
 	$GNUMAKE -j$(num_cpus)
 fi
