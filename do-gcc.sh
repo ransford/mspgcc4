@@ -102,7 +102,9 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	if [ x"$MPFR_VERSION" != x"-" ]; then
-		wget "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
+		# server doesn't support continuing (-c), but timestamping.
+		# Let's use -N to avoid pointless re-downloading.
+		wget -N "http://www.mpfr.org/mpfr-$MPFR_VERSION/mpfr-$MPFR_VERSION.tar.bz2"
 	fi
 fi
 
