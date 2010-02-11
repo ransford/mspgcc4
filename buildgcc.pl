@@ -185,7 +185,7 @@ if ($SCRIPTFILE ne '')
 	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
 	print F "$_\n" foreach @COMMANDS;
 	close F;
-	if (AskYesNo("$SCRIPTFILE created successfully. Run it now"))
+	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now"))
 	{
 		chdir $BUILD_DIR;
 		system("sh $SCRIPTFILE");
