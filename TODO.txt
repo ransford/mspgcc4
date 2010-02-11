@@ -4,9 +4,6 @@
 - check that most of the things don't discard expensive material (downloads,
   checkouts, builds, configure caches)
 
-  * Ivan added MPFR as an exception because the webserver doesn't support
-    required features for "wget -c".
-
 - remove code duplication in the various do-*.sh scripts, see num_cpus and the
   sourced buildgcc.subr file for a sample
 
