@@ -1,4 +1,4 @@
-#!/bin/perl
+#!/usr/bin/env perl -w
 # This work is partially financed by the European Commission under the
 # Framework 6 Information Society Technologies Project
 #  "Wirelessly Accessible Sensor Populations (WASP)".
@@ -174,7 +174,7 @@ if ($BINPACKAGE ne '')
 	push @COMMANDS, "echo \"Creating binary package...\"";
 	push @COMMANDS, "cd \"$TARGETPATH\"";
 	push @COMMANDS, "tar cjf \"$BASEDIR/$BINPACKAGE\" *";
-	push @COMMANDS, "ls -ldq \"$BASEDIR/$BINPACKAGE_NAME\"";
+	push @COMMANDS, "ls -ldq \"$BASEDIR/$BINPACKAGE\"";
 	push @COMMANDS, "cd \"$BASEDIR\"";
 }
 
