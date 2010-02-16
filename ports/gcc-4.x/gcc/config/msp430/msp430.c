@@ -121,10 +121,17 @@ struct mcu_type_s
 	int has_hwmul;
 };
 
+
+
 static struct mcu_type_s msp430_mcu_types[] = {
-	/* generic types */
-	{"msp1",         MSP430_ISA_1, 0},
-	{"msp2",         MSP430_ISA_2, 1},
+
+	/* Match binutils generic types */
+	{"msp1",         MSP430_ISA_11, 0}, /* anything without hardware multiply */
+	{"msp2",         MSP430_ISA_14, 1}, /* older chips with hardware multiply */
+	{"msp3",         MSP430_ISA_46, 1},
+	{"msp4",         MSP430_ISA_47, 1},
+	{"msp5",         MSP430_ISA_471, 1},
+	{"msp6",         MSP430_ISA_54, 1},
 
 	/* F1xx family */
 	{"msp430x110",   MSP430_ISA_11, 0},
@@ -314,6 +321,7 @@ static struct mcu_type_s msp430_mcu_types[] = {
 	{"cc430x6127",   MSP430_ISA_54, 1},
 	{"cc430x6137",   MSP430_ISA_54, 1},
 
+	/* Add new chips to MULTILIB_MATCHES in t-msp430 as well */
 	{NULL, 0, 0}
 };
 
@@ -526,19 +534,7 @@ rtx gen_rtx_HWREG(const char *name)
 
 void msp430_init_once (void)
 {
-	/******************************
-
-	__MPY=0x130
-	__MPYS=0x132
-	__MAC=0x134
-	__MACS=0x136
-	__OP2=0x138
-	__RESLO=0x13a
-	__RESHI=0x13c
-	__SUMEXT=0x13e
-	__RESSI	<- not natural 
-	*****************************/
-
+	/* Module register addresses chip-specific, added by msp430_file_start */
 	mpy_rtx 	= gen_rtx_HWREG ("__MPY");
 	mpys_rtx 	= gen_rtx_HWREG ("__MPYS");
 	mac_rtx 	= gen_rtx_HWREG ("__MAC");

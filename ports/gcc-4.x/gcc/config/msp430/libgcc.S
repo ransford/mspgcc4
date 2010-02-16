@@ -3,6 +3,21 @@
 
 	.section .text.libgcc, "ax", @progbits
 
+#if defined(MSP430_HAS_HWMUL)
+#if defined(__MSP430X2__)
+__MPY=0x4c0
+#else
+__MPY=0x130
+#endif	
+__MPYS=(__MPY   + 0x02)
+__MAC=(__MPY    + 0x04)
+__MACS=(__MPY   + 0x06)
+__OP2=(__MPY    + 0x08)
+__RESLO=(__MPY  + 0x0a)
+__RESHI=(__MPY  + 0x0c)
+__SUMEXT=(__MPY + 0x0e)
+#endif
+
 #if defined (L_cmpdi2)
 	
 	.global	__cmpdi2
@@ -208,15 +223,6 @@ __mulsi3:
 
 #if defined (L_mulsi3hw)
 	
-__MPY=0x130
-__MPYS=0x132
-__MAC=0x134
-__MACS=0x136
-__OP2=0x138
-__RESLO=0x13a
-__RESHI=0x13c
-__SUMEXT=0x13e
-
 	.global	__umulsi3hw
 	.func	__umulsi3hw
 __umulsi3hw:
@@ -1246,15 +1252,6 @@ __muldi3:
 #endif
 
 #if defined(L_muldi3) && defined(MSP430_HAS_HWMUL)
-
-__MPY=0x130
-__MPYS=0x132
-__MAC=0x134
-__MACS=0x136
-__OP2=0x138
-__RESLO=0x13a
-__RESHI=0x13c
-__SUMEXT=0x13e
 
 #define r_reshh  r11    /* res = arg1 * arg2 */
 #define r_reshl  r10

@@ -2517,7 +2517,11 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 
 #define CPP_SPEC "\
 %{!mmcu*|mmcu=msp1:%(cpp_msp1)} \
-%{mmcu=msp2:%(cpp_msp2) -DMSP430_HAS_HWMUL} \
+%{mmcu=msp2:%(cpp_msp2)} \
+%{mmcu=msp3:%(cpp_msp3)} \
+%{mmcu=msp4:%(cpp_msp4)} \
+%{mmcu=msp5:%(cpp_msp5)} \
+%{mmcu=msp6:%(cpp_msp6)} \
 %{mmcu=msp430x110:%(cpp_msp1) -D__MSP430_110__} \
 %{mmcu=msp430x112:%(cpp_msp1) -D__MSP430_112__} \
 %{mmcu=msp430x1101:%(cpp_msp1) -D__MSP430_1101__} \
@@ -2533,21 +2537,21 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x135:%(cpp_msp1) -D__MSP430_135__} \
 %{mmcu=msp430x1331:%(cpp_msp1) -D__MSP430_1331__} \
 %{mmcu=msp430x1351:%(cpp_msp1) -D__MSP430_1351__} \
-%{mmcu=msp430x147:%(cpp_msp2) -D__MSP430_147__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x148:%(cpp_msp2) -D__MSP430_148__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x149:%(cpp_msp2) -D__MSP430_149__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1471:%(cpp_msp2) -D__MSP430_1471__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1481:%(cpp_msp2) -D__MSP430_1481__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1491:%(cpp_msp2) -D__MSP430_1491__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x147:%(cpp_msp2) -D__MSP430_147__} \
+%{mmcu=msp430x148:%(cpp_msp2) -D__MSP430_148__} \
+%{mmcu=msp430x149:%(cpp_msp2) -D__MSP430_149__} \
+%{mmcu=msp430x1471:%(cpp_msp2) -D__MSP430_1471__} \
+%{mmcu=msp430x1481:%(cpp_msp2) -D__MSP430_1481__} \
+%{mmcu=msp430x1491:%(cpp_msp2) -D__MSP430_1491__} \
 %{mmcu=msp430x155:%(cpp_msp1) -D__MSP430_155__} \
 %{mmcu=msp430x156:%(cpp_msp1) -D__MSP430_156__} \
 %{mmcu=msp430x157:%(cpp_msp1) -D__MSP430_157__} \
-%{mmcu=msp430x167:%(cpp_msp2) -D__MSP430_167__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x168:%(cpp_msp2) -D__MSP430_168__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x169:%(cpp_msp2) -D__MSP430_169__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1610:%(cpp_msp2) -D__MSP430_1610__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1611:%(cpp_msp2) -D__MSP430_1611__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x1612:%(cpp_msp2) -D__MSP430_1612__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x167:%(cpp_msp2) -D__MSP430_167__} \
+%{mmcu=msp430x168:%(cpp_msp2) -D__MSP430_168__} \
+%{mmcu=msp430x169:%(cpp_msp2) -D__MSP430_169__} \
+%{mmcu=msp430x1610:%(cpp_msp2) -D__MSP430_1610__} \
+%{mmcu=msp430x1611:%(cpp_msp2) -D__MSP430_1611__} \
+%{mmcu=msp430x1612:%(cpp_msp2) -D__MSP430_1612__} \
 %{mmcu=msp430x2001:%(cpp_msp1) -D__MSP430_2001__} \
 %{mmcu=msp430x2011:%(cpp_msp1) -D__MSP430_2011__} \
 %{mmcu=msp430x2002:%(cpp_msp1) -D__MSP430_2002__} \
@@ -2567,26 +2571,26 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x2234:%(cpp_msp1) -D__MSP430_2234__} \
 %{mmcu=msp430x2254:%(cpp_msp1) -D__MSP430_2254__} \
 %{mmcu=msp430x2274:%(cpp_msp1) -D__MSP430_2274__} \
-%{mmcu=msp430x233:%(cpp_msp2) -D__MSP430_233__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x235:%(cpp_msp2) -D__MSP430_235__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2330:%(cpp_msp2) -D__MSP430_2330__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2350:%(cpp_msp2) -D__MSP430_2350__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2370:%(cpp_msp2) -D__MSP430_2370__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x247:%(cpp_msp2) -D__MSP430_247__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x248:%(cpp_msp2) -D__MSP430_248__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x249:%(cpp_msp2) -D__MSP430_249__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2410:%(cpp_msp2) -D__MSP430_2410__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2471:%(cpp_msp2) -D__MSP430_2471__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2481:%(cpp_msp2) -D__MSP430_2481__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2491:%(cpp_msp2) -D__MSP430_2491__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2416:%(cpp_msp2) -D__MSP430_2416__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2417:%(cpp_msp2) -D__MSP430_2417__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2418:%(cpp_msp2) -D__MSP430_2418__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2419:%(cpp_msp2) -D__MSP430_2419__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2616:%(cpp_msp2) -D__MSP430_2616__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2617:%(cpp_msp2) -D__MSP430_2617__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2618:%(cpp_msp2) -D__MSP430_2618__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x2619:%(cpp_msp2) -D__MSP430_2619__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x233:%(cpp_msp2) -D__MSP430_233__} \
+%{mmcu=msp430x235:%(cpp_msp2) -D__MSP430_235__} \
+%{mmcu=msp430x2330:%(cpp_msp2) -D__MSP430_2330__} \
+%{mmcu=msp430x2350:%(cpp_msp2) -D__MSP430_2350__} \
+%{mmcu=msp430x2370:%(cpp_msp2) -D__MSP430_2370__} \
+%{mmcu=msp430x247:%(cpp_msp2) -D__MSP430_247__} \
+%{mmcu=msp430x248:%(cpp_msp2) -D__MSP430_248__} \
+%{mmcu=msp430x249:%(cpp_msp2) -D__MSP430_249__} \
+%{mmcu=msp430x2410:%(cpp_msp2) -D__MSP430_2410__} \
+%{mmcu=msp430x2471:%(cpp_msp2) -D__MSP430_2471__} \
+%{mmcu=msp430x2481:%(cpp_msp2) -D__MSP430_2481__} \
+%{mmcu=msp430x2491:%(cpp_msp2) -D__MSP430_2491__} \
+%{mmcu=msp430x2416:%(cpp_msp3) -D__MSP430_2416__} \
+%{mmcu=msp430x2417:%(cpp_msp3) -D__MSP430_2417__} \
+%{mmcu=msp430x2418:%(cpp_msp3) -D__MSP430_2418__} \
+%{mmcu=msp430x2419:%(cpp_msp3) -D__MSP430_2419__} \
+%{mmcu=msp430x2616:%(cpp_msp3) -D__MSP430_2616__} \
+%{mmcu=msp430x2617:%(cpp_msp3) -D__MSP430_2617__} \
+%{mmcu=msp430x2618:%(cpp_msp3) -D__MSP430_2618__} \
+%{mmcu=msp430x2619:%(cpp_msp3) -D__MSP430_2619__} \
 %{mmcu=msp430x311:%(cpp_msp1) -D__MSP430_311__} \
 %{mmcu=msp430x312:%(cpp_msp1) -D__MSP430_312__} \
 %{mmcu=msp430x313:%(cpp_msp1) -D__MSP430_313__} \
@@ -2594,28 +2598,28 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x315:%(cpp_msp1) -D__MSP430_315__} \
 %{mmcu=msp430x323:%(cpp_msp1) -D__MSP430_323__} \
 %{mmcu=msp430x325:%(cpp_msp1) -D__MSP430_325__} \
-%{mmcu=msp430x336:%(cpp_msp2) -D__MSP430_336__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x337:%(cpp_msp2) -D__MSP430_337__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x336:%(cpp_msp2) -D__MSP430_336__} \
+%{mmcu=msp430x337:%(cpp_msp2) -D__MSP430_337__} \
 %{mmcu=msp430x412:%(cpp_msp1) -D__MSP430_412__} \
 %{mmcu=msp430x413:%(cpp_msp1) -D__MSP430_413__} \
 %{mmcu=msp430x415:%(cpp_msp1) -D__MSP430_415__} \
 %{mmcu=msp430x417:%(cpp_msp1) -D__MSP430_417__} \
-%{mmcu=msp430x423:%(cpp_msp2) -D__MSP430_423__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x425:%(cpp_msp2) -D__MSP430_425__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x427:%(cpp_msp2) -D__MSP430_427__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x423:%(cpp_msp2) -D__MSP430_423__} \
+%{mmcu=msp430x425:%(cpp_msp2) -D__MSP430_425__} \
+%{mmcu=msp430x427:%(cpp_msp2) -D__MSP430_427__} \
 %{mmcu=msp430x4250:%(cpp_msp1) -D__MSP430_4250__} \
 %{mmcu=msp430x4260:%(cpp_msp1) -D__MSP430_4260__} \
 %{mmcu=msp430x4270:%(cpp_msp1) -D__MSP430_4270__} \
 %{mmcu=msp430xG4250:%(cpp_msp1) -D__MSP430_G4250__} \
 %{mmcu=msp430xG4260:%(cpp_msp1) -D__MSP430_G4260__} \
 %{mmcu=msp430xG4270:%(cpp_msp1) -D__MSP430_G4270__} \
-%{mmcu=msp430xE423:%(cpp_msp2) -D__MSP430_E423__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE425:%(cpp_msp2) -D__MSP430_E425__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE427:%(cpp_msp2) -D__MSP430_E427__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE4232:%(cpp_msp2) -D__MSP430_E4232__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE4242:%(cpp_msp2) -D__MSP430_E4242__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE4252:%(cpp_msp2) -D__MSP430_E4252__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xE4272:%(cpp_msp2) -D__MSP430_E4272__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430xE423:%(cpp_msp2) -D__MSP430_E423__} \
+%{mmcu=msp430xE425:%(cpp_msp2) -D__MSP430_E425__} \
+%{mmcu=msp430xE427:%(cpp_msp2) -D__MSP430_E427__} \
+%{mmcu=msp430xE4232:%(cpp_msp2) -D__MSP430_E4232__} \
+%{mmcu=msp430xE4242:%(cpp_msp2) -D__MSP430_E4242__} \
+%{mmcu=msp430xE4252:%(cpp_msp2) -D__MSP430_E4252__} \
+%{mmcu=msp430xE4272:%(cpp_msp2) -D__MSP430_E4272__} \
 %{mmcu=msp430xW423:%(cpp_msp1) -D__MSP430_W423__} \
 %{mmcu=msp430xW425:%(cpp_msp1) -D__MSP430_W425__} \
 %{mmcu=msp430xW427:%(cpp_msp1) -D__MSP430_W427__} \
@@ -2628,39 +2632,39 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x4351:%(cpp_msp1) -D__MSP430_4351__} \
 %{mmcu=msp430x4361:%(cpp_msp1) -D__MSP430_4361__} \
 %{mmcu=msp430x4371:%(cpp_msp1) -D__MSP430_4371__} \
-%{mmcu=msp430x447:%(cpp_msp2) -D__MSP430_447__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x448:%(cpp_msp2) -D__MSP430_448__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x449:%(cpp_msp2) -D__MSP430_449__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xG4616:%(cpp_msp2) -D__MSP430_G4616__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xG4617:%(cpp_msp2) -D__MSP430_G4617__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xG4618:%(cpp_msp2) -D__MSP430_G4618__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430xG4619:%(cpp_msp2) -D__MSP430_G4619__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x4783:%(cpp_msp2) -D__MSP430_4783__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x4784:%(cpp_msp2) -D__MSP430_4784__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x4793:%(cpp_msp2) -D__MSP430_4793__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x4794:%(cpp_msp2) -D__MSP430_4794__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47166:%(cpp_msp2) -D__MSP430_47166__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47176:%(cpp_msp2) -D__MSP430_47176__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47186:%(cpp_msp2) -D__MSP430_47186__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47196:%(cpp_msp2) -D__MSP430_47196__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47167:%(cpp_msp2) -D__MSP430_47167__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47177:%(cpp_msp2) -D__MSP430_47177__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47187:%(cpp_msp2) -D__MSP430_47187__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x47197:%(cpp_msp2) -D__MSP430_47197__ -D__MSP430X__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5418:%(cpp_msp2) -D__MSP430_5418__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5419:%(cpp_msp2) -D__MSP430_5419__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5435:%(cpp_msp2) -D__MSP430_5435__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5436:%(cpp_msp2) -D__MSP430_5436__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5437:%(cpp_msp2) -D__MSP430_5437__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=msp430x5438:%(cpp_msp2) -D__MSP430_5438__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x5123:%(cpp_msp2) -D__CC430_5123__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x5125:%(cpp_msp2) -D__CC430_5125__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x6125:%(cpp_msp2) -D__CC430_6125__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x6135:%(cpp_msp2) -D__CC430_6135__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x6126:%(cpp_msp2) -D__CC430_6126__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x5137:%(cpp_msp2) -D__CC430_5137__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x6127:%(cpp_msp2) -D__CC430_6127__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
-%{mmcu=cc430x6137:%(cpp_msp2) -D__CC430_6137__ -D__MSP430X2__ -DMSP430_HAS_HWMUL} \
+%{mmcu=msp430x447:%(cpp_msp2) -D__MSP430_447__} \
+%{mmcu=msp430x448:%(cpp_msp2) -D__MSP430_448__} \
+%{mmcu=msp430x449:%(cpp_msp2) -D__MSP430_449__} \
+%{mmcu=msp430xG4616:%(cpp_msp3) -D__MSP430_G4616__} \
+%{mmcu=msp430xG4617:%(cpp_msp3) -D__MSP430_G4617__} \
+%{mmcu=msp430xG4618:%(cpp_msp3) -D__MSP430_G4618__} \
+%{mmcu=msp430xG4619:%(cpp_msp3) -D__MSP430_G4619__} \
+%{mmcu=msp430x4783:%(cpp_msp4) -D__MSP430_4783__} \
+%{mmcu=msp430x4784:%(cpp_msp4) -D__MSP430_4784__} \
+%{mmcu=msp430x4793:%(cpp_msp4) -D__MSP430_4793__} \
+%{mmcu=msp430x4794:%(cpp_msp4) -D__MSP430_4794__} \
+%{mmcu=msp430x47166:%(cpp_msp5) -D__MSP430_47166__} \
+%{mmcu=msp430x47176:%(cpp_msp5) -D__MSP430_47176__} \
+%{mmcu=msp430x47186:%(cpp_msp5) -D__MSP430_47186__} \
+%{mmcu=msp430x47196:%(cpp_msp5) -D__MSP430_47196__} \
+%{mmcu=msp430x47167:%(cpp_msp5) -D__MSP430_47167__} \
+%{mmcu=msp430x47177:%(cpp_msp5) -D__MSP430_47177__} \
+%{mmcu=msp430x47187:%(cpp_msp5) -D__MSP430_47187__} \
+%{mmcu=msp430x47197:%(cpp_msp5) -D__MSP430_47197__} \
+%{mmcu=msp430x5418:%(cpp_msp6) -D__MSP430_5418__} \
+%{mmcu=msp430x5419:%(cpp_msp6) -D__MSP430_5419__} \
+%{mmcu=msp430x5435:%(cpp_msp6) -D__MSP430_5435__} \
+%{mmcu=msp430x5436:%(cpp_msp6) -D__MSP430_5436__} \
+%{mmcu=msp430x5437:%(cpp_msp6) -D__MSP430_5437__} \
+%{mmcu=msp430x5438:%(cpp_msp6) -D__MSP430_5438__} \
+%{mmcu=cc430x5123:%(cpp_msp6) -D__CC430_5123__} \
+%{mmcu=cc430x5125:%(cpp_msp6) -D__CC430_5125__} \
+%{mmcu=cc430x6125:%(cpp_msp6) -D__CC430_6125__} \
+%{mmcu=cc430x6135:%(cpp_msp6) -D__CC430_6135__} \
+%{mmcu=cc430x6126:%(cpp_msp6) -D__CC430_6126__} \
+%{mmcu=cc430x5137:%(cpp_msp6) -D__CC430_5137__} \
+%{mmcu=cc430x6127:%(cpp_msp6) -D__CC430_6127__} \
+%{mmcu=cc430x6137:%(cpp_msp6) -D__CC430_6137__} \
 %{posix:-D_POSIX_SOURCE} %{mIAR:-D_IAR_ASSEMBLER_}"
 
 /* A C string constant that tells the GNU CC driver program options to
@@ -2698,7 +2702,11 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 #define LINK_SPEC "\
 %{!mmcu*:-m msp430x110} \
 %{mmcu=msp1:-m msp430x110} \
-%{mmcu=msp2:-m msp430x336} \
+%{mmcu=msp2:-m msp430x147} \
+%{mmcu=msp3:-m msp430xG4616} \
+%{mmcu=msp4:-m msp430x4783} \
+%{mmcu=msp5:-m msp430x47166} \
+%{mmcu=msp6:-m msp430x5418} \
 %{mmcu=msp430x110:-m msp430x110 } \
 %{mmcu=msp430x112:-m msp430x112 } \
 %{mmcu=msp430x1101:-m msp430x1101 } \
@@ -2806,6 +2814,9 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x435:-m msp430x435 } \
 %{mmcu=msp430x436:-m msp430x436 } \
 %{mmcu=msp430x437:-m msp430x437 } \
+%{mmcu=msp430x4351:-m msp430x4351 } \
+%{mmcu=msp430x4361:-m msp430x4361 } \
+%{mmcu=msp430x4371:-m msp430x4371 } \
 %{mmcu=msp430x447:-m msp430x447 } \
 %{mmcu=msp430x448:-m msp430x448 } \
 %{mmcu=msp430x449:-m msp430x449 } \
@@ -2831,14 +2842,14 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x5436:-m msp430x5436 } \
 %{mmcu=msp430x5437:-m msp430x5437 } \
 %{mmcu=msp430x5438:-m msp430x5438 } \
-%{mmcu=cc430x5123: -m cc430x5123 } \
-%{mmcu=cc430x5125: -m cc430x5125 } \
-%{mmcu=cc430x6125: -m cc430x6125 } \
-%{mmcu=cc430x6135: -m cc430x6135 } \
-%{mmcu=cc430x6126: -m cc430x6126 } \
-%{mmcu=cc430x5137: -m cc430x5137 } \
-%{mmcu=cc430x6127: -m cc430x6127 } \
-%{mmcu=cc430x6137: -m cc430x6137 } \
+%{mmcu=cc430x5123:-m cc430x5123 } \
+%{mmcu=cc430x5125:-m cc430x5125 } \
+%{mmcu=cc430x6125:-m cc430x6125 } \
+%{mmcu=cc430x6135:-m cc430x6135 } \
+%{mmcu=cc430x6126:-m cc430x6126 } \
+%{mmcu=cc430x5137:-m cc430x5137 } \
+%{mmcu=cc430x6127:-m cc430x6127 } \
+%{mmcu=cc430x6137:-m cc430x6137 } \
 "
 
 #define LIB_SPEC "-lc"
@@ -2974,16 +2985,24 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x447:crt430x447.o%s} \
 %{mmcu=msp430x448:crt430x448.o%s} \
 %{mmcu=msp430x449:crt430x449.o%s} \
-%{mmcu=msp430xG4616:crt430xG4616.o%s} \
+%{mmcu=msp430xG4616|mmcu=msp3:crt430xG4616.o%s} \
 %{mmcu=msp430xG4617:crt430xG4617.o%s} \
 %{mmcu=msp430xG4618:crt430xG4618.o%s} \
-%{mmcu=msp430xG4619:crt430xG4619.o%s}\
-%{mmcu=msp430x4783:crt430x4783.o%s} \
+%{mmcu=msp430xG4619:crt430xG4619.o%s} \
+%{mmcu=msp430x4783|mmcu=msp4:crt430x4783.o%s} \
 %{mmcu=msp430x4784:crt430x4784.o%s} \
 %{mmcu=msp430x4793:crt430x4793.o%s} \
 %{mmcu=msp430x4794:crt430x4794.o%s} \
-%{mmcu=msp430x5418:crt430x5418.o%s} \
-%{mmcu=msp430x5419:crt430x5419.o%s}\
+%{mmcu=msp430x47166|mmcu=msp5:crt430x47166.o%s} \
+%{mmcu=msp430x47176:crt430x47176.o%s} \
+%{mmcu=msp430x47186:crt430x47186.o%s} \
+%{mmcu=msp430x47196:crt430x47196.o%s} \
+%{mmcu=msp430x47167:crt430x47167.o%s} \
+%{mmcu=msp430x47177:crt430x47177.o%s} \
+%{mmcu=msp430x47187:crt430x47187.o%s} \
+%{mmcu=msp430x47197:crt430x47197.o%s} \
+%{mmcu=msp430x5418|mmcu=msp6:crt430x5418.o%s} \
+%{mmcu=msp430x5419:crt430x5419.o%s} \
 %{mmcu=msp430x5435:crt430x5435.o%s} \
 %{mmcu=msp430x5436:crt430x5436.o%s} \
 %{mmcu=msp430x5437:crt430x5437.o%s} \
@@ -2998,14 +3017,20 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=cc430x6137:crtcc430x6137.o%s} \
 "
 
-
-
 #define CPP_MSP1_SPEC " -DMSP430_NO_HW_MUL "
-#define CPP_MSP2_SPEC " -DMSP430_HAS_HW_MUL "
+#define CPP_MSP2_SPEC " -DMSP430_HAS_HW_MUL -DMSP430_HAS_HWMUL "
+#define CPP_MSP3_SPEC " -DMSP430_HAS_HW_MUL -DMSP430_HAS_HWMUL -D__MSP430X__"
+#define CPP_MSP4_SPEC " -DMSP430_HAS_HW_MUL -DMSP430_HAS_HWMUL"
+#define CPP_MSP5_SPEC " -DMSP430_HAS_HW_MUL -DMSP430_HAS_HWMUL -D__MSP430X__"
+#define CPP_MSP6_SPEC " -DMSP430_HAS_HW_MUL -DMSP430_HAS_HWMUL -D__MSP430X2__"
 
 #define EXTRA_SPECS                           	\
 {"cpp_msp1",CPP_MSP1_SPEC},			\
 {"cpp_msp2",CPP_MSP2_SPEC},			\
+{"cpp_msp3",CPP_MSP3_SPEC},			\
+{"cpp_msp4",CPP_MSP4_SPEC},			\
+{"cpp_msp5",CPP_MSP5_SPEC},			\
+{"cpp_msp6",CPP_MSP6_SPEC},			\
 {"crt_binutils", CRT_BINUTILS_SPECS},
 
 /* Define this macro to provide additional specifications to put in
