@@ -120,6 +120,7 @@ $MPFR_VERSION="2.4.1";
 				  {'ver' => '3.2.3', 'config' => '3.3'},
 				  );
 				  
+@LIBC_VERSIONS = ('20100207');
 @GDB_VERSIONS = grep(/^gdb-(.*)\.patch/, split("\n", `ls -1 -r`));
 s/gdb-(.*)\.patch/$1/ foreach(@GDB_VERSIONS);
 @GDB_VERSIONS = sort{GNUVersionToInt($b) <=> GNUVersionToInt($a)}(@GDB_VERSIONS);
@@ -134,6 +135,10 @@ s/insight-(.*)\.patch/$1/ foreach(@INSIGHT_VERSIONS);
 $GDBVERSION = $GDB_VERSIONS[SelectFromList(0, "Select GDB version to build:", (map{'gdb-'.$_}(@GDB_VERSIONS)), "none")];
 $INSIGHTVERSION = $INSIGHT_VERSIONS[SelectFromList(0, "Select Insight version to build:", (map{'insight-'.$_}(@INSIGHT_VERSIONS)), "none")];
 
+$idx = SelectFromList(1, "Select libc version to build:", "v1", @LIBC_VERSIONS);
+$LIBC_ARG = "";
+$LIBC_ARG = " \"http://sourceforge.net/projects/oshan/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
+
 $TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -o` eq "Msys\n") ? "/c" : "/opt") ."/msp430-gcc-$GCCRELEASE{ver}");
 
 if (AskYesNo("Create binary package after build?", 1))
@@ -141,7 +146,7 @@ if (AskYesNo("Create binary package after build?", 1))
 	$BINPACKAGE = AskForString("Enter binary package name", 50, "msp430-gcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".tar.bz2");
 }
 
-$SKIP_BINUTILS = AskYesNo("Looks like binutils are already installed in $TARGETPATH. Skip building binutils?") if (-e "$TARGETPATH/bin/msp430-as");
+$SKIP_BINUTILS = AskYesNo("Looks like binutils are already installed in $TARGETPATH. Skip building binutils?", 1) if (-e "$TARGETPATH/bin/msp430-as");
 $BASEDIR = `pwd`;
 chomp $BASEDIR;
 
@@ -163,7 +168,7 @@ if ($GCCRELEASE{ver} ne '')
 {
 	push @COMMANDS, "sh do-binutils.sh \"$TARGETPATH\" \"$BINUTILS_VERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\"" unless $SKIP_BINUTILS;
 	push @COMMANDS, "sh do-gcc.sh \"$TARGETPATH\" \"$GCCRELEASE{ver}\" \"$GNU_MIRROR\" \"$BUILD_DIR\" \"gcc-$GCCRELEASE{config}\" \"$GMP_VERSION\" \"$MPFR_VERSION\"";
-	push @COMMANDS, "sh do-libc.sh \"$TARGETPATH\" \"$BUILD_DIR\"";
+	push @COMMANDS, "sh do-libc.sh \"$TARGETPATH\" \"$BUILD_DIR\"$LIBC_ARG";
 }
 	
 push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$GDBVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" gdb" if $GDBVERSION ne '';
@@ -185,7 +190,7 @@ if ($SCRIPTFILE ne '')
 	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
 	print F "$_\n" foreach @COMMANDS;
 	close F;
-	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now"))
+	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now",1))
 	{
 		chdir $BUILD_DIR;
 		system("sh $SCRIPTFILE");
