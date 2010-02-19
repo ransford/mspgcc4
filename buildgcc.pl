@@ -209,7 +209,9 @@ if ($SCRIPTFILE ne '')
 	mkdir $BUILD_DIR;
 	open F, ">$BUILD_DIR/$SCRIPTFILE" or die "Cannot open script $BUILD_DIR/$SCRIPTFILE for writing: $!";
 	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
-	print F "$_\n" foreach @COMMANDS or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
+	foreach (@COMMANDS) {
+		print F "$_\n" or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
+	}
 	close F or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
 	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now?",1))
 	{
