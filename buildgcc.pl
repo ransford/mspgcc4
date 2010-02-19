@@ -1,18 +1,19 @@
-#!/usr/bin/env perl -w
+#!/usr/bin/env perl -W
 # This work is partially financed by the European Commission under the
 # Framework 6 Information Society Technologies Project
 #  "Wirelessly Accessible Sensor Populations (WASP)".
 
 $g_DialogPresent = (`which dialog 2>/dev/null` ne '');
 
-sub CallDialog
+sub CallDialog($)
 {
 	my $ansfile = "/tmp/dialog-$$.ans";
 	system("dialog $_[0] 2>$ansfile");
 	if ($?)
 	{
+		my $a=$?;
 		unlink($ansfile);
-		exit;
+		die "Cannot execute dialog: $a";
 	}
 	my $answer = `cat $ansfile` || return -1;
 	unlink($ansfile);
@@ -45,7 +46,7 @@ sub SelectFromList
 }
 
 #string AskForString (prompt, width, default)
-sub AskForString
+sub AskForString($$$)
 {
 	if ($g_DialogPresent)
 	{
@@ -62,7 +63,7 @@ sub AskForString
 }
 
 #bool AskYesNo(prompt, default)
-sub AskYesNo
+sub AskYesNo($$)
 {
 	if ($g_DialogPresent)
 	{
@@ -101,6 +102,24 @@ sub GNUVersionToInt
 		$ret += shift @vn;
 	}
 	return $ret;
+}
+
+# Check for and report errors from 'system' function (status code, command previously executed)
+# returns 1 for success, 0 for failure.
+sub SystemCheck($$)
+{
+	my ($rc, $cmd) = @_;
+
+	if ($rc == -1) {
+		print "could not execute $cmd: $!.\n";
+	} elsif ($rc & 127) {
+		printf "$cmd terminated with signal %d.\n", ($? & 127);
+	} elsif ($rc == 0) {
+		print "$cmd completed successfully.\n";
+	} else {
+		printf "$cmd exited with status code %d.\n", $? >> 8;
+	}
+	return $rc == 0 ? 1 : 0;
 }
 
 #----------------------------------------------------------------------------------------------------------------------------------
@@ -186,16 +205,19 @@ if ($BINPACKAGE ne '')
 if ($SCRIPTFILE ne '')
 {
 	mkdir $BUILD_DIR;
-	open F, ">$BUILD_DIR/$SCRIPTFILE" || die "Cannot open script $BUILD_DIR/$SCRIPTFILE for writing";
+	open F, ">$BUILD_DIR/$SCRIPTFILE" || die "Cannot open script $BUILD_DIR/$SCRIPTFILE for writing: $!";
 	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
-	print F "$_\n" foreach @COMMANDS;
-	close F;
-	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now",1))
+	print F "$_\n" foreach @COMMANDS || die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
+	close F || die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
+	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now?",1))
 	{
 		chdir $BUILD_DIR;
-		system("sh $SCRIPTFILE");
+		my $cmd = "sh $SCRIPTFILE";
+		system($cmd);
+		SystemCheck($?, $cmd);
+	} else {
+		printf "Please run   /bin/sh \"$BUILD_DIR/$SCRIPTFILE\"   to start build process\n";
 	}
-	printf "Run $BUILD_DIR/$SCRIPTFILE to start build process\n";
 }
 else
 {
