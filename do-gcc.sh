@@ -95,7 +95,8 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	cd ..
-	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2"
+	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-core-$GCC_VERSION.tar.bz2"
+	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-g++-$GCC_VERSION.tar.bz2"
 
 	if [ x"$GMP_VERSION" != x"-" ]; then
 		wget -c "$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2"
@@ -114,7 +115,8 @@ if [ $FETCH_ONLY = 1 ]; then
 fi
 
 echo "Unpacking GCC..."
-tar xjf "gcc-$GCC_VERSION.tar.bz2"
+tar xjf "gcc-core-$GCC_VERSION.tar.bz2"
+tar xjf "gcc-g++-$GCC_VERSION.tar.bz2"
 
 cd "gcc-$GCC_VERSION"
 
