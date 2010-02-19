@@ -27,8 +27,14 @@ INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
 NO_FETCH=0
 
+case "$(uname -s)" in
+MINGW*)	MINGW=1 ;;
+*)	MINGW=0 ;;
+esac
+
 WIN32_OPTS=
-if [ $(uname -o) = Msys ]; then
+
+if [ $MINGW = 1 ]; then
 	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG
 fi
 
@@ -136,7 +142,7 @@ if [ x"$MPFR_VERSION" != x"-" ]; then
 	tar xjf "../mpfr-$MPFR_VERSION.tar.bz2"
 	rm -rf mpfr
 	mv "mpfr-$MPFR_VERSION" mpfr
-	if [ $(uname -o) = Msys ]; then
+	if [ $MINGW = 1 ]; then
 		echo "echo \"#!/bin/sh\" > libtool" >> mpfr/configure
 		echo "echo \"/bin/libtool \\\"\\\$@\\\"\" >> libtool" >> mpfr/configure
 	fi
@@ -147,14 +153,14 @@ cd ..
 mkdir -p "gcc-$GCC_VERSION-build"
 cd "gcc-$GCC_VERSION-build"
 
-if [ $(uname -o) = Msys ]; then
+if [ $MINGW = 1 ]; then
 	"$(pwd -W)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --disable-nls --with-pkgversion="MSPGCC4_$VERSION_TAG"
 	GNUMAKE=mingw32-make
 else
 	"$(pwd)/../gcc-$GCC_VERSION/configure" --prefix="$TARGET_LOCATION" --target=msp430 --enable-languages=c,c++ $WIN32_OPTS --with-pkgversion="MSPGCC4_$VERSION_TAG"
 fi
 
-if [ $(uname -o) = Msys ]; then
+if [ $MINGW = 1 ]; then
 	../../mingw32-gccwa.pl $TARGET_LOCATION
 else
 	$GNUMAKE -j$(num_cpus)

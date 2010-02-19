@@ -18,9 +18,10 @@ INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
 WIN32_OPTS=
 
-if [ $(uname -o) = Msys ]; then
-	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG
-fi
+case "$(uname -s)" in
+MINGW*)
+	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG ;;
+esac
 
 set -eu
 

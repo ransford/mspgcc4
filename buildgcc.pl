@@ -164,7 +164,7 @@ $idx = SelectFromList(1, "Select libc version to build:", "v1", @LIBC_VERSIONS);
 $LIBC_ARG = "";
 $LIBC_ARG = " \"http://sourceforge.net/projects/oshan/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
 
-$TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -o` eq "Msys\n") ? "/c" : "/opt") ."/msp430-gcc-$GCCRELEASE{ver}");
+$TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -s` =~ /^MINGW/) ? "/c" : "/opt") ."/msp430-gcc-$GCCRELEASE{ver}");
 
 $BINPACKAGE = '';
 if (AskYesNo("Create binary package after build?", 1))
