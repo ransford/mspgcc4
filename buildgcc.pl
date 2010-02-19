@@ -1,7 +1,9 @@
-#!/usr/bin/env perl -W
+#!/usr/bin/env perl
 # This work is partially financed by the European Commission under the
 # Framework 6 Information Society Technologies Project
 #  "Wirelessly Accessible Sensor Populations (WASP)".
+
+use warnings 'all';
 
 $g_DialogPresent = (`which dialog 2>/dev/null` ne '');
 
