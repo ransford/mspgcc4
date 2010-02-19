@@ -160,6 +160,7 @@ $LIBC_ARG = " \"http://sourceforge.net/projects/oshan/files/msp430-libc/msp430-l
 
 $TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -o` eq "Msys\n") ? "/c" : "/opt") ."/msp430-gcc-$GCCRELEASE{ver}");
 
+$BINPACKAGE = '';
 if (AskYesNo("Create binary package after build?", 1))
 {
 	$BINPACKAGE = AskForString("Enter binary package name", 50, "msp430-gcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".tar.bz2");
@@ -177,6 +178,7 @@ Binary package name: $BINPACKAGE
 -------------------------------------
 Do you want to start build right now?", 0);
 
+$SCRIPTFILE = '';
 if (!$startnow)
 {
 	$SCRIPTFILE = AskForString("Enter script name to generate", 50, "buildgcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".sh");
