@@ -9,6 +9,12 @@
 # 7.0
 # insight 6.8-1
 
+# Note that insight 6.8-1 doesn't compile on Cygwin 1.7.1.
+# Workaround that let us proceed a bit:
+# make CC="gcc -D__USE_W32_SOCKETS" -C tcl/win
+# make CC="gcc -include winsock2.h" -C tk/win  # this is insufficient.
+# HELP SOLICITED!
+
 
 set -eu
 
