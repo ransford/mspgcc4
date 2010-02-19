@@ -6,6 +6,10 @@
 use warnings 'all';
 
 $g_DialogPresent = (`which dialog 2>/dev/null` ne '');
+if (!grep { /--default-item/ } `dialog --help 2>&1`) {
+	# insufficient dialog version (FreeBSD for instance)
+	$g_DialogPresent = '';
+}
 
 sub CallDialog($)
 {
