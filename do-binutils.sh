@@ -18,6 +18,8 @@ INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
 WIN32_OPTS=
 
+GNUMAKE=$(find_gnumake)
+
 case "$(uname -s)" in
 MINGW*)
 	WIN32_OPTS=--enable-win32-registry=MSP430-GCC-$VERSION_TAG ;;
@@ -73,7 +75,7 @@ mkdir -p "binutils-$BINUTILS_VERSION-build"
 cd "binutils-$BINUTILS_VERSION-build"
 
 "$(pwd)/../binutils-$BINUTILS_VERSION/configure" "--prefix=$TARGET_LOCATION" --target=msp430 --disable-werror $WIN32_OPTS --disable-nls
-make -j$(num_cpus)
-$INSTALL_LAUNCHER make install
+$GNUMAKE -j$(num_cpus)
+$INSTALL_LAUNCHER $GNUMAKE install
 
 cd "$INITIAL_DIR"
