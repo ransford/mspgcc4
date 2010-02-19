@@ -21,7 +21,7 @@ GCC_VERSION="4.3.4"
 GCC_PATCH_FOLDER="gcc-4.x"
 GMP_VERSION="4.3.1"
 MPFR_VERSION="2.4.1"
-GNU_MIRROR="ftp.uni-kl.de"
+GNU_MIRROR="http://ftp.uni-kl.de"
 BUILD_DIR="build"
 INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
@@ -95,10 +95,10 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	cd ..
-	wget -c "ftp://$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2"
+	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-$GCC_VERSION.tar.bz2"
 
 	if [ x"$GMP_VERSION" != x"-" ]; then
-		wget -c "ftp://$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2"
+		wget -c "$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2"
 	fi
 
 	if [ x"$MPFR_VERSION" != x"-" ]; then

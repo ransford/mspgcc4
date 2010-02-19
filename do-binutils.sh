@@ -12,7 +12,7 @@
 
 VERSION_TAG=$(cat _version_tag.txt)
 BINUTILS_VERSION=2.19.1
-GNU_MIRROR=ftp.uni-kl.de
+GNU_MIRROR=http://ftp.uni-kl.de
 BUILD_DIR=build
 INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
@@ -50,7 +50,7 @@ cd "$BUILD_DIR"
 
 export "PATH=$PATH:$TARGET_LOCATION/bin"
 
-wget -c "ftp://$GNU_MIRROR/pub/gnu/binutils/binutils-$BINUTILS_VERSION.tar.bz2"
+wget -c "$GNU_MIRROR/pub/gnu/binutils/binutils-$BINUTILS_VERSION.tar.bz2"
 
 if [ $FETCH_ONLY = 1 ]; then
 	echo "Binutils $BINUTILS_VERSION downloaded successfully"

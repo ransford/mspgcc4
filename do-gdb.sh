@@ -23,7 +23,8 @@ set -eu
 
 PKG_VERSION=7.0
 PKG_NAME=gdb	#can also be insight
-GNU_MIRROR=ftp.uni-kl.de
+GNU_MIRROR=http://ftp.uni-kl.de
+INSIGHT_MIRROR=http://gd.tuwien.ac.at/gnu/sourceware/insight/releases/
 BUILD_DIR=build
 INITIAL_DIR="$(pwd)"
 FETCH_ONLY=0
@@ -52,11 +53,11 @@ done
 
 case "$PKG_NAME" in
 gdb)
-	PKG_SRC_URL="ftp://$GNU_MIRROR/pub/gnu/gdb/gdb-$PKG_VERSION.tar.bz2"
+	PKG_SRC_URL="$GNU_MIRROR/pub/gnu/gdb/gdb-$PKG_VERSION.tar.bz2"
 	GDB_CFG_EXTRA_FLAGS=
 	;;
 insight)
-	PKG_SRC_URL="ftp://sourceware.org/pub/insight/releases/insight-$PKG_VERSION.tar.bz2"
+	PKG_SRC_URL="$INSIGHT_MIRROR/insight-$PKG_VERSION.tar.bz2"
 	GDB_CFG_EXTRA_FLAGS="--enable-gdbtk"
 	;;
 *)
