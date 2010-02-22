@@ -207,10 +207,9 @@ push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$INSIGHTVERSION\" \"$GNU_MIRROR\
 if ($BINPACKAGE ne '')
 {
 	push @COMMANDS, "echo \"Creating binary package...\"";
-	push @COMMANDS, "cd \"$TARGETPATH\"";
-	push @COMMANDS, "tar cjf \"$BASEDIR/$BINPACKAGE\" *";
+	push @COMMANDS, "cd \"$TARGETPATH\" && tar cf - * | bzip2 -c > \"$BASEDIR/$BINPACKAGE\"";
 	push @COMMANDS, "ls -ldq \"$BASEDIR/$BINPACKAGE\"";
-	push @COMMANDS, "cd \"$BASEDIR\"";
+	push @COMMANDS, "cd \"$BASEDIR\"" if $SCRIPTFILE ne '';
 }
 
 if ($SCRIPTFILE ne '')
