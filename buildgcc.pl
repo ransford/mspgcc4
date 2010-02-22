@@ -11,15 +11,18 @@ if (!grep { /--default-item/ } `dialog --help 2>&1`) {
 	$g_DialogPresent = '';
 }
 
+sub SystemCheck($$);   # forward declaration
+
 sub CallDialog($)
 {
 	my $ansfile = "/tmp/dialog-$$.ans";
-	system("dialog $_[0] 2>$ansfile");
-	if ($?)
+	my $cmd = "dialog $_[0] 2>$ansfile";
+	my $rc = system($cmd);
+	if ($rc)
 	{
-		my $a=$?;
 		unlink($ansfile);
-		die "Cannot execute dialog: $a";
+		SystemCheck($rc, $cmd);
+		die "Cannot execute dialog. Abort";
 	}
 	my $answer = `cat $ansfile` or return -1;
 	unlink($ansfile);
