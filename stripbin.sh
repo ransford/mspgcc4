@@ -8,15 +8,21 @@ if [ "$#" != 1 ]; then
 	exit 1
 fi
 
-case "$1" in
+DEST="$1" ; shift
+
+case "$DEST" in
 /*) ;;
-*)	echo >&2 "mspgcc prefix must be absolute, got \"$1\". Abort."
+*)	echo >&2 "mspgcc prefix must be absolute, got \"$DEST\". Abort."
 	exit 1
 	;;
 esac
 
+INSTALL_LAUNCHER=$(sh do-detect-sudo.sh "$DEST")
+
 set +e	# there are some non-binary files in those directories (scripts),
 	# we don't want to abort => set +e
-cd "$1/bin" && strip *
-cd "$1/msp430/bin" && strip *
-cd "$1/libexec/gcc/msp430"/* && strip * install-tools/*
+cd "$DEST/bin" && $INSTALL_LAUNCHER strip *
+cd "$DEST/msp430/bin" && $INSTALL_LAUNCHER strip *
+cd "$DEST/libexec/gcc/msp430"/* && $INSTALL_LAUNCHER strip * install-tools/*
+
+true # pretend success
