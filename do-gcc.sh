@@ -101,12 +101,11 @@ if [ $NO_FETCH != 1 ]; then
 	fi
 
 	cd ..
-	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-core-$GCC_VERSION.tar.bz2"
-	wget -c "$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-g++-$GCC_VERSION.tar.bz2"
 
-	if [ x"$GMP_VERSION" != x"-" ]; then
-		wget -c "$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2"
-	fi
+	wget -c \
+		"$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-core-$GCC_VERSION.tar.bz2" \
+		"$GNU_MIRROR/pub/gnu/gcc/gcc-$GCC_VERSION/gcc-g++-$GCC_VERSION.tar.bz2"\
+		"$GNU_MIRROR/pub/gnu/gmp/gmp-$GMP_VERSION.tar.bz2"
 
 	if [ x"$MPFR_VERSION" != x"-" ]; then
 		# server doesn't support continuing (-c), but timestamping.
