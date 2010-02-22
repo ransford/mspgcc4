@@ -234,9 +234,14 @@ if ($SCRIPTFILE ne '')
 }
 else
 {
-	foreach(@COMMANDS)
+	foreach my $cmd (@COMMANDS)
 	{
-		print "Running $_\n";
-		system($_) or die "Failed to execute $_";
+		my $rc;
+
+		print "Running $cmd\n";
+		$rc = system($cmd);
+		if ($rc) {
+			SystemCheck($rc, $cmd) or die "Failed to execute $cmd";
+		}
 	}
 }
