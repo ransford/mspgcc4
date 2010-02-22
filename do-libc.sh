@@ -31,6 +31,7 @@ if [ $# -ge 1 ] && [ "_$1" = "--fetch-only" ]; then
 	shift
 fi
 
+OVERRIDE_URL=
 if [ $# -ge 1 ] ; then
 	OVERRIDE_URL="$1"
 	shift
@@ -83,6 +84,12 @@ if [ "_$FETCH_ONLY" = _1 ]; then
 	exit 0
 fi
 
+# the next line works around a Makefile issue in some versions (for instance
+# 20100207) - we don't care if it fails, because it doesn't work for all
+# versions
+$GNUMAKE --ignore-errors PREFIX=$TARGET_LOCATION makedir-crt
+
+# build
 $GNUMAKE -j$(num_cpus) PREFIX=$TARGET_LOCATION
 $INSTALL_LAUNCHER $GNUMAKE install PREFIX=$TARGET_LOCATION
 
