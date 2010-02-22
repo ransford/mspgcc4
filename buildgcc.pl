@@ -167,6 +167,8 @@ $idx = SelectFromList(1, "Select libc version to build:", "v1", @LIBC_VERSIONS);
 $LIBC_ARG = "";
 $LIBC_ARG = " \"http://sourceforge.net/projects/oshan/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
 
+$STRIPBINS = AskYesNo("Strip debug information\nfrom executables after install?", 1);
+
 $TARGETPATH = AskForString("Enter target toolchain path", 50, ((`uname -s` =~ /^MINGW/) ? "/c" : "/opt") ."/msp430-gcc-$GCCRELEASE{ver}");
 
 $BINPACKAGE = '';
@@ -203,6 +205,8 @@ if ($GCCRELEASE{ver} ne '')
 	
 push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$GDBVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" gdb" if $GDBVERSION ne '';
 push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$INSIGHTVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" insight" if $INSIGHTVERSION ne '';
+
+push @COMMANDS, "sh stripbin.sh \"$TARGETPATH\"" if ($STRIPBINS);
 
 if ($BINPACKAGE ne '')
 {
