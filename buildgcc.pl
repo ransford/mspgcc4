@@ -214,7 +214,7 @@ if ($SCRIPTFILE ne '')
 {
 	mkdir $BUILD_DIR;
 	open F, ">$BUILD_DIR/$SCRIPTFILE" or die "Cannot open script $BUILD_DIR/$SCRIPTFILE for writing: $!";
-	print F "#!/bin/sh\ncd ..\nset -eu\n\n";
+	print F "#!/bin/sh\ncd \"\$(dirname \$0)\"/..\nset -eu\n\n";
 	foreach (@COMMANDS) {
 		print F "$_\n" or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
 	}
