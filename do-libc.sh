@@ -83,7 +83,10 @@ if [ "_$FETCH_ONLY" = _1 ]; then
 	exit 0
 fi
 
-$GNUMAKE -j$(num_cpus) PREFIX=$TARGET_LOCATION
+# some versions of libc fail the parallel build; so retry
+# a serial build if the parallel build fails.
+$GNUMAKE -j$(num_cpus) PREFIX=$TARGET_LOCATION || \
+$GNUMAKE               PREFIX=$TARGET_LOCATION
 $INSTALL_LAUNCHER $GNUMAKE install PREFIX=$TARGET_LOCATION
 
 echo '!<arch>' > 0lib.tmp
