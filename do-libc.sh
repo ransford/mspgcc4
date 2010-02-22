@@ -70,7 +70,7 @@ if [ "$OVERRIDE_URL" = "" ] ; then
 else
 	ARCHIVE_NAME=$(echo $OVERRIDE_URL | sed s/^.*\\\/\\\([^\\\/]*\\\)\$/\\\1/;)
 	ARCHIVE_BASE=$(echo $OVERRIDE_URL | sed s/^.*\\\/\\\([^\\\/.]*\\\)\\..*\$/\\\1/;)
-	wget "$OVERRIDE_URL"
+	wget -c "$OVERRIDE_URL"
 	
 	test -e $ARCHIVE_BASE && rm -rf $ARCHIVE_BASE
 	tar xjf $ARCHIVE_NAME
