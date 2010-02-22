@@ -91,7 +91,7 @@ sub AskYesNo($$)
 	else
 	{
 		my $def = ($_[1] eq '0') ? 'n' : 'y';
-		print "\n$_[0] (y/n)\n[$def]";
+		print "\n$_[0] (y/n) [$def] ";
 		my $r = <STDIN>;
 		chomp $r;
 		$r = $def if $r eq '';
@@ -177,7 +177,7 @@ if (AskYesNo("Create binary package after build?", 1))
 	$BINPACKAGE = AskForString("Enter binary package name", 50, "msp430-gcc-$GCCRELEASE{ver}".(($GDBVERSION eq '') ? '' : "_gdb_$GDBVERSION").".tar.bz2");
 }
 
-$SKIP_BINUTILS = AskYesNo("Looks like binutils are already installed in $TARGETPATH. Skip building binutils?", 1) if (-e "$TARGETPATH/bin/msp430-as");
+$SKIP_BINUTILS = AskYesNo("Looks like binutils are already installed in $TARGETPATH.\nSkip building binutils?", 1) if (-e "$TARGETPATH/bin/msp430-as");
 $BASEDIR = `pwd`;
 chomp $BASEDIR;
 
@@ -225,7 +225,7 @@ if ($SCRIPTFILE ne '')
 		print F "$_\n" or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
 	}
 	close F or die "Cannot write to $BUILD_DIR/$SCRIPTFILE: $!";
-	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully. Run it now?",1))
+	if (AskYesNo("$BUILD_DIR/$SCRIPTFILE created successfully.\nRun it now?",1))
 	{
 		chdir $BUILD_DIR;
 		my $cmd = "sh $SCRIPTFILE";
