@@ -1,0 +1,4 @@
+mspgcc4 is not maintained in git.  Use the subversion repository:
+
+  svn co https://mspgcc4.svn.sourceforge.net/svnroot/mspgcc4 mspgcc4 
+
