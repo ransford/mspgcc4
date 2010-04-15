@@ -26,11 +26,12 @@ if [ $# -ge 1 ] ; then
 	shift
 fi
 
-if [ $# -ge 1 ] && [ "_$1" = "--fetch-only" ]; then
+if [ $# -ge 1 ] && [ "_$1" = "_--fetch-only" ]; then
 	FETCH_ONLY=1
 	shift
 fi
 
+OVERRIDE_URL=
 if [ $# -ge 1 ] ; then
 	OVERRIDE_URL="$1"
 	shift
