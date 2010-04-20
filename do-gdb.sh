@@ -95,6 +95,22 @@ if test -e "$INITIAL_DIR/$PKG_NAME-$PKG_VERSION.patch" ; then
        patch -p1 < "$INITIAL_DIR/$PKG_NAME-$PKG_VERSION.patch"
 fi
 
+cat >try$$.c <<'_EOF'
+#include <curses.h>
+
+int main(void) { initscr(); return 0; }
+_EOF
+a=0
+cc -c -o try$$.o try$$.c || a=$?
+rm -f try$$.o try$$.c
+if test $a != 0 ; then
+	echo >&2 "=============================================================="
+	echo >&2 "Note that you must have libcurses developer headers installed."
+	echo >&2 "Abort."
+	echo >&2 "=============================================================="
+	exit 1
+fi
+
 cd ..
 mkdir -p "$PKG_NAME-$PKG_VERSION-build"
 cd "$PKG_NAME-$PKG_VERSION-build"

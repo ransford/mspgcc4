@@ -46,6 +46,15 @@ while [ $# -ge 1 ] ; do
 	shift
 done
 
+if ! makeinfo --version >/dev/null 2>&1 ; then
+	exec >&2
+	echo "==================================================================="
+	echo "makeinfo is missing from path, but required for the binutils build."
+	echo "Please install texinfo.  Aborting."
+	echo "==================================================================="
+	exit 1
+fi
+
 INSTALL_LAUNCHER=$(sh do-detect-sudo.sh $TARGET_LOCATION)
 
 mkdir -p "$BUILD_DIR"
