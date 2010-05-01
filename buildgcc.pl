@@ -148,7 +148,7 @@ $MPFR_VERSION="2.4.1";
 				  {'ver' => '3.2.3', 'config' => '3.3'},
 				  );
 				  
-@LIBC_VERSIONS = ('20100207');
+@LIBC_VERSIONS = ('20100430', '20100403', '20100207');
 @GDB_VERSIONS = grep(/^gdb-(.*)\.patch/, split("\n", `ls -1 -r`));
 s/gdb-(.*)\.patch/$1/ foreach(@GDB_VERSIONS);
 @GDB_VERSIONS = sort{GNUVersionToInt($b) <=> GNUVersionToInt($a)}(@GDB_VERSIONS);
@@ -165,7 +165,7 @@ $INSIGHTVERSION = $INSIGHT_VERSIONS[SelectFromList(0, "Select Insight version to
 
 $idx = SelectFromList(1, "Select libc version to build:", "v1", @LIBC_VERSIONS);
 $LIBC_ARG = "";
-$LIBC_ARG = " \"http://sourceforge.net/projects/oshan/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
+$LIBC_ARG = " \"http://sourceforge.net/projects/mspgcc4/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
 
 $STRIPBINS = AskYesNo("Strip debug information\nfrom executables after install?", 1);
 
