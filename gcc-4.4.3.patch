@@ -1,6 +1,6 @@
-diff -urN gcc-4.4.2/configure.orig gcc-4.4.2/configure
---- gcc-4.4.2/configure.orig	2010-01-15 18:58:52.355557300 +0100
-+++ gcc-4.4.2/configure	2010-01-15 19:05:32.338914800 +0100
+diff -urN gcc-4.4.3/configure.orig gcc-4.4.3/configure
+--- gcc-4.4.3/configure.orig	2010-01-15 18:58:52.355557300 +0100
++++ gcc-4.4.3/configure	2010-01-15 19:05:32.338914800 +0100
 @@ -2360,6 +2360,9 @@
    avr-*-*)
      noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
@@ -11,9 +11,9 @@ diff -urN gcc-4.4.2/configure.orig gcc-4.4.2/configure
    bfin-*-*)
      noconfigdirs="$noconfigdirs gdb"
      if test x${is_cross_compiler} != xno ; then
-diff -urN gcc-4.4.2/gcc/config.gcc.orig gcc-4.4.2/gcc/config.gcc
---- gcc-4.4.2/gcc/config.gcc.orig	2010-01-15 18:58:52.371182200 +0100
-+++ gcc-4.4.2/gcc/config.gcc	2010-01-15 19:05:32.354539700 +0100
+diff -urN gcc-4.4.3/gcc/config.gcc.orig gcc-4.4.3/gcc/config.gcc
+--- gcc-4.4.3/gcc/config.gcc.orig	2010-01-15 18:58:52.371182200 +0100
++++ gcc-4.4.3/gcc/config.gcc	2010-01-15 19:05:32.354539700 +0100
 @@ -804,6 +804,12 @@
  avr-*-*)
  	tm_file="avr/avr.h dbxelf.h"
@@ -27,9 +27,9 @@ diff -urN gcc-4.4.2/gcc/config.gcc.orig gcc-4.4.2/gcc/config.gcc
  bfin*-elf*)
  	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
  	tmake_file=bfin/t-bfin-elf
-diff -urN gcc-4.4.2/gcc/configure.orig gcc-4.4.2/gcc/configure
---- gcc-4.4.2/gcc/configure.orig	2010-01-15 18:58:52.386807100 +0100
-+++ gcc-4.4.2/gcc/configure	2010-01-15 19:05:32.401414500 +0100
+diff -urN gcc-4.4.3/gcc/configure.orig gcc-4.4.3/gcc/configure
+--- gcc-4.4.3/gcc/configure.orig	2010-01-15 18:58:52.386807100 +0100
++++ gcc-4.4.3/gcc/configure	2010-01-15 19:05:32.401414500 +0100
 @@ -1595,6 +1595,7 @@
  
  
@@ -38,9 +38,9 @@ diff -urN gcc-4.4.2/gcc/configure.orig gcc-4.4.2/gcc/configure
  
  # Determine the host, build, and target systems
  ac_aux_dir=
-diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
---- gcc-4.4.2/gcc/loop-invariant.c.orig	2010-01-15 18:58:52.418057100 +0100
-+++ gcc-4.4.2/gcc/loop-invariant.c	2010-01-15 19:05:32.432664500 +0100
+diff -urN gcc-4.4.3/gcc/loop-invariant.c.orig gcc-4.4.3/gcc/loop-invariant.c
+--- gcc-4.4.3/gcc/loop-invariant.c.orig	2010-01-15 18:58:52.418057100 +0100
++++ gcc-4.4.3/gcc/loop-invariant.c	2010-01-15 19:05:32.432664500 +0100
 @@ -1171,11 +1171,13 @@
    rtx reg, set, dest, note;
    struct use *use;
@@ -120,9 +120,9 @@ diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
  
    return true;
  
-diff -urN gcc-4.4.2/libgcc/config.host.orig gcc-4.4.2/libgcc/config.host
---- gcc-4.4.2/libgcc/config.host.orig	2010-01-15 18:58:52.418057100 +0100
-+++ gcc-4.4.2/libgcc/config.host	2010-01-15 19:05:32.432664500 +0100
+diff -urN gcc-4.4.3/libgcc/config.host.orig gcc-4.4.3/libgcc/config.host
+--- gcc-4.4.3/libgcc/config.host.orig	2010-01-15 18:58:52.418057100 +0100
++++ gcc-4.4.3/libgcc/config.host	2010-01-15 19:05:32.432664500 +0100
 @@ -224,6 +224,8 @@
      # Make HImode functions for AVR
      tmake_file=${cpu_type}/t-avr
@@ -132,9 +132,9 @@ diff -urN gcc-4.4.2/libgcc/config.host.orig gcc-4.4.2/libgcc/config.host
  bfin*-elf*)
          ;;
  bfin*-uclinux*)
-diff -urN gcc-4.4.2/gcc/expr.c.orig gcc-4.4.2/gcc/expr.c
---- gcc-4.4.2/gcc/expr.c.orig	2010-01-15 18:58:52.433682100 +0100
-+++ gcc-4.4.2/gcc/expr.c	2010-01-15 19:05:32.448289500 +0100
+diff -urN gcc-4.4.3/gcc/expr.c.orig gcc-4.4.3/gcc/expr.c
+--- gcc-4.4.3/gcc/expr.c.orig	2010-01-15 18:58:52.433682100 +0100
++++ gcc-4.4.3/gcc/expr.c	2010-01-15 19:05:32.448289500 +0100
 @@ -955,7 +955,7 @@
  	  data.autinc_from = 1;
  	  data.explicit_inc_from = -1;
