@@ -3,6 +3,11 @@
 # Prepares the rpm build area from the current mspgcc4 source area.
 # This incorporates only the base files from the mspgcc4 release.
 # RPM-specific patches need to be added by hand.
+#
+# NOTE: This script assumes it's running in the rpms subdirectory of a
+# git workspace in which the branch svn refers to the mspgcc4
+# subversion trunk.  If that is not true, you need to build
+# ${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 yourself.
 
 BINUTILS_VERSION=${BINUTILS_VERSION:-2.20.1}
 MPFR_VERSION=${MPFR_VERSION:-2.4.1}
@@ -24,7 +29,12 @@ mkdir -p SOURCES
 
 cp -p ../binutils-${BINUTILS_VERSION}.patch SOURCES/binutils-${BINUTILS_VERSION}-${MSPGCC4}.patch
 cp -p ../gcc-${GCC_VERSION}.patch SOURCES/gcc-${GCC_VERSION}-${MSPGCC4}.patch
-( cd ../ports/gcc-4.x ; \
-  tar cjf ../../rpms/SOURCES/${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 \
-     --transform="s,^\./,./gcc-${GCC_VERSION}/," \
-     ./gcc )
+rm -rf XXports
+( cd .. \
+  && git archive \
+    --format=tar \
+    --prefix=./XX \
+    svn ports/gcc-4.x ) \
+| tar xf -
+(cd XXports ; mv gcc-4.x gcc-${GCC_VERSION} ; tar cjf ../SOURCES/${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 ./gcc-${GCC_VERSION} )
+rm -rf XXports
