@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# Prepares the rpm build area from the current mspgcc4 source area.
+# This incorporates only the base files from the mspgcc4 release.
+# RPM-specific patches need to be added by hand.
+
+BINUTILS_VERSION=${BINUTILS_VERSION:-2.20.1}
+MPFR_VERSION=${MPFR_VERSION:-2.4.1}
+GCC_VERSION=${GCC_VERSION:-4.4.3}
+LIBC_VERSION=${LIBC_VERSION:-20100430}
+
+MSPGCC4_VERSION_TAG=$(cat ../_version_tag.txt | sed -e 's@-@.@g')
+MSPGCC4="mspgcc4-${MSPGCC4_VERSION_TAG}"
+
+mkdir -p SOURCES
+
+( cd SOURCES ;
+  wget -N ftp://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.bz2 
+  wget -N http://www.mpfr.org/mpfr-${MPFR_VERSION}/mpfr-${MPFR_VERSION}.tar.bz2
+  wget -N ftp://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-core-${GCC_VERSION}.tar.bz2
+  wget -N ftp://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-g++-${GCC_VERSION}.tar.bz2
+  wget -N http://sourceforge.net/projects/mspgcc4/files/msp430-libc/msp430-libc-${LIBC_VERSION}.tar.bz2
+)
+
+cp -p ../binutils-${BINUTILS_VERSION}.patch SOURCES/binutils-${BINUTILS_VERSION}-${MSPGCC4}.patch
+cp -p ../gcc-${GCC_VERSION}.patch SOURCES/gcc-${GCC_VERSION}-${MSPGCC4}.patch
+( cd ../ports/gcc-4.x ; \
+  tar cjf ../../rpms/SOURCES/${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 \
+     --transform="s,^\./,./gcc-${GCC_VERSION}/," \
+     ./gcc )

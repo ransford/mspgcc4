@@ -28,19 +28,28 @@ rm -rf ${RPMROOT}
 mkdir -p ${RPMROOT}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
 
 # Build binutils first, then install it
-rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-binutils-${BINUTILS}.${SDIST}.src.rpm
-sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-binutils-${BINUTILS}.${DIST}.${MACH}.rpm
-
-# Next gcc.  Install both c and c++.
-rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-gcc-${GCC}.${SDIST}.src.rpm
-sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-*-${GCC}.${DIST}.${MACH}.rpm
-
-# Finally the library.
-rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-libc-${LIBC}.${SDIST}.src.rpm
-sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/noarch/msp430-libc-${LIBC}.${DIST}.noarch.rpm
-
-# And copy everything that was generated down here into persistent storage.
-for fn in `cd ${RPMROOT} ; find . -name '*.rpm' ` ; do
+rpmbuild \
+  --define="_topdir ${RPMROOT}" \
+  --define="dist .${DIST}" \
+  --rebuild SRPMS/msp430-binutils-${BINUTILS}.${SDIST}.src.rpm \
+&& sudo rpm \
+  --replacepkgs \
+  -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-binutils-${BINUTILS}.${DIST}.${MACH}.rpm \
+&& rpmbuild \
+  --define="_topdir ${RPMROOT}" \
+  --define="dist .${DIST}" \
+  --rebuild SRPMS/msp430-gcc-${GCC}.${SDIST}.src.rpm \
+&& sudo rpm \
+  --replacepkgs \
+  -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-*-${GCC}.${DIST}.${MACH}.rpm \
+&& rpmbuild \
+  --define="_topdir ${RPMROOT}" \
+  --define="dist .${DIST}" \
+  --rebuild SRPMS/msp430-libc-${LIBC}.${SDIST}.src.rpm \
+&& sudo rpm \
+  --replacepkgs \
+  -Uvh ${RPMROOT}/RPMS/noarch/msp430-libc-${LIBC}.${DIST}.noarch.rpm \
+&& for fn in `cd ${RPMROOT} ; find . -name '*.rpm' ` ; do
   mkdir -p `dirname ${fn}`
   echo "Saving ${fn}"
   cp -p ${RPMROOT}/${fn} ${fn}

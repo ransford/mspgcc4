@@ -14,6 +14,11 @@ if [ -z "${1}" ] ; then
   exit 1
 fi
 
-rpmbuild -bs --define="dist .${DIST}" SPECS/msp430-binutils.spec
-rpmbuild -bs --define="dist .${DIST}" SPECS/msp430-gcc.spec
-rpmbuild -bs --define="dist .${DIST}" SPECS/msp430-libc.spec
+mkdir -p SRPMS
+for sf in binutils gcc libc ; do
+  rpmbuild \
+    --define="dist .${DIST}" \
+    --define='_topdir .' \
+    -bs SPECS/msp430-${sf}.spec \
+  || exit 1
+done
