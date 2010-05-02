@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# Build the RPMs for a specific platform from an existing source RPM.
+#
+# sh build distname sourcedistname
+#
+
+# Version tags for what we're building.
+BINUTILS=2.20.1-2.r4.20100210
+GCC=4.4.3-2.r4.20100210
+LIBC=20100430-1
+
+# Get the target distribution (not pre-defined on RHEL/CentOS).  When
+# building on a derivative platform, also specify whose source RPM to use.
+DIST="${1}"
+if [ -z "${1}" ] ; then
+  echo "Must define dist as parameter"
+  exit 1
+fi
+SDIST="${2:-${DIST}}"
+
+# Machine subdirectory into which RPM will be written
+MACH=`uname -m`
+
+# Do all work locally; start withi a clean slate
+RPMROOT=/tmp/RPM
+rm -rf ${RPMROOT}
+mkdir -p ${RPMROOT}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+
+# Build binutils first, then install it
+rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-binutils-${BINUTILS}.${SDIST}.src.rpm
+sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-binutils-${BINUTILS}.${DIST}.${MACH}.rpm
+
+# Next gcc.  Install both c and c++.
+rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-gcc-${GCC}.${SDIST}.src.rpm
+sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/${MACH}/msp430-*-${GCC}.${DIST}.${MACH}.rpm
+
+# Finally the library.
+rpmbuild --define="_topdir ${RPMROOT}" --define="dist .${DIST}" --rebuild SRPMS/msp430-libc-${LIBC}.${SDIST}.src.rpm
+sudo rpm --replacepkgs -Uvh ${RPMROOT}/RPMS/noarch/msp430-libc-${LIBC}.${DIST}.noarch.rpm
+
+# And copy everything that was generated down here into persistent storage.
+for fn in `cd ${RPMROOT} ; find . -name '*.rpm' ` ; do
+  mkdir -p `dirname ${fn}`
+  echo "Saving ${fn}"
+  cp -p ${RPMROOT}/${fn} ${fn}
+done
