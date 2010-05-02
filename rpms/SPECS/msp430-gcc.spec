@@ -18,10 +18,10 @@ License:	GPLv2+
 URL:		http://mspgcc4.sourceforge.net/
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-core-%{version}.tar.bz2
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-g++-%{version}.tar.bz2
-Source2:	msp430-%{VERSION_TAG}-gcc-%{version}.tar.bz2
+Source2:	mspgcc4-%{VERSION_TAG}-gcc-%{version}.tar.bz2
 Source3: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
-Patch0:		gcc-%{version}-msp430-%{VERSION_TAG}.patch
-Patch1:		msp430-%{VERSION_TAG}-chipcat.patch
+Patch0:		gcc-%{version}-mspgcc4-%{VERSION_TAG}.patch
+Patch1:		mspgcc4-%{VERSION_TAG}-chipcat.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	%{target}-binutils >= 2.19
 BuildRequires:	zlib-devel, gettext, bison, flex, texinfo

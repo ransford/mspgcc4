@@ -16,7 +16,7 @@ Source0:	http://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.bz2
 # I (rob spanton) have attempted to get this patch upstream.
 # See mailing list post: http://article.gmane.org/gmane.comp.gnu.binutils/39694
 # FSF's response was to request copyright release from all contributors.
-Patch0:		binutils-2.20.1-msp430.patch
+Patch0:		binutils-2.20.1-mspgcc4-%{VERSION_TAG}.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	texinfo
 
