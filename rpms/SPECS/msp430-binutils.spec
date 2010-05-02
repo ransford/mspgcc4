@@ -1,9 +1,13 @@
 %define target msp430
+# The top-level _version_tag.txt file from the mspgcc4 repository
 %global VERSION_TAG r4.20100210
+# Marks the RPM spec file release.  Resets to 1 when VERSION_TAG
+# changes.
+%global RELEASE_NUMBER 2
 
 Name:		%{target}-binutils
-Version:	2.20
-Release:	1.%{VERSION_TAG}%{?dist}
+Version:	2.20.1
+Release:	%{RELEASE_NUMBER}.%{VERSION_TAG}%{?dist}
 Summary:	Cross Compiling GNU binutils targeted at %{target}
 Group:		Development/Tools
 License:	GPLv2+
@@ -12,7 +16,7 @@ Source0:	http://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.bz2
 # I (rob spanton) have attempted to get this patch upstream.
 # See mailing list post: http://article.gmane.org/gmane.comp.gnu.binutils/39694
 # FSF's response was to request copyright release from all contributors.
-Patch0:		binutils-2.20-msp430.patch
+Patch0:		binutils-2.20.1-msp430.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	texinfo
 
@@ -56,6 +60,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/%{target}-*.1.gz
 
 %changelog
+* Sat May  1 2010 Peter A. Bigot pab@peoplepowerco.com  - 2.20.1-2.r4.20100210
+- Update to binutils 2.20.1
+
 * Sat Apr  3 2010 Peter A. Bigot pab@peoplepowerco.com  - 2.20-1
 - Update for mspgcc4
 
