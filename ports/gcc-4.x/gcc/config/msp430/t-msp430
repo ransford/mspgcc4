@@ -61,70 +61,153 @@ fp-bit.c: $(srcdir)/config/fp-bit.c $(srcdir)/config/msp430/t-msp430
 
 FPBIT = fp-bit.c
 
-MULTILIB_OPTIONS = mmcu=msp1/mmcu=msp2
-MULTILIB_DIRNAMES = msp1 msp2
-
+MULTILIB_OPTIONS = mmcu=msp1/mmcu=msp2/mmcu=msp3/mmcu=msp4/mmcu=msp5/mmcu=msp6
+MULTILIB_DIRNAMES = msp1 msp2 msp3 msp4 msp5 msp6
 
 MULTILIB_MATCHES = \
-	mmcu?msp1=mmcu?msp430x110   mmcu?msp1=mmcu?msp430x112 \
-	mmcu?msp1=mmcu?msp430x1101  mmcu?msp1=mmcu?msp430x1111  mmcu?msp1=mmcu?msp430x1121 \
-	mmcu?msp1=mmcu?msp430x1122  mmcu?msp1=mmcu?msp430x1132 \
-	mmcu?msp1=mmcu?msp430x122   mmcu?msp1=mmcu?msp430x123 \
-	mmcu?msp1=mmcu?msp430x1222  mmcu?msp1=mmcu?msp430x1232 \
-	mmcu?msp1=mmcu?msp430x133   mmcu?msp1=mmcu?msp430x135 \
-	mmcu?msp1=mmcu?msp430x1331  mmcu?msp1=mmcu?msp430x1351 \
-	mmcu?msp2=mmcu?msp430x147   mmcu?msp2=mmcu?msp430x148   mmcu?msp2=mmcu?msp430x149 \
-	mmcu?msp2=mmcu?msp430x1471  mmcu?msp2=mmcu?msp430x1481  mmcu?msp2=mmcu?msp430x1491 \
-	mmcu?msp1=mmcu?msp430x155   mmcu?msp1=mmcu?msp430x156   mmcu?msp1=mmcu?msp430x157 \
-	mmcu?msp2=mmcu?msp430x167   mmcu?msp2=mmcu?msp430x168   mmcu?msp2=mmcu?msp430x169 \
-	mmcu?msp2=mmcu?msp430x1610  mmcu?msp2=mmcu?msp430x1611  mmcu?msp2=mmcu?msp430x1612 \
-	mmcu?msp1=mmcu?msp430x2001  mmcu?msp1=mmcu?msp430x2011 \
-	mmcu?msp1=mmcu?msp430x2002  mmcu?msp1=mmcu?msp430x2012 \
-	mmcu?msp1=mmcu?msp430x2003  mmcu?msp1=mmcu?msp430x2013 \
-	mmcu?msp1=mmcu?msp430x2101  mmcu?msp1=mmcu?msp430x2111  mmcu?msp1=mmcu?msp430x2121 \
+	mmcu?msp1=mmcu?msp430x110 \
+	mmcu?msp1=mmcu?msp430x112 \
+	mmcu?msp1=mmcu?msp430x1101 \
+	mmcu?msp1=mmcu?msp430x1111 \
+	mmcu?msp1=mmcu?msp430x1121 \
+	mmcu?msp1=mmcu?msp430x1122 \
+	mmcu?msp1=mmcu?msp430x1132 \
+	mmcu?msp1=mmcu?msp430x122 \
+	mmcu?msp1=mmcu?msp430x123 \
+	mmcu?msp1=mmcu?msp430x1222 \
+	mmcu?msp1=mmcu?msp430x1232 \
+	mmcu?msp1=mmcu?msp430x133 \
+	mmcu?msp1=mmcu?msp430x135 \
+	mmcu?msp1=mmcu?msp430x1331 \
+	mmcu?msp1=mmcu?msp430x1351 \
+	mmcu?msp2=mmcu?msp430x147 \
+	mmcu?msp2=mmcu?msp430x148 \
+	mmcu?msp2=mmcu?msp430x149 \
+	mmcu?msp2=mmcu?msp430x1471 \
+	mmcu?msp2=mmcu?msp430x1481 \
+	mmcu?msp2=mmcu?msp430x1491 \
+	mmcu?msp1=mmcu?msp430x155 \
+	mmcu?msp1=mmcu?msp430x156 \
+	mmcu?msp1=mmcu?msp430x157 \
+	mmcu?msp2=mmcu?msp430x167 \
+	mmcu?msp2=mmcu?msp430x168 \
+	mmcu?msp2=mmcu?msp430x169 \
+	mmcu?msp2=mmcu?msp430x1610 \
+	mmcu?msp2=mmcu?msp430x1611 \
+	mmcu?msp2=mmcu?msp430x1612 \
+	mmcu?msp1=mmcu?msp430x2001 \
+	mmcu?msp1=mmcu?msp430x2011 \
+	mmcu?msp1=mmcu?msp430x2002 \
+	mmcu?msp1=mmcu?msp430x2012 \
+	mmcu?msp1=mmcu?msp430x2003 \
+	mmcu?msp1=mmcu?msp430x2013 \
+	mmcu?msp1=mmcu?msp430x2101 \
+	mmcu?msp1=mmcu?msp430x2111 \
+	mmcu?msp1=mmcu?msp430x2121 \
 	mmcu?msp1=mmcu?msp430x2131 \
-	mmcu?msp1=mmcu?msp430x2112  mmcu?msp1=mmcu?msp430x2122 \
-	mmcu?msp1=mmcu?msp430x2232  mmcu?msp1=mmcu?msp430x2252  mmcu?msp1=mmcu?msp430x2272 \
-	mmcu?msp1=mmcu?msp430x2234  mmcu?msp1=mmcu?msp430x2254  mmcu?msp1=mmcu?msp430x2274 \
-	mmcu?msp2=mmcu?msp430x233   mmcu?msp2=mmcu?msp430x235 \
-	mmcu?msp2=mmcu?msp430x2330  mmcu?msp2=mmcu?msp430x2350  mmcu?msp2=mmcu?msp430x2370 \
-	mmcu?msp2=mmcu?msp430x247   mmcu?msp2=mmcu?msp430x248   mmcu?msp2=mmcu?msp430x249 \
+	mmcu?msp1=mmcu?msp430x2112 \
+	mmcu?msp1=mmcu?msp430x2122 \
+	mmcu?msp1=mmcu?msp430x2132 \
+	mmcu?msp1=mmcu?msp430x2232 \
+	mmcu?msp1=mmcu?msp430x2252 \
+	mmcu?msp1=mmcu?msp430x2272 \
+	mmcu?msp1=mmcu?msp430x2234 \
+	mmcu?msp1=mmcu?msp430x2254 \
+	mmcu?msp1=mmcu?msp430x2274 \
+	mmcu?msp2=mmcu?msp430x233 \
+	mmcu?msp2=mmcu?msp430x235 \
+	mmcu?msp2=mmcu?msp430x2330 \
+	mmcu?msp2=mmcu?msp430x2350 \
+	mmcu?msp2=mmcu?msp430x2370 \
+	mmcu?msp2=mmcu?msp430x247 \
+	mmcu?msp2=mmcu?msp430x248 \
+	mmcu?msp2=mmcu?msp430x249 \
 	mmcu?msp2=mmcu?msp430x2410 \
-	mmcu?msp2=mmcu?msp430x2471  mmcu?msp2=mmcu?msp430x2481  mmcu?msp2=mmcu?msp430x2491 \
-	mmcu?msp2=mmcu?msp430x2416  mmcu?msp2=mmcu?msp430x2417  mmcu?msp2=mmcu?msp430x2418 \
-	mmcu?msp2=mmcu?msp430x2419 \
-	mmcu?msp2=mmcu?msp430x2616  mmcu?msp2=mmcu?msp430x2617  mmcu?msp2=mmcu?msp430x2618 \
-	mmcu?msp2=mmcu?msp430x2619 \
-	mmcu?msp1=mmcu?msp430x311   mmcu?msp1=mmcu?msp430x312   mmcu?msp1=mmcu?msp430x313 \
-	mmcu?msp1=mmcu?msp430x314   mmcu?msp1=mmcu?msp430x315 \
-	mmcu?msp1=mmcu?msp430x323   mmcu?msp1=mmcu?msp430x325 \
-	mmcu?msp2=mmcu?msp430x336   mmcu?msp2=mmcu?msp430x337 \
-	mmcu?msp1=mmcu?msp430x412   mmcu?msp1=mmcu?msp430x413 \
-	mmcu?msp1=mmcu?msp430x415   mmcu?msp1=mmcu?msp430x417 \
-	mmcu?msp2=mmcu?msp430x423   mmcu?msp2=mmcu?msp430x425   mmcu?msp2=mmcu?msp430x427 \
-	mmcu?msp1=mmcu?msp430x4250  mmcu?msp1=mmcu?msp430x4260  mmcu?msp1=mmcu?msp430x4270 \
-	mmcu?msp1=mmcu?msp430xG4250 mmcu?msp1=mmcu?msp430xG4260 mmcu?msp1=mmcu?msp430xG4270 \
-	mmcu?msp2=mmcu?msp430xE423  mmcu?msp2=mmcu?msp430xE425  mmcu?msp2=mmcu?msp430xE427 \
-	mmcu?msp2=mmcu?msp430xE4232 mmcu?msp2=mmcu?msp430xE4242 mmcu?msp2=mmcu?msp430xE4252 \
+	mmcu?msp2=mmcu?msp430x2471 \
+	mmcu?msp2=mmcu?msp430x2481 \
+	mmcu?msp2=mmcu?msp430x2491 \
+	mmcu?msp3=mmcu?msp430x2416 \
+	mmcu?msp3=mmcu?msp430x2417 \
+	mmcu?msp3=mmcu?msp430x2418 \
+	mmcu?msp3=mmcu?msp430x2419 \
+	mmcu?msp3=mmcu?msp430x2616 \
+	mmcu?msp3=mmcu?msp430x2617 \
+	mmcu?msp3=mmcu?msp430x2618 \
+	mmcu?msp3=mmcu?msp430x2619 \
+	mmcu?msp1=mmcu?msp430x311 \
+	mmcu?msp1=mmcu?msp430x312 \
+	mmcu?msp1=mmcu?msp430x313 \
+	mmcu?msp1=mmcu?msp430x314 \
+	mmcu?msp1=mmcu?msp430x315 \
+	mmcu?msp1=mmcu?msp430x323 \
+	mmcu?msp1=mmcu?msp430x325 \
+	mmcu?msp2=mmcu?msp430x336 \
+	mmcu?msp2=mmcu?msp430x337 \
+	mmcu?msp1=mmcu?msp430x412 \
+	mmcu?msp1=mmcu?msp430x413 \
+	mmcu?msp1=mmcu?msp430x415 \
+	mmcu?msp1=mmcu?msp430x417 \
+	mmcu?msp2=mmcu?msp430x423 \
+	mmcu?msp2=mmcu?msp430x425 \
+	mmcu?msp2=mmcu?msp430x427 \
+	mmcu?msp1=mmcu?msp430x4250 \
+	mmcu?msp1=mmcu?msp430x4260 \
+	mmcu?msp1=mmcu?msp430x4270 \
+	mmcu?msp1=mmcu?msp430xG4250 \
+	mmcu?msp1=mmcu?msp430xG4260 \
+	mmcu?msp1=mmcu?msp430xG4270 \
+	mmcu?msp2=mmcu?msp430xE423 \
+	mmcu?msp2=mmcu?msp430xE425 \
+	mmcu?msp2=mmcu?msp430xE427 \
+	mmcu?msp2=mmcu?msp430xE4232 \
+	mmcu?msp2=mmcu?msp430xE4242 \
+	mmcu?msp2=mmcu?msp430xE4252 \
 	mmcu?msp2=mmcu?msp430xE4272 \
-	mmcu?msp1=mmcu?msp430xW423  mmcu?msp1=mmcu?msp430xW425  mmcu?msp1=mmcu?msp430xW427 \
-	mmcu?msp1=mmcu?msp430xG437  mmcu?msp1=mmcu?msp430xG438  mmcu?msp1=mmcu?msp430xG439 \
-	mmcu?msp1=mmcu?msp430x435   mmcu?msp1=mmcu?msp430x436   mmcu?msp1=mmcu?msp430x437 \
-	mmcu?msp1=mmcu?msp430x4351  mmcu?msp1=mmcu?msp430x4361  mmcu?msp1=mmcu?msp430x4371 \
-	mmcu?msp2=mmcu?msp430x447   mmcu?msp2=mmcu?msp430x448   mmcu?msp2=mmcu?msp430x449 \
-	mmcu?msp2=mmcu?msp430xG4616 mmcu?msp2=mmcu?msp430xG4617 mmcu?msp2=mmcu?msp430xG4618 \
-	mmcu?msp2=mmcu?msp430xG4619 \
-	mmcu?msp2=mmcu?msp430x4783  mmcu?msp2=mmcu?msp430x4784  mmcu?msp2=mmcu?msp430x4793 \
-	mmcu?msp2=mmcu?msp430x4794 \
-	mmcu?msp2=mmcu?msp430x5418 mmcu?msp2=mmcu?msp430x5419 \
-	mmcu?msp2=mmcu?msp430x5435 mmcu?msp2=mmcu?msp430x5436 mmcu?msp2=mmcu?msp430x5437 \
-	mmcu?msp2=mmcu?msp430x5438 \
-	mmcu?msp2=mmcu?cc430x5123 \
-	mmcu?msp2=mmcu?cc430x5125 mmcu?msp2=mmcu?cc430x6125 mmcu?msp2=mmcu?cc430x6135 \
-	mmcu?msp2=mmcu?cc430x6126 \
-	mmcu?msp2=mmcu?cc430x5137 mmcu?msp2=mmcu?cc430x6127 mmcu?msp2=mmcu?cc430x6137
-#todo: 47xx has 32*32 HW MUL
-#todo: 54xx has 32*32 HW MUL
+	mmcu?msp1=mmcu?msp430xW423 \
+	mmcu?msp1=mmcu?msp430xW425 \
+	mmcu?msp1=mmcu?msp430xW427 \
+	mmcu?msp1=mmcu?msp430xG437 \
+	mmcu?msp1=mmcu?msp430xG438 \
+	mmcu?msp1=mmcu?msp430xG439 \
+	mmcu?msp1=mmcu?msp430x435 \
+	mmcu?msp1=mmcu?msp430x436 \
+	mmcu?msp1=mmcu?msp430x437 \
+	mmcu?msp1=mmcu?msp430x4351 \
+	mmcu?msp1=mmcu?msp430x4361 \
+	mmcu?msp1=mmcu?msp430x4371 \
+	mmcu?msp2=mmcu?msp430x447 \
+	mmcu?msp2=mmcu?msp430x448 \
+	mmcu?msp2=mmcu?msp430x449 \
+	mmcu?msp3=mmcu?msp430xG4616 \
+	mmcu?msp3=mmcu?msp430xG4617 \
+	mmcu?msp3=mmcu?msp430xG4618 \
+	mmcu?msp3=mmcu?msp430xG4619 \
+	mmcu?msp4=mmcu?msp430x4783 \
+	mmcu?msp4=mmcu?msp430x4784 \
+	mmcu?msp4=mmcu?msp430x4793 \
+	mmcu?msp4=mmcu?msp430x4794 \
+	mmcu?msp5=mmcu?msp430x47166 \
+	mmcu?msp5=mmcu?msp430x47176 \
+	mmcu?msp5=mmcu?msp430x47186 \
+	mmcu?msp5=mmcu?msp430x47196 \
+	mmcu?msp5=mmcu?msp430x47167 \
+	mmcu?msp5=mmcu?msp430x47177 \
+	mmcu?msp5=mmcu?msp430x47187 \
+	mmcu?msp5=mmcu?msp430x47197 \
+	mmcu?msp6=mmcu?msp430x5418 \
+	mmcu?msp6=mmcu?msp430x5419 \
+	mmcu?msp6=mmcu?msp430x5435 \
+	mmcu?msp6=mmcu?msp430x5436 \
+	mmcu?msp6=mmcu?msp430x5437 \
+	mmcu?msp6=mmcu?msp430x5438 \
+	mmcu?msp6=mmcu?cc430x5123 \
+	mmcu?msp6=mmcu?cc430x5125 \
+	mmcu?msp6=mmcu?cc430x6125 \
+	mmcu?msp6=mmcu?cc430x6135 \
+	mmcu?msp6=mmcu?cc430x6126 \
+	mmcu?msp6=mmcu?cc430x5137 \
+	mmcu?msp6=mmcu?cc430x6127 \
+	mmcu?msp6=mmcu?cc430x6137
 
 MULTILIB_EXCEPTIONS =
 
