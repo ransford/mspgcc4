@@ -11,7 +11,7 @@
 . ./buildgcc.subr
 
 VERSION_TAG=$(cat _version_tag.txt)
-BINUTILS_VERSION=2.19.1
+BINUTILS_VERSION=2.20.1
 GNU_MIRROR=http://ftp.uni-kl.de
 BUILD_DIR=build
 INITIAL_DIR="$(pwd)"
