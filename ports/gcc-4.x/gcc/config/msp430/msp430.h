@@ -2657,7 +2657,7 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x5436:%(cpp_msp6) -D__MSP430_5436__} \
 %{mmcu=msp430x5437:%(cpp_msp6) -D__MSP430_5437__} \
 %{mmcu=msp430x5438:%(cpp_msp6) -D__MSP430_5438__} \
-%{mmcu=cc430x5123:%(cpp_msp6) -D__CC430_5123__} \
+%{mmcu=cc430x5133:%(cpp_msp6) -D__CC430_5133__} \
 %{mmcu=cc430x5125:%(cpp_msp6) -D__CC430_5125__} \
 %{mmcu=cc430x6125:%(cpp_msp6) -D__CC430_6125__} \
 %{mmcu=cc430x6135:%(cpp_msp6) -D__CC430_6135__} \
@@ -2842,7 +2842,7 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x5436:-m msp430x5436 } \
 %{mmcu=msp430x5437:-m msp430x5437 } \
 %{mmcu=msp430x5438:-m msp430x5438 } \
-%{mmcu=cc430x5123:-m cc430x5123 } \
+%{mmcu=cc430x5133:-m cc430x5133 } \
 %{mmcu=cc430x5125:-m cc430x5125 } \
 %{mmcu=cc430x6125:-m cc430x6125 } \
 %{mmcu=cc430x6135:-m cc430x6135 } \
@@ -3007,7 +3007,7 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x5436:crt430x5436.o%s} \
 %{mmcu=msp430x5437:crt430x5437.o%s} \
 %{mmcu=msp430x5438:crt430x5438.o%s} \
-%{mmcu=cc430x5123:crtcc430x5123.o%s} \
+%{mmcu=cc430x5133:crtcc430x5133.o%s} \
 %{mmcu=cc430x5125:crtcc430x5125.o%s} \
 %{mmcu=cc430x6125:crtcc430x6125.o%s} \
 %{mmcu=cc430x6135:crtcc430x6135.o%s} \
