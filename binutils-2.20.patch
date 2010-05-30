@@ -1,7 +1,7 @@
-diff --git a/bfd/archures.c b/bfd/archures.c
+diff --git binutils-2.20.orig/bfd/archures.c binutils-2.20/bfd/archures.c
 index df73b3f..fd76c6c 100644
---- a/bfd/archures.c
-+++ b/bfd/archures.c
+--- binutils-2.20.orig/bfd/archures.c
++++ binutils-2.20/bfd/archures.c
 @@ -398,7 +398,13 @@ DESCRIPTION
  .#define bfd_mach_msp14          14
  .#define bfd_mach_msp15          15
@@ -27,10 +27,10 @@ index df73b3f..fd76c6c 100644
  .  bfd_arch_xc16x,     {* Infineon's XC16X Series.               *}
  .#define bfd_mach_xc16x         1
  .#define bfd_mach_xc16xl        2
-diff --git a/bfd/bfd-in2.h b/bfd/bfd-in2.h
+diff --git binutils-2.20.orig/bfd/bfd-in2.h binutils-2.20/bfd/bfd-in2.h
 index 40d3b7a..507c4a9 100644
---- a/bfd/bfd-in2.h
-+++ b/bfd/bfd-in2.h
+--- binutils-2.20.orig/bfd/bfd-in2.h
++++ binutils-2.20/bfd/bfd-in2.h
 @@ -2065,7 +2065,13 @@ enum bfd_architecture
  #define bfd_mach_msp14          14
  #define bfd_mach_msp15          15
@@ -82,10 +82,10 @@ index 40d3b7a..507c4a9 100644
  
  /* IQ2000 Relocations.  */
    BFD_RELOC_IQ2000_OFFSET_16,
-diff --git a/bfd/cpu-msp430.c b/bfd/cpu-msp430.c
+diff --git binutils-2.20.orig/bfd/cpu-msp430.c binutils-2.20/bfd/cpu-msp430.c
 index 63c301a..8847dc3 100644
---- a/bfd/cpu-msp430.c
-+++ b/bfd/cpu-msp430.c
+--- binutils-2.20.orig/bfd/cpu-msp430.c
++++ binutils-2.20/bfd/cpu-msp430.c
 @@ -65,29 +65,60 @@ static const bfd_arch_info_type arch_info_struct[] =
    /* msp430x16x.  */
    N (16, bfd_mach_msp16, "msp:16", FALSE, & arch_info_struct[7]),
@@ -155,10 +155,10 @@ index 63c301a..8847dc3 100644
  };
  
  const bfd_arch_info_type bfd_msp430_arch =
-diff --git a/bfd/doc/archures.texi b/bfd/doc/archures.texi
+diff --git binutils-2.20.orig/bfd/doc/archures.texi binutils-2.20/bfd/doc/archures.texi
 index 33d7c59..f1f0a12 100644
---- a/bfd/doc/archures.texi
-+++ b/bfd/doc/archures.texi
+--- binutils-2.20.orig/bfd/doc/archures.texi
++++ binutils-2.20/bfd/doc/archures.texi
 @@ -363,7 +363,12 @@ enum bfd_architecture
  #define bfd_mach_msp14          14
  #define bfd_mach_msp15          15
@@ -185,10 +185,10 @@ index 33d7c59..f1f0a12 100644
  This routine is provided for those cases where a bfd * is not
  available
 -
-diff --git a/bfd/elf32-msp430.c b/bfd/elf32-msp430.c
+diff --git binutils-2.20.orig/bfd/elf32-msp430.c binutils-2.20/bfd/elf32-msp430.c
 index 7a57024..3362365 100644
---- a/bfd/elf32-msp430.c
-+++ b/bfd/elf32-msp430.c
+--- binutils-2.20.orig/bfd/elf32-msp430.c
++++ binutils-2.20/bfd/elf32-msp430.c
 @@ -90,7 +90,7 @@ static reloc_howto_type elf_msp430_howto_table[] =
  	 0xffff,		/* dst_mask */
  	 FALSE),		/* pcrel_offset */
@@ -891,10 +891,10 @@ index 7a57024..3362365 100644
  	}
      }
  
-diff --git a/bfd/libbfd.h b/bfd/libbfd.h
+diff --git binutils-2.20.orig/bfd/libbfd.h binutils-2.20/bfd/libbfd.h
 index 2450b2d..5c8e0e9 100644
---- a/bfd/libbfd.h
-+++ b/bfd/libbfd.h
+--- binutils-2.20.orig/bfd/libbfd.h
++++ binutils-2.20/bfd/libbfd.h
 @@ -2004,6 +2004,25 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
    "BFD_RELOC_MSP430_16_BYTE",
    "BFD_RELOC_MSP430_2X_PCREL",
@@ -921,10 +921,10 @@ index 2450b2d..5c8e0e9 100644
    "BFD_RELOC_IQ2000_OFFSET_16",
    "BFD_RELOC_IQ2000_OFFSET_21",
    "BFD_RELOC_IQ2000_UHI16",
-diff --git a/bfd/reloc.c b/bfd/reloc.c
+diff --git binutils-2.20.orig/bfd/reloc.c binutils-2.20/bfd/reloc.c
 index 3be29fe..9375f8e 100644
---- a/bfd/reloc.c
-+++ b/bfd/reloc.c
+--- binutils-2.20.orig/bfd/reloc.c
++++ binutils-2.20/bfd/reloc.c
 @@ -4993,6 +4993,44 @@ ENUMX
    BFD_RELOC_MSP430_2X_PCREL
  ENUMX
@@ -970,10 +970,10 @@ index 3be29fe..9375f8e 100644
  ENUMDOC
    msp430 specific relocation codes
  
-diff --git a/gas/config/tc-msp430.c b/gas/config/tc-msp430.c
+diff --git binutils-2.20.orig/gas/config/tc-msp430.c binutils-2.20/gas/config/tc-msp430.c
 index 0ccf4db..0e26c97 100644
---- a/gas/config/tc-msp430.c
-+++ b/gas/config/tc-msp430.c
+--- binutils-2.20.orig/gas/config/tc-msp430.c
++++ binutils-2.20/gas/config/tc-msp430.c
 @@ -23,7 +23,6 @@
  
  #include <limits.h>
@@ -2923,10 +2923,10 @@ index 0ccf4db..0e26c97 100644
  	default:
  	  as_fatal (_("line %d: unknown relocation type: 0x%x"),
  		    fixp->fx_line, fixp->fx_r_type);
-diff --git a/include/elf/msp430.h b/include/elf/msp430.h
+diff --git binutils-2.20.orig/include/elf/msp430.h binutils-2.20/include/elf/msp430.h
 index ff16ba2..8aeabdb 100644
---- a/include/elf/msp430.h
-+++ b/include/elf/msp430.h
+--- binutils-2.20.orig/include/elf/msp430.h
++++ binutils-2.20/include/elf/msp430.h
 @@ -26,20 +26,31 @@
  /* Processor specific flags for the ELF header e_flags field.  */
  #define EF_MSP430_MACH 		0xff
@@ -2999,10 +2999,10 @@ index ff16ba2..8aeabdb 100644
  
  END_RELOC_NUMBERS (R_MSP430_max)
  
-diff --git a/include/opcode/msp430.h b/include/opcode/msp430.h
+diff --git binutils-2.20.orig/include/opcode/msp430.h binutils-2.20/include/opcode/msp430.h
 index eec2f1e..58a8962 100644
---- a/include/opcode/msp430.h
-+++ b/include/opcode/msp430.h
+--- binutils-2.20.orig/include/opcode/msp430.h
++++ binutils-2.20/include/opcode/msp430.h
 @@ -25,7 +25,7 @@ struct msp430_operand_s
    int ol;	/* Operand length words.  */
    int am;	/* Addr mode.  */
@@ -3328,10 +3328,10 @@ index eec2f1e..58a8962 100644
    /* End of instruction set.  */
    { NULL, 0, 0, 0, 0 }
  };
-diff --git a/ld/Makefile.am b/ld/Makefile.am
+diff --git binutils-2.20.orig/ld/Makefile.am binutils-2.20/ld/Makefile.am
 index 7c4444b..3348ca7 100644
---- a/ld/Makefile.am
-+++ b/ld/Makefile.am
+--- binutils-2.20.orig/ld/Makefile.am
++++ binutils-2.20/ld/Makefile.am
 @@ -198,7 +198,7 @@ ALL_EMULATIONS = \
  	eelf32mcore.o \
  	eelf32mep.o \
@@ -3858,10 +3858,10 @@ index 7c4444b..3348ca7 100644
  enews.c: $(srcdir)/emulparams/news.sh \
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
-diff --git a/ld/Makefile.in b/ld/Makefile.in
+diff --git binutils-2.20.orig/ld/Makefile.in binutils-2.20/ld/Makefile.in
 index 8aabafb..3b9ef17 100644
---- a/ld/Makefile.in
-+++ b/ld/Makefile.in
+--- binutils-2.20.orig/ld/Makefile.in
++++ binutils-2.20/ld/Makefile.in
 @@ -484,7 +484,7 @@ ALL_EMULATIONS = \
  	eelf32mcore.o \
  	eelf32mep.o \
@@ -4388,10 +4388,10 @@ index 8aabafb..3b9ef17 100644
  enews.c: $(srcdir)/emulparams/news.sh \
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
-diff --git a/ld/configure.tgt b/ld/configure.tgt
+diff --git binutils-2.20.orig/ld/configure.tgt binutils-2.20/ld/configure.tgt
 index d6d86ab..1c2fe0a 100644
---- a/ld/configure.tgt
-+++ b/ld/configure.tgt
+--- binutils-2.20.orig/ld/configure.tgt
++++ binutils-2.20/ld/configure.tgt
 @@ -426,7 +426,7 @@ mn10300-*-*)		targ_emul=mn10300
  mt-*elf)                targ_emul=elf32mt
  			;;
@@ -4401,10 +4401,10 @@ index d6d86ab..1c2fe0a 100644
  			;;
  ns32k-pc532-mach* | ns32k-pc532-ux*)  targ_emul=pc532macha ;;
  ns32k-*-netbsd* | ns32k-pc532-lites*) targ_emul=ns32knbsd
-diff --git a/ld/emulparams/msp430all.sh b/ld/emulparams/msp430all.sh
+diff --git binutils-2.20.orig/ld/emulparams/msp430all.sh binutils-2.20/ld/emulparams/msp430all.sh
 index 57d21c2..786f817 100644
---- a/ld/emulparams/msp430all.sh
-+++ b/ld/emulparams/msp430all.sh
+--- binutils-2.20.orig/ld/emulparams/msp430all.sh
++++ binutils-2.20/ld/emulparams/msp430all.sh
 @@ -18,7 +18,7 @@ ROM_START=0xfc00
  ROM_SIZE=0x3e0
  RAM_START=0x0200
@@ -5470,10 +5470,10 @@ index 57d21c2..786f817 100644
 +
 +STACK=$(printf "0x%x" $(( RAM_START + RAM_SIZE )) )
 +VECTORS_SIZE=$((0x10000 - VECTORS_START))
-diff --git a/ld/scripttempl/elf32msp430.sc b/ld/scripttempl/elf32msp430.sc
+diff --git binutils-2.20.orig/ld/scripttempl/elf32msp430.sc binutils-2.20/ld/scripttempl/elf32msp430.sc
 index cbffe48..825640d 100644
---- a/ld/scripttempl/elf32msp430.sc
-+++ b/ld/scripttempl/elf32msp430.sc
+--- binutils-2.20.orig/ld/scripttempl/elf32msp430.sc
++++ binutils-2.20/ld/scripttempl/elf32msp430.sc
 @@ -14,9 +14,32 @@ HEAP_SECTION_MSP430=".heap ${RELOCATING-0} :
      ${RELOCATING+ PROVIDE (__heap_bottom = .) ; }
      ${RELOCATING+ PROVIDE (__heap_top = ${HEAP_START} + ${HEAP_LENGTH}) ; }
@@ -5678,10 +5678,10 @@ index cbffe48..825640d 100644
    PROVIDE (__stack = ${STACK}) ;
    PROVIDE (__data_start_rom = _etext) ;
    PROVIDE (__data_end_rom   = _etext + SIZEOF (.data)) ;
-diff --git a/ld/scripttempl/elf32msp430_3.sc b/ld/scripttempl/elf32msp430_3.sc
+diff --git binutils-2.20.orig/ld/scripttempl/elf32msp430_3.sc binutils-2.20/ld/scripttempl/elf32msp430_3.sc
 index 15eb517..7b7d0fb 100644
---- a/ld/scripttempl/elf32msp430_3.sc
-+++ b/ld/scripttempl/elf32msp430_3.sc
+--- binutils-2.20.orig/ld/scripttempl/elf32msp430_3.sc
++++ binutils-2.20/ld/scripttempl/elf32msp430_3.sc
 @@ -4,9 +4,9 @@ OUTPUT_ARCH(${ARCH})
  
  MEMORY
@@ -5823,10 +5823,10 @@ index 15eb517..7b7d0fb 100644
      ${RELOCATING+ _vectors_end = . ; }
    } ${RELOCATING+ > vectors}
  
-diff --git a/opcodes/msp430-dis.c b/opcodes/msp430-dis.c
+diff --git binutils-2.20.orig/opcodes/msp430-dis.c binutils-2.20/opcodes/msp430-dis.c
 index c4a86eb..37001a2 100644
---- a/opcodes/msp430-dis.c
-+++ b/opcodes/msp430-dis.c
+--- binutils-2.20.orig/opcodes/msp430-dis.c
++++ binutils-2.20/opcodes/msp430-dis.c
 @@ -51,12 +51,153 @@ msp430dis_opcode (bfd_vma addr, disassemble_info *info)
    return bfd_getl16 (buffer);
  }
