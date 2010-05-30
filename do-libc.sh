@@ -88,7 +88,7 @@ fi
 # a serial build if the parallel build fails.
 $GNUMAKE -j$(num_cpus) PREFIX=$TARGET_LOCATION || \
 $GNUMAKE               PREFIX=$TARGET_LOCATION
-$INSTALL_LAUNCHER PATH="$PATH" $GNUMAKE install PREFIX=$TARGET_LOCATION
+PATH="$PATH" $INSTALL_LAUNCHER $GNUMAKE install PREFIX=$TARGET_LOCATION
 
 echo '!<arch>' > 0lib.tmp
 $INSTALL_LAUNCHER cp 0lib.tmp "$TARGET_LOCATION/lib/libstdc++.a"
