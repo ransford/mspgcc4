@@ -1,7 +1,8 @@
-diff -urN binutils-2.20.1/bfd/archures.c binutils-2.20.1-mspgcc4/bfd/archures.c
---- binutils-2.20.1/bfd/archures.c	2009-09-10 06:47:11.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/archures.c	2010-04-30 19:31:50.000000000 -0500
-@@ -398,7 +398,13 @@
+diff --git binutils-2.20.1.orig/bfd/archures.c binutils-2.20.1/bfd/archures.c
+index df73b3f..fd76c6c 100644
+--- binutils-2.20.1.orig/bfd/archures.c
++++ binutils-2.20.1/bfd/archures.c
+@@ -398,7 +398,13 @@ DESCRIPTION
  .#define bfd_mach_msp14          14
  .#define bfd_mach_msp15          15
  .#define bfd_mach_msp16          16
@@ -15,7 +16,7 @@ diff -urN binutils-2.20.1/bfd/archures.c binutils-2.20.1-mspgcc4/bfd/archures.c
  .#define bfd_mach_msp31          31
  .#define bfd_mach_msp32          32
  .#define bfd_mach_msp33          33
-@@ -406,6 +412,10 @@
+@@ -406,6 +412,10 @@ DESCRIPTION
  .#define bfd_mach_msp42          42
  .#define bfd_mach_msp43          43
  .#define bfd_mach_msp44          44
@@ -26,10 +27,11 @@ diff -urN binutils-2.20.1/bfd/archures.c binutils-2.20.1-mspgcc4/bfd/archures.c
  .  bfd_arch_xc16x,     {* Infineon's XC16X Series.               *}
  .#define bfd_mach_xc16x         1
  .#define bfd_mach_xc16xl        2
-diff -urN binutils-2.20.1/bfd/bfd-in2.h binutils-2.20.1-mspgcc4/bfd/bfd-in2.h
---- binutils-2.20.1/bfd/bfd-in2.h	2010-02-03 07:28:24.000000000 -0600
-+++ binutils-2.20.1-mspgcc4/bfd/bfd-in2.h	2010-04-30 19:31:50.000000000 -0500
-@@ -2072,7 +2072,13 @@
+diff --git binutils-2.20.1.orig/bfd/bfd-in2.h binutils-2.20.1/bfd/bfd-in2.h
+index d98c6ec..21e2645 100644
+--- binutils-2.20.1.orig/bfd/bfd-in2.h
++++ binutils-2.20.1/bfd/bfd-in2.h
+@@ -2072,7 +2072,13 @@ enum bfd_architecture
  #define bfd_mach_msp14          14
  #define bfd_mach_msp15          15
  #define bfd_mach_msp16          16
@@ -43,7 +45,7 @@ diff -urN binutils-2.20.1/bfd/bfd-in2.h binutils-2.20.1-mspgcc4/bfd/bfd-in2.h
  #define bfd_mach_msp31          31
  #define bfd_mach_msp32          32
  #define bfd_mach_msp33          33
-@@ -2080,6 +2086,10 @@
+@@ -2080,6 +2086,10 @@ enum bfd_architecture
  #define bfd_mach_msp42          42
  #define bfd_mach_msp43          43
  #define bfd_mach_msp44          44
@@ -54,7 +56,7 @@ diff -urN binutils-2.20.1/bfd/bfd-in2.h binutils-2.20.1-mspgcc4/bfd/bfd-in2.h
    bfd_arch_xc16x,     /* Infineon's XC16X Series.               */
  #define bfd_mach_xc16x         1
  #define bfd_mach_xc16xl        2
-@@ -4416,6 +4426,25 @@
+@@ -4416,6 +4426,25 @@ This is the 5 bits of a value.  */
    BFD_RELOC_MSP430_16_BYTE,
    BFD_RELOC_MSP430_2X_PCREL,
    BFD_RELOC_MSP430_RL_PCREL,
@@ -80,10 +82,11 @@ diff -urN binutils-2.20.1/bfd/bfd-in2.h binutils-2.20.1-mspgcc4/bfd/bfd-in2.h
  
  /* IQ2000 Relocations.  */
    BFD_RELOC_IQ2000_OFFSET_16,
-diff -urN binutils-2.20.1/bfd/cpu-msp430.c binutils-2.20.1-mspgcc4/bfd/cpu-msp430.c
---- binutils-2.20.1/bfd/cpu-msp430.c	2009-09-02 02:18:36.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/cpu-msp430.c	2010-04-30 19:31:50.000000000 -0500
-@@ -65,29 +65,60 @@
+diff --git binutils-2.20.1.orig/bfd/cpu-msp430.c binutils-2.20.1/bfd/cpu-msp430.c
+index 63c301a..8847dc3 100644
+--- binutils-2.20.1.orig/bfd/cpu-msp430.c
++++ binutils-2.20.1/bfd/cpu-msp430.c
+@@ -65,29 +65,60 @@ static const bfd_arch_info_type arch_info_struct[] =
    /* msp430x16x.  */
    N (16, bfd_mach_msp16, "msp:16", FALSE, & arch_info_struct[7]),
  
@@ -152,10 +155,11 @@ diff -urN binutils-2.20.1/bfd/cpu-msp430.c binutils-2.20.1-mspgcc4/bfd/cpu-msp43
  };
  
  const bfd_arch_info_type bfd_msp430_arch =
-diff -urN binutils-2.20.1/bfd/doc/archures.texi binutils-2.20.1-mspgcc4/bfd/doc/archures.texi
---- binutils-2.20.1/bfd/doc/archures.texi	2009-10-16 06:52:10.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/doc/archures.texi	2010-04-30 19:31:50.000000000 -0500
-@@ -363,7 +363,12 @@
+diff --git binutils-2.20.1.orig/bfd/doc/archures.texi binutils-2.20.1/bfd/doc/archures.texi
+index 33d7c59..f1f0a12 100644
+--- binutils-2.20.1.orig/bfd/doc/archures.texi
++++ binutils-2.20.1/bfd/doc/archures.texi
+@@ -363,7 +363,12 @@ enum bfd_architecture
  #define bfd_mach_msp14          14
  #define bfd_mach_msp15          15
  #define bfd_mach_msp16          16
@@ -168,7 +172,7 @@ diff -urN binutils-2.20.1/bfd/doc/archures.texi binutils-2.20.1-mspgcc4/bfd/doc/
  #define bfd_mach_msp31          31
  #define bfd_mach_msp32          32
  #define bfd_mach_msp33          33
-@@ -371,6 +376,7 @@
+@@ -371,6 +376,7 @@ enum bfd_architecture
  #define bfd_mach_msp42          42
  #define bfd_mach_msp43          43
  #define bfd_mach_msp44          44
@@ -176,15 +180,16 @@ diff -urN binutils-2.20.1/bfd/doc/archures.texi binutils-2.20.1-mspgcc4/bfd/doc/
    bfd_arch_xc16x,     /* Infineon's XC16X Series.               */
  #define bfd_mach_xc16x         1
  #define bfd_mach_xc16xl        2
-@@ -623,4 +629,3 @@
+@@ -623,4 +629,3 @@ See bfd_octets_per_byte.
  
  This routine is provided for those cases where a bfd * is not
  available
 -
-diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-msp430.c
---- binutils-2.20.1/bfd/elf32-msp430.c	2007-09-28 03:43:45.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/elf32-msp430.c	2010-04-30 19:31:50.000000000 -0500
-@@ -90,7 +90,7 @@
+diff --git binutils-2.20.1.orig/bfd/elf32-msp430.c binutils-2.20.1/bfd/elf32-msp430.c
+index 7a57024..3362365 100644
+--- binutils-2.20.1.orig/bfd/elf32-msp430.c
++++ binutils-2.20.1/bfd/elf32-msp430.c
+@@ -90,7 +90,7 @@ static reloc_howto_type elf_msp430_howto_table[] =
  	 0xffff,		/* dst_mask */
  	 FALSE),		/* pcrel_offset */
  
@@ -193,7 +198,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
    HOWTO (R_MSP430_16_PCREL,	/* type */
  	 1,			/* rightshift */
  	 1,			/* size (0 = byte, 1 = short, 2 = long) */
-@@ -120,7 +120,7 @@
+@@ -120,7 +120,7 @@ static reloc_howto_type elf_msp430_howto_table[] =
  	 0xffff,		/* dst_mask */
  	 FALSE),		/* pcrel_offset */
  
@@ -202,7 +207,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
    HOWTO (R_MSP430_16_PCREL_BYTE,/* type */
  	 1,			/* rightshift */
  	 1,			/* size (0 = byte, 1 = short, 2 = long) */
-@@ -163,7 +163,292 @@
+@@ -163,7 +163,292 @@ static reloc_howto_type elf_msp430_howto_table[] =
  	 FALSE,			/* partial_inplace */
  	 0,			/* src_mask */
  	 0xffff,		/* dst_mask */
@@ -496,7 +501,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  };
  
  /* Map BFD reloc types to MSP430 ELF reloc types.  */
-@@ -185,7 +470,29 @@
+@@ -185,7 +470,29 @@ static const struct msp430_reloc_map msp430_reloc_map[] =
      {BFD_RELOC_MSP430_16_PCREL_BYTE, R_MSP430_16_PCREL_BYTE},
      {BFD_RELOC_MSP430_16_BYTE,       R_MSP430_16_BYTE},
      {BFD_RELOC_MSP430_2X_PCREL,      R_MSP430_2X_PCREL},
@@ -527,7 +532,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
    };
  
  static reloc_howto_type *
-@@ -207,10 +514,7 @@
+@@ -207,10 +514,7 @@ bfd_elf32_bfd_reloc_name_lookup (bfd *abfd ATTRIBUTE_UNUSED,
  {
    unsigned int i;
  
@@ -539,7 +544,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
      if (elf_msp430_howto_table[i].name != NULL
  	&& strcasecmp (elf_msp430_howto_table[i].name, r_name) == 0)
        return &elf_msp430_howto_table[i];
-@@ -282,18 +586,44 @@
+@@ -282,18 +586,44 @@ msp430_final_link_relocate (reloc_howto_type * howto, bfd * input_bfd,
  {
    bfd_reloc_status_type r = bfd_reloc_ok;
    bfd_vma x;
@@ -590,7 +595,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  
        if (srel & 1)
  	return bfd_reloc_outofrange;
-@@ -311,13 +641,7 @@
+@@ -311,13 +641,7 @@ msp430_final_link_relocate (reloc_howto_type * howto, bfd * input_bfd,
        break;
  
      case R_MSP430_2X_PCREL:
@@ -604,7 +609,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  
        if (srel & 1)
  	return bfd_reloc_outofrange;
-@@ -341,13 +665,7 @@
+@@ -341,13 +665,7 @@ msp430_final_link_relocate (reloc_howto_type * howto, bfd * input_bfd,
  
      case R_MSP430_16_PCREL:
      case R_MSP430_RL_PCREL:
@@ -618,7 +623,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  
        if (srel & 1)
  	return bfd_reloc_outofrange;
-@@ -356,35 +674,138 @@
+@@ -356,35 +674,138 @@ msp430_final_link_relocate (reloc_howto_type * howto, bfd * input_bfd,
        break;
  
      case R_MSP430_16_PCREL_BYTE:
@@ -770,7 +775,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
      default:
        r = _bfd_final_link_relocate (howto, input_bfd, input_section,
  				    contents, rel->r_offset,
-@@ -560,6 +981,34 @@
+@@ -560,6 +981,34 @@ bfd_elf_msp430_final_write_processing (bfd * abfd,
        val = E_MSP430_MACH_MSP430x16;
        break;
  
@@ -805,7 +810,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
      case bfd_mach_msp31:
        val = E_MSP430_MACH_MSP430x31;
        break;
-@@ -587,6 +1036,22 @@
+@@ -587,6 +1036,22 @@ bfd_elf_msp430_final_write_processing (bfd * abfd,
      case bfd_mach_msp44:
        val = E_MSP430_MACH_MSP430x44;
        break;
@@ -828,7 +833,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
      }
  
    elf_elfheader (abfd)->e_machine = EM_MSP430;
-@@ -637,6 +1102,34 @@
+@@ -637,6 +1102,34 @@ elf32_msp430_object_p (bfd * abfd)
  	  e_set = bfd_mach_msp16;
  	  break;
  
@@ -863,7 +868,7 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  	case E_MSP430_MACH_MSP430x31:
  	  e_set = bfd_mach_msp31;
  	  break;
-@@ -664,6 +1157,22 @@
+@@ -664,6 +1157,22 @@ elf32_msp430_object_p (bfd * abfd)
  	case E_MSP430_MACH_MSP430x44:
  	  e_set = bfd_mach_msp44;
  	  break;
@@ -886,10 +891,11 @@ diff -urN binutils-2.20.1/bfd/elf32-msp430.c binutils-2.20.1-mspgcc4/bfd/elf32-m
  	}
      }
  
-diff -urN binutils-2.20.1/bfd/libbfd.h binutils-2.20.1-mspgcc4/bfd/libbfd.h
---- binutils-2.20.1/bfd/libbfd.h	2009-09-02 03:10:55.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/libbfd.h	2010-04-30 19:31:50.000000000 -0500
-@@ -2004,6 +2004,25 @@
+diff --git binutils-2.20.1.orig/bfd/libbfd.h binutils-2.20.1/bfd/libbfd.h
+index 2450b2d..5c8e0e9 100644
+--- binutils-2.20.1.orig/bfd/libbfd.h
++++ binutils-2.20.1/bfd/libbfd.h
+@@ -2004,6 +2004,25 @@ static const char *const bfd_reloc_code_real_names[] = { "@@uninitialized@@",
    "BFD_RELOC_MSP430_16_BYTE",
    "BFD_RELOC_MSP430_2X_PCREL",
    "BFD_RELOC_MSP430_RL_PCREL",
@@ -915,10 +921,11 @@ diff -urN binutils-2.20.1/bfd/libbfd.h binutils-2.20.1-mspgcc4/bfd/libbfd.h
    "BFD_RELOC_IQ2000_OFFSET_16",
    "BFD_RELOC_IQ2000_OFFSET_21",
    "BFD_RELOC_IQ2000_UHI16",
-diff -urN binutils-2.20.1/bfd/reloc.c binutils-2.20.1-mspgcc4/bfd/reloc.c
---- binutils-2.20.1/bfd/reloc.c	2009-09-10 06:47:13.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/bfd/reloc.c	2010-04-30 19:31:50.000000000 -0500
-@@ -4993,6 +4993,44 @@
+diff --git binutils-2.20.1.orig/bfd/reloc.c binutils-2.20.1/bfd/reloc.c
+index 3be29fe..9375f8e 100644
+--- binutils-2.20.1.orig/bfd/reloc.c
++++ binutils-2.20.1/bfd/reloc.c
+@@ -4993,6 +4993,44 @@ ENUMX
    BFD_RELOC_MSP430_2X_PCREL
  ENUMX
    BFD_RELOC_MSP430_RL_PCREL
@@ -963,9 +970,10 @@ diff -urN binutils-2.20.1/bfd/reloc.c binutils-2.20.1-mspgcc4/bfd/reloc.c
  ENUMDOC
    msp430 specific relocation codes
  
-diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/config/tc-msp430.c
---- binutils-2.20.1/gas/config/tc-msp430.c	2009-09-02 02:24:20.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/gas/config/tc-msp430.c	2010-04-30 19:31:50.000000000 -0500
+diff --git binutils-2.20.1.orig/gas/config/tc-msp430.c binutils-2.20.1/gas/config/tc-msp430.c
+index 0ccf4db..0e26c97 100644
+--- binutils-2.20.1.orig/gas/config/tc-msp430.c
++++ binutils-2.20.1/gas/config/tc-msp430.c
 @@ -23,7 +23,6 @@
  
  #include <limits.h>
@@ -982,7 +990,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  /* GCC uses the some condition codes which we'll
     implement as new polymorph instructions.
-@@ -99,12 +99,13 @@
+@@ -99,12 +99,13 @@ int msp430_enable_polys;
     Also, we add 'jump' instruction:
     jump	UNCOND	-> jmp		br lab
  
@@ -998,7 +1006,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    int    sop;	/* Opcode if jump length is short.  */
    long   lpos;	/* Label position.  */
    long   lop0;	/* Opcode 1 _word_ (16 bits).  */
-@@ -143,7 +144,7 @@
+@@ -143,7 +144,7 @@ static struct rcodes_s msp430_rcodes[] =
  struct hcodes_s 
  {
    char * name;	
@@ -1007,7 +1015,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    int    tlab;		/* Number of labels in short mode.  */
    int    op0;		/* Opcode for first word of short jump.  */
    int    op1;		/* Opcode for second word of short jump.  */
-@@ -237,107 +238,251 @@
+@@ -237,107 +238,251 @@ struct mcu_type_s
    int mach;
  };
  
@@ -1031,7 +1039,8 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
 -#define CHECK_RELOC_MSP430_PCREL	((imm_op || byte_op)?BFD_RELOC_MSP430_16_PCREL_BYTE:BFD_RELOC_MSP430_16_PCREL)
 -
 -static struct mcu_type_s mcu_types[] =
--{
++enum
+ {
 -  {"msp1",        MSP430_ISA_11, bfd_mach_msp11},
 -  {"msp2",        MSP430_ISA_14, bfd_mach_msp14},
 -  {"msp430x110",  MSP430_ISA_11, bfd_mach_msp11},
@@ -1069,8 +1078,6 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
 -  {"msp430x2111", MSP430_ISA_21, bfd_mach_msp21},
 -  {"msp430x2121", MSP430_ISA_21, bfd_mach_msp21},
 -  {"msp430x2131", MSP430_ISA_21, bfd_mach_msp21},
-+enum
-+{
 +  CORE_MASK = 0x3,
 +  CPU4_BUG = 1 << 2,    // push #4, push #8 cannot use CG
 +  CPU7_BUG = 1 << 3,    // CALL and PUSH with @SP+, @SP, and X(SP) uses the SP to calculate the address, then decrements it
@@ -1330,7 +1337,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
 +  {"msp430x5437",  MSP430_ISA_54,  bfd_mach_msp54},
 +  {"msp430x5438",  MSP430_ISA_54,  bfd_mach_msp54},
 +
-+  {"cc430x5123",   MSP430_ISA_54,  bfd_mach_msp54},
++  {"cc430x5133",   MSP430_ISA_54,  bfd_mach_msp54},
 +  {"cc430x5125",   MSP430_ISA_54,  bfd_mach_msp54},
 +  {"cc430x6125",   MSP430_ISA_54,  bfd_mach_msp54},
 +  {"cc430x6135",   MSP430_ISA_54,  bfd_mach_msp54},
@@ -1352,7 +1359,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  /* Profiling capability:
     It is a performance hit to use gcc's profiling approach for this tiny target.
-@@ -446,11 +591,14 @@
+@@ -446,11 +591,14 @@ pow2value (int y)
  static char *
  parse_exp (char * s, expressionS * op)
  {
@@ -1368,7 +1375,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  }
  
  
-@@ -504,7 +652,8 @@
+@@ -504,7 +652,8 @@ extract_operand (char * from, char * to, int limit)
    *(to + size) = 0;
    del_spaces (to);
  
@@ -1378,7 +1385,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
    return from;
  }
-@@ -549,7 +698,8 @@
+@@ -549,7 +698,8 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
        return;
      }
  
@@ -1388,7 +1395,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
    while (*flags)
      {
-@@ -662,7 +812,7 @@
+@@ -662,7 +812,7 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
        /* Process like ".word xxx" directive.  */
        parse_exp (str, & exp);
        emit_expr (& exp, 2);
@@ -1397,7 +1404,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
      }
  
    /* Fill the rest with zeros.  */
-@@ -766,11 +916,14 @@
+@@ -766,11 +916,14 @@ md_parse_option (int c, char * arg)
    return 0;
  }
  
@@ -1412,7 +1419,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    {NULL, NULL, 0}
  };
  
-@@ -792,26 +945,57 @@
+@@ -792,26 +945,57 @@ md_show_usage (FILE * stream)
    fprintf (stream,
  	   _("MSP430 options:\n"
  	     "  -mmcu=[msp430-name] select microcontroller type\n"
@@ -1481,7 +1488,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
 +	     "                  msp430x47167 msp430x47177 msp430x47187  msp430x47197\n"
 +	     "                  msp430x5418  msp430xG5419\n"
 +	     "                  msp430x5435  msp430x5436  msp430x5437  msp430x5438\n"
-+	     "                  cc430x5123\n"
++	     "                  cc430x5133\n"
 +	     "                  cc430x5125   cc430x6125   cc430x6135\n"
 +	     "                  cc430x6126\n"
 +	     "                  cc430x5137   cc430x6127   cc430x6137\n"
@@ -1490,7 +1497,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    fprintf (stream,
  	   _("  -mQ - enable relaxation at assembly time. DANGEROUS!\n"
  	     "  -mP - enable polymorph instructions\n"));
-@@ -851,7 +1035,7 @@
+@@ -851,7 +1035,7 @@ md_atof (int type, char * litP, int * sizeP)
  void
  md_begin (void)
  {
@@ -1499,7 +1506,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    msp430_hash = hash_new ();
  
    for (opcode = msp430_opcodes; opcode->name; opcode++)
-@@ -881,10 +1065,63 @@
+@@ -881,10 +1065,63 @@ check_reg (char * t)
    return 0;
  }
  
@@ -1564,7 +1571,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  {
    char *__tl = l;
  
-@@ -965,79 +1202,11 @@
+@@ -965,79 +1202,11 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	      x = op->exp.X_add_number;
  	    }
  
@@ -1647,7 +1654,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	}
        else if (op->exp.X_op == O_symbol)
  	{
-@@ -1045,12 +1214,10 @@
+@@ -1045,12 +1214,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	}
        else if (op->exp.X_op == O_big)
  	{
@@ -1660,7 +1667,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    }
  	  else
  	    {
-@@ -1059,49 +1226,6 @@
+@@ -1059,49 +1226,6 @@ msp430_srcoperand (struct msp430_operand_s * op,
  		      l);
  	      return 1;
  	    }
@@ -1710,7 +1717,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	}
        /* Redundant (yet) check.  */
        else if (op->exp.X_op == O_register)
-@@ -1128,7 +1252,7 @@
+@@ -1128,7 +1252,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	{
  	  int x = op->exp.X_add_number;
  
@@ -1719,7 +1726,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    {
  	      as_bad (_("value out of range: %d"), x);
  	      return 1;
-@@ -1263,7 +1387,7 @@
+@@ -1263,7 +1387,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	{
  	  int x = op->exp.X_add_number;
  
@@ -1728,7 +1735,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    {
  	      as_bad (_("value out of range: %d"), x);
  	      return 1;
-@@ -1339,10 +1463,10 @@
+@@ -1339,10 +1463,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
  
  
  static int
@@ -1741,7 +1748,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
    if (ret)
      return ret;
-@@ -1374,39 +1498,135 @@
+@@ -1374,39 +1498,135 @@ msp430_dstoperand (struct msp430_operand_s * op, char * l, int bin)
    return 0;
  }
  
@@ -1888,7 +1895,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    while (! ISSPACE (*line) && *line)
      line++;
  
-@@ -1424,22 +1644,22 @@
+@@ -1424,22 +1644,22 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
    imm_op = 0;
  
@@ -1918,7 +1925,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	  if (res)
  	    break;
  
-@@ -1464,14 +1684,15 @@
+@@ -1464,14 +1684,15 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	    }
  	  break;
  
@@ -1937,7 +1944,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  	    if (res)
  	      break;	/* An error occurred.  All warnings were done before.  */
-@@ -1499,7 +1720,12 @@
+@@ -1499,7 +1720,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
  	    if (op2.mode == OP_EXP)
  	      {
@@ -1951,7 +1958,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  		bfd_putl16 ((bfd_vma) ZEROS, frag + 2 + ((__is == 3) ? 2 : 0));
  
  		if (op2.reg)	/* Not PC relative.  */
-@@ -1511,16 +1737,21 @@
+@@ -1511,16 +1737,21 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	      }
  	    break;
  	  }
@@ -1977,7 +1984,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  	  bin |= ((op1.reg << 8) | (op1.am << 4));
  	  __is = 1 + op1.ol;
-@@ -1545,11 +1776,12 @@
+@@ -1545,11 +1776,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -1993,7 +2000,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
        if (res)
  	break;			/* Error occurred.  All warnings were done before.  */
-@@ -1577,7 +1809,12 @@
+@@ -1577,7 +1809,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
        if (op2.mode == OP_EXP)
  	{
@@ -2007,7 +2014,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	  bfd_putl16 ((bfd_vma) ZEROS, frag + 2 + ((__is == 3) ? 2 : 0));
  
  	  if (op2.reg)		/* Not PC relative.  */
-@@ -1589,8 +1826,8 @@
+@@ -1589,8 +1826,8 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2018,7 +2025,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	{
  	  /* reti instruction.  */
  	  frag = frag_more (2);
-@@ -1600,9 +1837,10 @@
+@@ -1600,9 +1837,10 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
  
        line = extract_operand (line, l1, sizeof (l1));
@@ -2030,7 +2037,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
        bin |= op1.reg | (op1.am << 4);
        __is = 1 + op1.ol;
-@@ -1624,7 +1862,7 @@
+@@ -1624,7 +1862,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2039,7 +2046,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
        line = extract_operand (line, l1, sizeof (l1));
        /* l1 is a label.  */
        if (l1[0])
-@@ -1694,11 +1932,13 @@
+@@ -1694,11 +1932,13 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  else if (*l1 == '$')
  	    {
  	      as_bad (_("instruction requires label sans '$'"));
@@ -2053,7 +2060,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    }
  	  dwarf2_emit_insn (2 * __is);
  	  break;
-@@ -1710,7 +1950,7 @@
+@@ -1710,7 +1950,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2062,7 +2069,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
        if (!msp430_enable_polys)
  	{
  	  as_bad (_("polymorphs are not enabled. Use -mP option to enable."));
-@@ -1731,7 +1971,7 @@
+@@ -1731,7 +1971,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  if (exp.X_op == O_symbol)
  	    {
  	      /* Relaxation required.  */
@@ -2071,7 +2078,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  	      /* The parameter to dwarf2_emit_insn is actually the offset to the start
  		 of the insn from the fix piece of instruction that was emitted.
-@@ -1752,7 +1992,7 @@
+@@ -1752,7 +1992,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
        as_bad (_("instruction requires label"));
        break;
  
@@ -2080,7 +2087,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
        if (!msp430_enable_polys)
  	{
  	  as_bad (_("polymorphs are not enabled. Use -mP option to enable."));
-@@ -1772,7 +2012,7 @@
+@@ -1772,7 +2012,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  if (exp.X_op == O_symbol)
  	    {
  	      /* Relaxation required.  */
@@ -2089,7 +2096,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
  	      frag = frag_more (8);
  	      dwarf2_emit_insn (0);
-@@ -1791,18 +2031,680 @@
+@@ -1791,18 +2031,680 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
        as_bad (_("instruction requires label"));
        break;
  
@@ -2772,7 +2779,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    char cmd[32];
    unsigned int i = 0;
  
-@@ -1822,7 +2724,7 @@
+@@ -1822,7 +2724,7 @@ md_assemble (char * str)
        return;
      }
  
@@ -2781,7 +2788,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  
    if (opcode == NULL)
      {
-@@ -1830,6 +2732,12 @@
+@@ -1830,6 +2732,12 @@ md_assemble (char * str)
        return;
      }
  
@@ -2794,7 +2801,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
    {
      char *__t = input_line_pointer;
  
-@@ -1964,6 +2872,26 @@
+@@ -1964,6 +2872,26 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  
        switch (fixp->fx_r_type)
  	{
@@ -2821,7 +2828,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	case BFD_RELOC_MSP430_10_PCREL:
  	  if (value & 1)
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
-@@ -1988,7 +2916,7 @@
+@@ -1988,7 +2916,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  			  _("odd address operand: %ld"), value);
  
  	  /* Nothing to be corrected here.  */
@@ -2830,7 +2837,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
  			  _("operand out of range: %ld"), value);
  
-@@ -1998,7 +2926,7 @@
+@@ -1998,7 +2926,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  
  	case BFD_RELOC_MSP430_16_PCREL_BYTE:
  	  /* Nothing to be corrected here.  */
@@ -2839,7 +2846,7 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
  			  _("operand out of range: %ld"), value);
  
-@@ -2017,6 +2945,76 @@
+@@ -2017,6 +2945,76 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  	  bfd_putl16 ((bfd_vma) value, where);
  	  break;
  
@@ -2916,9 +2923,10 @@ diff -urN binutils-2.20.1/gas/config/tc-msp430.c binutils-2.20.1-mspgcc4/gas/con
  	default:
  	  as_fatal (_("line %d: unknown relocation type: 0x%x"),
  		    fixp->fx_line, fixp->fx_r_type);
-diff -urN binutils-2.20.1/include/elf/msp430.h binutils-2.20.1-mspgcc4/include/elf/msp430.h
---- binutils-2.20.1/include/elf/msp430.h	2005-05-10 05:21:10.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/include/elf/msp430.h	2010-04-30 19:31:50.000000000 -0500
+diff --git binutils-2.20.1.orig/include/elf/msp430.h binutils-2.20.1/include/elf/msp430.h
+index ff16ba2..8aeabdb 100644
+--- binutils-2.20.1.orig/include/elf/msp430.h
++++ binutils-2.20.1/include/elf/msp430.h
 @@ -26,20 +26,31 @@
  /* Processor specific flags for the ELF header e_flags field.  */
  #define EF_MSP430_MACH 		0xff
@@ -2965,7 +2973,7 @@ diff -urN binutils-2.20.1/include/elf/msp430.h binutils-2.20.1-mspgcc4/include/e
  
  /* Relocations.  */
  START_RELOC_NUMBERS (elf_msp430_reloc_type)
-@@ -52,6 +63,25 @@
+@@ -52,6 +63,25 @@ START_RELOC_NUMBERS (elf_msp430_reloc_type)
       RELOC_NUMBER (R_MSP430_16_PCREL_BYTE, 	6)
       RELOC_NUMBER (R_MSP430_2X_PCREL,		7)
       RELOC_NUMBER (R_MSP430_RL_PCREL,		8)
@@ -2991,10 +2999,11 @@ diff -urN binutils-2.20.1/include/elf/msp430.h binutils-2.20.1-mspgcc4/include/e
  
  END_RELOC_NUMBERS (R_MSP430_max)
  
-diff -urN binutils-2.20.1/include/opcode/msp430.h binutils-2.20.1-mspgcc4/include/opcode/msp430.h
---- binutils-2.20.1/include/opcode/msp430.h	2005-05-10 05:21:13.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/include/opcode/msp430.h	2010-04-30 19:31:50.000000000 -0500
-@@ -25,7 +25,7 @@
+diff --git binutils-2.20.1.orig/include/opcode/msp430.h binutils-2.20.1/include/opcode/msp430.h
+index eec2f1e..58a8962 100644
+--- binutils-2.20.1.orig/include/opcode/msp430.h
++++ binutils-2.20.1/include/opcode/msp430.h
+@@ -25,7 +25,7 @@ struct msp430_operand_s
    int ol;	/* Operand length words.  */
    int am;	/* Addr mode.  */
    int reg;	/* Register.  */
@@ -3003,7 +3012,7 @@ diff -urN binutils-2.20.1/include/opcode/msp430.h binutils-2.20.1-mspgcc4/includ
  #define OP_REG		0
  #define OP_EXP		1
  #ifndef DASM_SECTION
-@@ -33,91 +33,240 @@
+@@ -33,91 +33,240 @@ struct msp430_operand_s
  #endif
  };
  
@@ -3319,10 +3328,20 @@ diff -urN binutils-2.20.1/include/opcode/msp430.h binutils-2.20.1-mspgcc4/includ
    /* End of instruction set.  */
    { NULL, 0, 0, 0, 0 }
  };
-diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
---- binutils-2.20.1/ld/Makefile.am	2010-02-22 02:07:01.000000000 -0600
-+++ binutils-2.20.1-mspgcc4/ld/Makefile.am	2010-04-30 19:31:50.000000000 -0500
-@@ -311,6 +311,9 @@
+diff --git binutils-2.20.1.orig/ld/Makefile.am binutils-2.20.1/ld/Makefile.am
+index d8bd1f9..ff80c8d 100644
+--- binutils-2.20.1.orig/ld/Makefile.am
++++ binutils-2.20.1/ld/Makefile.am
+@@ -198,7 +198,7 @@ ALL_EMULATIONS = \
+ 	eelf32mcore.o \
+ 	eelf32mep.o \
+ 	eelf32mb_linux.o \
+- 	eelf32microblaze.o \
++	eelf32microblaze.o \
+ 	eelf32mipswindiss.o \
+ 	eelf32mt.o \
+ 	eelf32openrisc.o \
+@@ -311,6 +311,9 @@ ALL_EMULATIONS = \
  	emsp430x147.o \
  	emsp430x148.o \
  	emsp430x149.o \
@@ -3332,7 +3351,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  	emsp430x155.o \
  	emsp430x156.o \
  	emsp430x157.o \
-@@ -320,10 +323,45 @@
+@@ -320,10 +323,45 @@ ALL_EMULATIONS = \
  	emsp430x1610.o \
  	emsp430x1611.o \
  	emsp430x1612.o \
@@ -3378,7 +3397,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  	emsp430x311.o \
  	emsp430x312.o \
  	emsp430x313.o \
-@@ -337,21 +375,67 @@
+@@ -337,21 +375,67 @@ ALL_EMULATIONS = \
  	emsp430x413.o \
  	emsp430x415.o \
  	emsp430x417.o \
@@ -3435,7 +3454,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
 +	emsp430x5436.o \
 +	emsp430x5437.o \
 +	emsp430x5438.o \
-+	ecc430x5123.o \
++	ecc430x5133.o \
 +	ecc430x5125.o \
 +	ecc430x6125.o \
 +	ecc430x6135.o \
@@ -3446,7 +3465,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  	enews.o \
  	ens32knbsd.o \
  	eor32.o \
-@@ -1447,6 +1531,18 @@
+@@ -1447,6 +1531,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x149 "$(tdir_msp430x149)" msp430all
@@ -3465,7 +3484,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430x155.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1483,6 +1579,30 @@
+@@ -1483,6 +1579,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x1612 "$(tdir_msp430x1612)" msp430all
@@ -3496,7 +3515,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430x2101.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1491,14 +1611,130 @@
+@@ -1491,14 +1611,130 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x2111 "$(tdir_msp430x2111)" msp430all
@@ -3627,7 +3646,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430x311.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430_3.sc \
    ${GEN_DEPENDS}
-@@ -1551,6 +1787,46 @@
+@@ -1551,6 +1787,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x417 "$(tdir_msp430x417)" msp430all
@@ -3674,7 +3693,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430xE423.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1575,6 +1851,18 @@
+@@ -1575,6 +1851,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430xW427 "$(tdir_msp430xW427)" msp430all
@@ -3693,7 +3712,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430xG437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1599,6 +1887,18 @@
+@@ -1599,6 +1887,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x437 "$(tdir_msp430x437)" msp430all
@@ -3712,7 +3731,7 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  emsp430x447.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1611,6 +1911,126 @@
+@@ -1611,6 +1911,126 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x449 "$(tdir_msp430x449)" msp430all
@@ -3804,10 +3823,10 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
 +	${GENSCRIPTS} msp430x5438 "$(tdir_msp430x5438)" msp430all
-+ecc430x5123.c: $(srcdir)/emulparams/msp430all.sh \
++ecc430x5133.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
-+	${GENSCRIPTS} cc430x5123 "$(tdir_cc430x5123)" msp430all
++	${GENSCRIPTS} cc430x5133 "$(tdir_cc430x5133)" msp430all
 +ecc430x5125.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
@@ -3839,10 +3858,20 @@ diff -urN binutils-2.20.1/ld/Makefile.am binutils-2.20.1-mspgcc4/ld/Makefile.am
  enews.c: $(srcdir)/emulparams/news.sh \
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
-diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
---- binutils-2.20.1/ld/Makefile.in	2010-03-03 08:06:21.000000000 -0600
-+++ binutils-2.20.1-mspgcc4/ld/Makefile.in	2010-04-30 19:31:50.000000000 -0500
-@@ -597,6 +597,9 @@
+diff --git binutils-2.20.1.orig/ld/Makefile.in binutils-2.20.1/ld/Makefile.in
+index 3a8b4f5..2383570 100644
+--- binutils-2.20.1.orig/ld/Makefile.in
++++ binutils-2.20.1/ld/Makefile.in
+@@ -484,7 +484,7 @@ ALL_EMULATIONS = \
+ 	eelf32mcore.o \
+ 	eelf32mep.o \
+ 	eelf32mb_linux.o \
+- 	eelf32microblaze.o \
++	eelf32microblaze.o \
+ 	eelf32mipswindiss.o \
+ 	eelf32mt.o \
+ 	eelf32openrisc.o \
+@@ -597,6 +597,9 @@ ALL_EMULATIONS = \
  	emsp430x147.o \
  	emsp430x148.o \
  	emsp430x149.o \
@@ -3852,7 +3881,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  	emsp430x155.o \
  	emsp430x156.o \
  	emsp430x157.o \
-@@ -606,10 +609,45 @@
+@@ -606,10 +609,45 @@ ALL_EMULATIONS = \
  	emsp430x1610.o \
  	emsp430x1611.o \
  	emsp430x1612.o \
@@ -3898,7 +3927,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  	emsp430x311.o \
  	emsp430x312.o \
  	emsp430x313.o \
-@@ -623,21 +661,67 @@
+@@ -623,21 +661,67 @@ ALL_EMULATIONS = \
  	emsp430x413.o \
  	emsp430x415.o \
  	emsp430x417.o \
@@ -3955,7 +3984,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
 +	emsp430x5436.o \
 +	emsp430x5437.o \
 +	emsp430x5438.o \
-+	ecc430x5123.o \
++	ecc430x5133.o \
 +	ecc430x5125.o \
 +	ecc430x6125.o \
 +	ecc430x6135.o \
@@ -3966,7 +3995,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  	enews.o \
  	ens32knbsd.o \
  	eor32.o \
-@@ -2789,6 +2873,18 @@
+@@ -2789,6 +2873,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x149 "$(tdir_msp430x149)" msp430all
@@ -3985,7 +4014,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430x155.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2825,6 +2921,30 @@
+@@ -2825,6 +2921,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x1612 "$(tdir_msp430x1612)" msp430all
@@ -4016,7 +4045,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430x2101.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2833,14 +2953,130 @@
+@@ -2833,14 +2953,130 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x2111 "$(tdir_msp430x2111)" msp430all
@@ -4147,7 +4176,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430x311.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430_3.sc \
    ${GEN_DEPENDS}
-@@ -2893,6 +3129,46 @@
+@@ -2893,6 +3129,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x417 "$(tdir_msp430x417)" msp430all
@@ -4194,7 +4223,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430xE423.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2917,6 +3193,18 @@
+@@ -2917,6 +3193,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430xW427 "$(tdir_msp430xW427)" msp430all
@@ -4213,7 +4242,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430xG437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2941,6 +3229,18 @@
+@@ -2941,6 +3229,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x437 "$(tdir_msp430x437)" msp430all
@@ -4232,7 +4261,7 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  emsp430x447.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2953,6 +3253,126 @@
+@@ -2953,6 +3253,126 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x449 "$(tdir_msp430x449)" msp430all
@@ -4324,10 +4353,10 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
 +	${GENSCRIPTS} msp430x5438 "$(tdir_msp430x5438)" msp430all
-+ecc430x5123.c: $(srcdir)/emulparams/msp430all.sh \
++ecc430x5133.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
-+	${GENSCRIPTS} cc430x5123 "$(tdir_cc430x5123)" msp430all
++	${GENSCRIPTS} cc430x5133 "$(tdir_cc430x5133)" msp430all
 +ecc430x5125.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
@@ -4359,22 +4388,24 @@ diff -urN binutils-2.20.1/ld/Makefile.in binutils-2.20.1-mspgcc4/ld/Makefile.in
  enews.c: $(srcdir)/emulparams/news.sh \
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
-diff -urN binutils-2.20.1/ld/configure.tgt binutils-2.20.1-mspgcc4/ld/configure.tgt
---- binutils-2.20.1/ld/configure.tgt	2009-08-06 12:38:03.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/ld/configure.tgt	2010-04-30 19:31:50.000000000 -0500
-@@ -426,7 +426,7 @@
+diff --git binutils-2.20.1.orig/ld/configure.tgt binutils-2.20.1/ld/configure.tgt
+index d6d86ab..1c2fe0a 100644
+--- binutils-2.20.1.orig/ld/configure.tgt
++++ binutils-2.20.1/ld/configure.tgt
+@@ -426,7 +426,7 @@ mn10300-*-*)		targ_emul=mn10300
  mt-*elf)                targ_emul=elf32mt
  			;;
  msp430-*-*)             targ_emul=msp430x110
 -                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2101 msp430x2111 msp430x2121 msp430x2131 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430xE423 msp430xE425 msp430xE427 msp430xW423 msp430xW425 msp430xW427 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x447 msp430x448 msp430x449"
-+                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x1471 msp430x1481 msp430x1491 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2001 msp430x2011 msp430x2002 msp430x2012 msp430x2003 msp430x2013 msp430x2101 msp430x2111 msp430x2112 msp430x2121 msp430x2122 msp430x2131 msp430x2132 msp430x2232 msp430x2234 msp430x2252 msp430x2254 msp430x2272 msp430x2274 msp430x233 msp430x235 msp430x2330 msp430x2350 msp430x2370 msp430x247 msp430x248 msp430x249 msp430x2410 msp430x2471 msp430x2481 msp430x2491 msp430x2416 msp430x2417 msp430x2418 msp430x2419 msp430x2616 msp430x2617 msp430x2618 msp430x2619 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430x423 msp430x425 msp430x427 msp430x4250 msp430x4260 msp430x4270 msp430xE423 msp430xE425 msp430xE427 msp430xE4232 msp430xE4242 msp430xE4252 msp430xE4272 msp430xW423 msp430xW425 msp430xW427 msp430xG4250 msp430xG4260 msp430xG4270 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x4351 msp430x4361 msp430x4371 msp430x447 msp430x448 msp430x449 msp430xG4616 msp430xG4617 msp430xG4618 msp430xG4619 msp430x4783 msp430x4784 msp430x4793 msp430x4794 msp430x47166 msp430x47176 msp430x47186 msp430x47196 msp430x47167 msp430x47177 msp430x47187 msp430x47197 msp430x5418 msp430x5419 msp430x5435 msp430x5436 msp430x5437 msp430x5438 cc430x5123 cc430x5125 cc430x6125 cc430x6135 cc430x6126 cc430x5137 cc430x6127 cc430x6137"
++                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x1471 msp430x1481 msp430x1491 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2001 msp430x2011 msp430x2002 msp430x2012 msp430x2003 msp430x2013 msp430x2101 msp430x2111 msp430x2112 msp430x2121 msp430x2122 msp430x2131 msp430x2132 msp430x2232 msp430x2234 msp430x2252 msp430x2254 msp430x2272 msp430x2274 msp430x233 msp430x235 msp430x2330 msp430x2350 msp430x2370 msp430x247 msp430x248 msp430x249 msp430x2410 msp430x2471 msp430x2481 msp430x2491 msp430x2416 msp430x2417 msp430x2418 msp430x2419 msp430x2616 msp430x2617 msp430x2618 msp430x2619 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430x423 msp430x425 msp430x427 msp430x4250 msp430x4260 msp430x4270 msp430xE423 msp430xE425 msp430xE427 msp430xE4232 msp430xE4242 msp430xE4252 msp430xE4272 msp430xW423 msp430xW425 msp430xW427 msp430xG4250 msp430xG4260 msp430xG4270 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x4351 msp430x4361 msp430x4371 msp430x447 msp430x448 msp430x449 msp430xG4616 msp430xG4617 msp430xG4618 msp430xG4619 msp430x4783 msp430x4784 msp430x4793 msp430x4794 msp430x47166 msp430x47176 msp430x47186 msp430x47196 msp430x47167 msp430x47177 msp430x47187 msp430x47197 msp430x5418 msp430x5419 msp430x5435 msp430x5436 msp430x5437 msp430x5438 cc430x5133 cc430x5125 cc430x6125 cc430x6135 cc430x6126 cc430x5137 cc430x6127 cc430x6137"
  			;;
  ns32k-pc532-mach* | ns32k-pc532-ux*)  targ_emul=pc532macha ;;
  ns32k-*-netbsd* | ns32k-pc532-lites*) targ_emul=ns32knbsd
-diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/emulparams/msp430all.sh
---- binutils-2.20.1/ld/emulparams/msp430all.sh	2006-06-19 21:22:14.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/ld/emulparams/msp430all.sh	2010-04-30 19:31:50.000000000 -0500
-@@ -18,7 +18,7 @@
+diff --git binutils-2.20.1.orig/ld/emulparams/msp430all.sh binutils-2.20.1/ld/emulparams/msp430all.sh
+index 57d21c2..786f817 100644
+--- binutils-2.20.1.orig/ld/emulparams/msp430all.sh
++++ binutils-2.20.1/ld/emulparams/msp430all.sh
+@@ -18,7 +18,7 @@ ROM_START=0xfc00
  ROM_SIZE=0x3e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4383,7 +4414,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1101" ] ; then
-@@ -27,7 +27,7 @@
+@@ -27,7 +27,7 @@ ROM_START=0xfc00
  ROM_SIZE=0x3e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4392,7 +4423,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1111" ] ; then
-@@ -36,7 +36,7 @@
+@@ -36,7 +36,7 @@ ROM_START=0xf800
  ROM_SIZE=0x07e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4401,7 +4432,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x112" ] ; then
-@@ -45,25 +45,16 @@
+@@ -45,25 +45,16 @@ ROM_START=0xf000
  ROM_SIZE=0xfe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4430,24 +4461,15 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1132" ] ; then
-@@ -72,106 +63,70 @@
+@@ -72,106 +63,70 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
 -STACK=0x300
--fi
--
--if [ "${MSP430_NAME}" = "msp430x122" ] ; then
--ARCH=msp:12
--ROM_START=0xf000
--ROM_SIZE=0xfe0
--RAM_START=0x0200
--RAM_SIZE=256
--STACK=0x300
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x1222" ] ; then
+-if [ "${MSP430_NAME}" = "msp430x122" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x122" -o "${MSP430_NAME}" = "msp430x1222" ] ; then
  ARCH=msp:12
  ROM_START=0xf000
@@ -4458,17 +4480,16 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x123" ] ; then
-+if [ "${MSP430_NAME}" = "msp430x123" -o "${MSP430_NAME}" = "msp430x1232" ] ; then
- ARCH=msp:12
- ROM_START=0xe000
- ROM_SIZE=0x1fe0
- RAM_START=0x0200
- RAM_SIZE=256
+-if [ "${MSP430_NAME}" = "msp430x1222" ] ; then
+-ARCH=msp:12
+-ROM_START=0xf000
+-ROM_SIZE=0xfe0
+-RAM_START=0x0200
+-RAM_SIZE=256
 -STACK=0x300
 -fi
 -
--if [ "${MSP430_NAME}" = "msp430x1232" ] ; then
+-if [ "${MSP430_NAME}" = "msp430x123" ] ; then
 -ARCH=msp:12
 -ROM_START=0xe000
 -ROM_SIZE=0x1fe0
@@ -4477,17 +4498,18 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 -STACK=0x300
 -fi
 -
--if [ "${MSP430_NAME}" = "msp430x133" ] ; then
--ARCH=msp:13
--ROM_START=0xe000
--ROM_SIZE=0x1fe0
--RAM_START=0x0200
--RAM_SIZE=256
+-if [ "${MSP430_NAME}" = "msp430x1232" ] ; then
++if [ "${MSP430_NAME}" = "msp430x123" -o "${MSP430_NAME}" = "msp430x1232" ] ; then
+ ARCH=msp:12
+ ROM_START=0xe000
+ ROM_SIZE=0x1fe0
+ RAM_START=0x0200
+ RAM_SIZE=256
 -STACK=0x300
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x1331" ] ; then
+-if [ "${MSP430_NAME}" = "msp430x133" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x133" -o "${MSP430_NAME}" = "msp430x1331" ] ; then
  ARCH=msp:13
  ROM_START=0xe000
@@ -4498,7 +4520,25 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +VECTORS_START=0xffe0
  fi
  
+-if [ "${MSP430_NAME}" = "msp430x1331" ] ; then
+-ARCH=msp:13
+-ROM_START=0xe000
+-ROM_SIZE=0x1fe0
+-RAM_START=0x0200
+-RAM_SIZE=256
+-STACK=0x300
+-fi
+-
 -if [ "${MSP430_NAME}" = "msp430x135" ] ; then
+-ARCH=msp:13
+-ROM_START=0xc000
+-ROM_SIZE=0x3fe0
+-RAM_START=0x0200
+-RAM_SIZE=512
+-STACK=0x400
+-fi
+-
+-if [ "${MSP430_NAME}" = "msp430x1351" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x135" -o "${MSP430_NAME}" = "msp430x1351" ] ; then
  ARCH=msp:13
  ROM_START=0xc000
@@ -4509,15 +4549,6 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x1351" ] ; then
--ARCH=msp:13
--ROM_START=0xc000
--ROM_SIZE=0x3fe0
--RAM_START=0x0200
--RAM_SIZE=512
--STACK=0x400
--fi
--
 -if [ "${MSP430_NAME}" = "msp430x147" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x147" -o  "${MSP430_NAME}" = "msp430x1471" ] ; then
  ARCH=msp:14
@@ -4555,7 +4586,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x155" ] ; then
-@@ -180,7 +135,7 @@
+@@ -180,7 +135,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4564,7 +4595,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x156" ] ; then
-@@ -189,7 +144,7 @@
+@@ -189,7 +144,7 @@ ROM_START=0xa000
  ROM_SIZE=0x5fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4573,7 +4604,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x157" ] ; then
-@@ -197,8 +152,8 @@
+@@ -197,8 +152,8 @@ ARCH=msp:15
  ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
@@ -4584,7 +4615,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x167" ] ; then
-@@ -206,8 +161,8 @@
+@@ -206,8 +161,8 @@ ARCH=msp:16
  ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
@@ -4595,7 +4626,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x168" ] ; then
-@@ -215,8 +170,8 @@
+@@ -215,8 +170,8 @@ ARCH=msp:16
  ROM_START=0x4000
  ROM_SIZE=0xbfe0
  RAM_START=0x0200
@@ -4606,7 +4637,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x169" ] ; then
-@@ -224,8 +179,8 @@
+@@ -224,8 +179,8 @@ ARCH=msp:16
  ROM_START=0x1100
  ROM_SIZE=0xeee0
  RAM_START=0x0200
@@ -4617,7 +4648,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1610" ] ; then
-@@ -234,7 +189,7 @@
+@@ -234,7 +189,7 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x1100
  RAM_SIZE=0x1400
@@ -4626,7 +4657,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1611" ] ; then
-@@ -243,7 +198,7 @@
+@@ -243,7 +198,7 @@ ROM_START=0x4000
  ROM_SIZE=0xbfe0
  RAM_START=0x1100
  RAM_SIZE=0x2800
@@ -4635,7 +4666,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x1612" ] ; then
-@@ -252,7 +207,25 @@
+@@ -252,7 +207,25 @@ ROM_START=0x2500
  ROM_SIZE=0xdae0
  RAM_START=0x1100
  RAM_SIZE=0x1400
@@ -4662,7 +4693,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x2101" ] ; then
-@@ -261,34 +234,210 @@
+@@ -261,34 +234,210 @@ ROM_START=0xFC00
  ROM_SIZE=0x03e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4880,7 +4911,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x311" ] ; then
-@@ -298,7 +447,7 @@
+@@ -298,7 +447,7 @@ ROM_START=0xf800
  ROM_SIZE=0x07e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4889,7 +4920,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x312" ] ; then
-@@ -308,7 +457,7 @@
+@@ -308,7 +457,7 @@ ROM_START=0xf000
  ROM_SIZE=0x0fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4898,7 +4929,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x313" ] ; then
-@@ -318,7 +467,7 @@
+@@ -318,7 +467,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4907,7 +4938,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x314" ] ; then
-@@ -328,7 +477,7 @@
+@@ -328,7 +477,7 @@ ROM_START=0xd000
  ROM_SIZE=0x2fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4916,7 +4947,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x315" ] ; then
-@@ -338,7 +487,7 @@
+@@ -338,7 +487,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4925,7 +4956,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x323" ] ; then
-@@ -348,7 +497,7 @@
+@@ -348,7 +497,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4934,7 +4965,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x325" ] ; then
-@@ -358,7 +507,7 @@
+@@ -358,7 +507,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4943,7 +4974,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x336" ] ; then
-@@ -368,7 +517,7 @@
+@@ -368,7 +517,7 @@ ROM_START=0xa000
  ROM_SIZE=0x5fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -4952,7 +4983,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x337" ] ; then
-@@ -378,7 +527,7 @@
+@@ -378,7 +527,7 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -4961,7 +4992,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x412" ] ; then
-@@ -387,7 +536,7 @@
+@@ -387,7 +536,7 @@ ROM_START=0xf000
  ROM_SIZE=0x0fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4970,7 +5001,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x413" ] ; then
-@@ -396,7 +545,7 @@
+@@ -396,7 +545,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -4979,7 +5010,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x415" ] ; then
-@@ -405,7 +554,7 @@
+@@ -405,7 +554,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -4988,7 +5019,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x417" ] ; then
-@@ -414,34 +563,79 @@
+@@ -414,34 +563,79 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5016,9 +5047,8 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_SIZE=512
 +fi
 +VECTORS_START=0xffe0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430x435" ] ; then
++fi
++
 +if [ "${MSP430_NAME}" = "msp430x4260" ] ; then
 +ARCH=msp:42
 +ROM_START=0xa000
@@ -5039,8 +5069,9 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_SIZE=1024
 +fi
 +VECTORS_START=0xffe0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430x435" ] ; then
 +
 +if [ "${MSP430_NAME}" = "msp430x435" -o "${MSP430_NAME}" = "msp430x4351" ] ; then
  ARCH=msp:43
@@ -5075,7 +5106,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x447" ] ; then
-@@ -450,7 +644,7 @@
+@@ -450,7 +644,7 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5084,7 +5115,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x448" ] ; then
-@@ -458,8 +652,8 @@
+@@ -458,8 +652,8 @@ ARCH=msp:44
  ROM_START=0x4000
  ROM_SIZE=0xbfe0
  RAM_START=0x0200
@@ -5095,7 +5126,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430x449" ] ; then
-@@ -467,36 +661,69 @@
+@@ -467,44 +661,77 @@ ARCH=msp:44
  ROM_START=0x1100
  ROM_SIZE=0xeee0
  RAM_START=0x0200
@@ -5142,8 +5173,9 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 -STACK=0x400
 +fi
 +VECTORS_START=0xffe0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430xE427" ] ; then
 +if [ "${MSP430_NAME}" = "msp430xG4260" ] ; then
 +ARCH=msp:42
 +ROM_START=0xa000
@@ -5151,9 +5183,8 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x0200
 +RAM_SIZE=256
 +VECTORS_START=0xffe0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430xE427" ] ; then
++fi
++
 +if [ "${MSP430_NAME}" = "msp430xE427" -o "${MSP430_NAME}" = "msp430xW427" \
 +    -o "${MSP430_NAME}" = "msp430xG4270" -o "${MSP430_NAME}" = "msp430xE4272" \
 +   ] ; then
@@ -5166,14 +5197,14 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +else
  RAM_SIZE=1024
 -STACK=0x600
- fi
-+VECTORS_START=0xffe0
 +fi
-+
++VECTORS_START=0xffe0
+ fi
  
++
  if [ "${MSP430_NAME}" = "msp430xG437" ] ; then
  ARCH=msp:43
-@@ -504,7 +731,7 @@
+ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5182,7 +5213,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430xG438" ] ; then
-@@ -512,8 +739,8 @@
+@@ -512,8 +739,8 @@ ARCH=msp:43
  ROM_START=0x4000
  ROM_SIZE=0xbef0
  RAM_START=0x0200
@@ -5193,7 +5224,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
  fi
  
  if [ "${MSP430_NAME}" = "msp430xG439" ] ; then
-@@ -521,33 +748,222 @@
+@@ -521,33 +748,222 @@ ARCH=msp:43
  ROM_START=0x1100
  ROM_SIZE=0xeee0
  RAM_START=0x0200
@@ -5221,15 +5252,8 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x1100
 +RAM_SIZE=4096
 +VECTORS_START=0xffc0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430xW425" ] ; then
--ARCH=msp:42
--ROM_START=0xc000
--ROM_SIZE=0x3fe0
--RAM_START=0x0200
--RAM_SIZE=512
--STACK=0x400
++fi
++
 +if [ "${MSP430_NAME}" = "msp430xG4617" ] ; then
 +ARCH=msp:46
 +ROM_START=0x3100
@@ -5241,15 +5265,8 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x1100
 +RAM_SIZE=8192
 +VECTORS_START=0xffc0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430xW427" ] ; then
--ARCH=msp:42
--ROM_START=0x8000
--ROM_SIZE=0x7fe0
--RAM_START=0x0200
--RAM_SIZE=0x400
--STACK=0x600
++fi
++
 +if [ "${MSP430_NAME}" = "msp430xG4618" ] ; then
 +ARCH=msp:46
 +ROM_START=0x3100
@@ -5261,7 +5278,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x1100
 +RAM_SIZE=8192
 +VECTORS_START=0xffc0
- fi
++fi
 +
 +if [ "${MSP430_NAME}" = "msp430xG4619" ] ; then
 +ARCH=msp:46
@@ -5274,8 +5291,15 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x1100
 +RAM_SIZE=4096
 +VECTORS_START=0xffc0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430xW425" ] ; then
+-ARCH=msp:42
+-ROM_START=0xc000
+-ROM_SIZE=0x3fe0
+-RAM_START=0x0200
+-RAM_SIZE=512
+-STACK=0x400
 +if [ "${MSP430_NAME}" = "msp430x4783" -o "${MSP430_NAME}" = "msp430x4784" ] ; then
 +ARCH=msp:47
 +ROM_START=0x4000
@@ -5283,8 +5307,10 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +RAM_START=0x200
 +RAM_SIZE=2048
 +VECTORS_START=0xffe0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430xW427" ] ; then
+-ARCH=msp:42
 +if [ "${MSP430_NAME}" = "msp430x4793" -o "${MSP430_NAME}" = "msp430x4794" ] ; then
 +ARCH=msp:47
 +ROM_START=0x1100
@@ -5385,7 +5411,7 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +VECTORS_START=0xff80
 +fi
 +
-+if [ "${MSP430_NAME}" = "cc430x5123" ] ; then
++if [ "${MSP430_NAME}" = "cc430x5133" ] ; then
 +ARCH=msp:54
 +ROM_START=0xe000
 +ROM_SIZE=0x2000
@@ -5413,7 +5439,12 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +
 +if [ "${MSP430_NAME}" = "cc430x6126" ] ; then
 +ARCH=msp:54
-+ROM_START=0x8000
+ ROM_START=0x8000
+-ROM_SIZE=0x7fe0
+-RAM_START=0x0200
+-RAM_SIZE=0x400
+-STACK=0x600
+-fi
 +ROM_SIZE=0x8000
 +INFO_START=0x1800
 +INFO_SIZE=512
@@ -5439,10 +5470,11 @@ diff -urN binutils-2.20.1/ld/emulparams/msp430all.sh binutils-2.20.1-mspgcc4/ld/
 +
 +STACK=$(printf "0x%x" $(( RAM_START + RAM_SIZE )) )
 +VECTORS_SIZE=$((0x10000 - VECTORS_START))
-diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/ld/scripttempl/elf32msp430.sc
---- binutils-2.20.1/ld/scripttempl/elf32msp430.sc	2009-10-09 08:12:35.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/ld/scripttempl/elf32msp430.sc	2010-04-30 19:31:50.000000000 -0500
-@@ -14,9 +14,32 @@
+diff --git binutils-2.20.1.orig/ld/scripttempl/elf32msp430.sc binutils-2.20.1/ld/scripttempl/elf32msp430.sc
+index cbffe48..825640d 100644
+--- binutils-2.20.1.orig/ld/scripttempl/elf32msp430.sc
++++ binutils-2.20.1/ld/scripttempl/elf32msp430.sc
+@@ -14,9 +14,32 @@ HEAP_SECTION_MSP430=".heap ${RELOCATING-0} :
      ${RELOCATING+ PROVIDE (__heap_bottom = .) ; }
      ${RELOCATING+ PROVIDE (__heap_top = ${HEAP_START} + ${HEAP_LENGTH}) ; }
    } ${RELOCATING+ > heap}"
@@ -5476,7 +5508,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
  
  cat <<EOF
  OUTPUT_FORMAT("${OUTPUT_FORMAT}","${OUTPUT_FORMAT}","${OUTPUT_FORMAT}")
-@@ -24,12 +47,12 @@
+@@ -24,12 +47,12 @@ OUTPUT_ARCH(${ARCH})
  
  MEMORY
  {
@@ -5489,13 +5521,13 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
 +  ${TEXT_REGION_MSP430}
 +  data   (rwx)      : ORIGIN = $RAM_START,     LENGTH = $RAM_SIZE
 +  vectors (rw)      : ORIGIN = $VECTORS_START,     LENGTH = $VECTORS_SIZE
-+  bootloader(rx)    : ORIGIN = 0x0c00,     LENGTH = 1K
-+  infomem(rx)       : ORIGIN = 0x1000,     LENGTH = 256
-+  infomemnobits(rx) : ORIGIN = 0x1000,     LENGTH = 256
++  bootloader(rx)    : ORIGIN = ${BOOT_START-0x0c00},     LENGTH = ${BOOT_SIZE-1K}
++  infomem(rx)       : ORIGIN = ${INFO_START-0x1000},     LENGTH = ${INFO_SIZE-256}
++  infomemnobits(rx) : ORIGIN = ${INFO_START-0x1000},     LENGTH = ${INFO_SIZE-256}
    ${HEAP_MEMORY_MSP430}
  }
  
-@@ -100,22 +123,35 @@
+@@ -100,22 +123,35 @@ SECTIONS
    {
      ${RELOCATING+. = ALIGN(2);}
      *(.init)
@@ -5541,7 +5573,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
      ${CONSTRUCTING+ __dtors_end = . ; }
  
      ${RELOCATING+. = ALIGN(2);}
-@@ -124,31 +160,45 @@
+@@ -124,31 +160,45 @@ SECTIONS
      *(.text.*)
  
      ${RELOCATING+. = ALIGN(2);}
@@ -5598,7 +5630,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
    
    /* Bootloader.  */
    .bootloader ${RELOCATING-0} :
-@@ -175,19 +225,22 @@
+@@ -175,19 +225,22 @@ SECTIONS
      *(.infomemnobits.*)
    } ${RELOCATING+ > infomemnobits}
  
@@ -5623,7 +5655,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
      *(COMMON)
      ${RELOCATING+ PROVIDE (__noinit_end = .) ; }
      ${RELOCATING+ _end = . ;  }
-@@ -197,9 +250,11 @@
+@@ -197,9 +250,11 @@ SECTIONS
    {
      ${RELOCATING+ PROVIDE (__vectors_start = .) ; }
      *(.vectors*)
@@ -5635,7 +5667,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
    ${HEAP_SECTION_MSP430}
  
    /* Stabs for profiling information*/
-@@ -239,6 +294,10 @@
+@@ -239,6 +294,10 @@ SECTIONS
    .debug_loc      0 : { *(.debug_loc) }
    .debug_macinfo  0 : { *(.debug_macinfo) }
  
@@ -5646,10 +5678,11 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430.sc binutils-2.20.1-mspgcc4/
    PROVIDE (__stack = ${STACK}) ;
    PROVIDE (__data_start_rom = _etext) ;
    PROVIDE (__data_end_rom   = _etext + SIZEOF (.data)) ;
-diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1-mspgcc4/ld/scripttempl/elf32msp430_3.sc
---- binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc	2009-10-09 08:12:35.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/ld/scripttempl/elf32msp430_3.sc	2010-04-30 19:31:50.000000000 -0500
-@@ -4,9 +4,9 @@
+diff --git binutils-2.20.1.orig/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc
+index 15eb517..7b7d0fb 100644
+--- binutils-2.20.1.orig/ld/scripttempl/elf32msp430_3.sc
++++ binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc
+@@ -4,9 +4,9 @@ OUTPUT_ARCH(${ARCH})
  
  MEMORY
  {
@@ -5662,7 +5695,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1-mspgcc
  }
  
  SECTIONS
-@@ -76,22 +76,35 @@
+@@ -76,22 +76,35 @@ SECTIONS
    {
      ${RELOCATING+. = ALIGN(2);}
      *(.init)
@@ -5708,7 +5741,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1-mspgcc
      ${CONSTRUCTING+ __dtors_end = . ; }
  
      ${RELOCATING+. = ALIGN(2);}
-@@ -100,43 +113,60 @@
+@@ -100,43 +113,60 @@ SECTIONS
      *(.text.*)
  
      ${RELOCATING+. = ALIGN(2);}
@@ -5782,7 +5815,7 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1-mspgcc
      *(COMMON)
      ${RELOCATING+ PROVIDE (__noinit_end = .) ; }
      ${RELOCATING+ _end = . ;  }
-@@ -146,6 +176,7 @@
+@@ -146,6 +176,7 @@ SECTIONS
    {
      ${RELOCATING+ PROVIDE (__vectors_start = .) ; }
      *(.vectors*)
@@ -5790,10 +5823,11 @@ diff -urN binutils-2.20.1/ld/scripttempl/elf32msp430_3.sc binutils-2.20.1-mspgcc
      ${RELOCATING+ _vectors_end = . ; }
    } ${RELOCATING+ > vectors}
  
-diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/msp430-dis.c
---- binutils-2.20.1/opcodes/msp430-dis.c	2009-09-02 02:20:30.000000000 -0500
-+++ binutils-2.20.1-mspgcc4/opcodes/msp430-dis.c	2010-04-30 19:31:50.000000000 -0500
-@@ -51,12 +51,153 @@
+diff --git binutils-2.20.1.orig/opcodes/msp430-dis.c binutils-2.20.1/opcodes/msp430-dis.c
+index c4a86eb..37001a2 100644
+--- binutils-2.20.1.orig/opcodes/msp430-dis.c
++++ binutils-2.20.1/opcodes/msp430-dis.c
+@@ -51,12 +51,153 @@ msp430dis_opcode (bfd_vma addr, disassemble_info *info)
    return bfd_getl16 (buffer);
  }
  
@@ -5950,7 +5984,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
  {
    /* Pop with constant.  */
    if (insn == 0x43b2)
-@@ -64,18 +205,16 @@
+@@ -64,18 +205,16 @@ msp430_nooperands (struct msp430_opcode_s *opcode,
    if (insn == opcode->bin_opcode)
      return 2;
  
@@ -5970,7 +6004,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
      }
  
    return 2;
-@@ -83,16 +222,14 @@
+@@ -83,16 +222,14 @@ msp430_nooperands (struct msp430_opcode_s *opcode,
  
  static int
  msp430_singleoperand (disassemble_info *info,
@@ -5989,7 +6023,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
    int cmd_len = 2;
    short dst = 0;
  
-@@ -101,9 +238,9 @@
+@@ -101,9 +238,9 @@ msp430_singleoperand (disassemble_info *info,
    as = (insn & 0x0030) >> 4;
    ad = (insn & 0x0080) >> 7;
  
@@ -6001,7 +6035,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
        if (regs != 2 && regs != 3 && regs != 1)
  	return 0;
  
-@@ -115,167 +252,23 @@
+@@ -115,167 +252,23 @@ msp430_singleoperand (disassemble_info *info,
        if ((opcode->bin_opcode & 0xff00) == 0x5300 && as == 3)
  	return 0;
  
@@ -6181,7 +6215,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
      default:
        cmd_len = 0;
      }
-@@ -285,26 +278,26 @@
+@@ -285,26 +278,26 @@ msp430_singleoperand (disassemble_info *info,
  
  static int
  msp430_doubleoperand (disassemble_info *info,
@@ -6213,7 +6247,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
      {
        /* Special case: rla and rlc are the only 2 emulated instructions that
  	 fall into two operand instructions.  */
-@@ -319,348 +312,352 @@
+@@ -319,348 +312,352 @@ msp430_doubleoperand (disassemble_info *info,
        if (regd != regs || as != ad)
  	return 0;		/* May be 'data' section.  */
  
@@ -6347,7 +6381,53 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -	*cycles = 3;
 -    }
 -  else if (as == 3)
--    {
++  dst = msp430dis_operand (addr + cmd_len, info, regs, as, &cmd_len);
++  msp430x_decode_operand(regs, as, addr + cmd_len, dst, OP_16BIT_HEX, op1, comm1);
++
++  return cmd_len;
++}
++
++static opwidth_t
++msp430x_opwidth(unsigned int insn)
++{
++    insn &= NON_ADDR_OPERATION | BYTE_OPERATION_X;
++    
++    if(insn == (NON_ADDR_OPERATION | BYTE_OPERATION_X))
++      return BYTE_OP;
++    if(insn == NON_ADDR_OPERATION)
++      return WORD_OP;
++    if(insn == BYTE_OPERATION_X)
++      return ADDR_OP;
++
++    return 0;   // reserved
++}
++
++static int
++msp430x_singleoperand (disassemble_info *info,
++		      struct msp430_opcode_s const *opcode,
++		      bfd_vma addr,
++		      unsigned int insn,
++		      char *op,
++		      char *comm,
++                      int *repeats)
++{
++  int reg = (insn >> 16) & 0xf;
++  int am = (insn >> 20) & 0x3;
++  int cmd_len = 4;
++  int dst = 0;
++
++  if ( opcode_variant(opcode) < V_PUSHX )
++    if ((am == 3 && reg == 0)           // #N operand
++        || (am == 0 && reg == 3)        // R3 is illegal as dest: may be data section. 
++       )
++        {
++          strcpy (comm, _("Illegal as 1-op instr"));
++          return -1;
++        }
++ 
++  // extract repeat count if any
++  if ( am == 0 )                // extension word for register mode
+     {
 -      if (regs == 2)
 -	{
 -	  sprintf (op1, "#8");
@@ -6410,69 +6490,6 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -	  cmd_len += 2;
 -	  sprintf (op1, "%d(r%d)", dst, regs);
 -	}
--    }
-+  dst = msp430dis_operand (addr + cmd_len, info, regs, as, &cmd_len);
-+  msp430x_decode_operand(regs, as, addr + cmd_len, dst, OP_16BIT_HEX, op1, comm1);
- 
--  /* Destination. Special care needed on addr + XXXX.  */
-+  return cmd_len;
-+}
- 
--  if (ad == 0)
--    {
--      /* Register.  */
--      if (regd == 0)
--	{
--	  *cycles += 1;
--	  sprintf (op2, "r0");
--	}
--      else if (regd == 1)
--	sprintf (op2, "r1");
-+static opwidth_t
-+msp430x_opwidth(unsigned int insn)
-+{
-+    insn &= NON_ADDR_OPERATION | BYTE_OPERATION_X;
-+    
-+    if(insn == (NON_ADDR_OPERATION | BYTE_OPERATION_X))
-+      return BYTE_OP;
-+    if(insn == NON_ADDR_OPERATION)
-+      return WORD_OP;
-+    if(insn == BYTE_OPERATION_X)
-+      return ADDR_OP;
- 
--      else if (regd == 2)
--	sprintf (op2, "r2");
-+    return 0;   // reserved
-+}
- 
--      else
--	sprintf (op2, "r%d", regd);
-+static int
-+msp430x_singleoperand (disassemble_info *info,
-+		      struct msp430_opcode_s const *opcode,
-+		      bfd_vma addr,
-+		      unsigned int insn,
-+		      char *op,
-+		      char *comm,
-+                      int *repeats)
-+{
-+  int reg = (insn >> 16) & 0xf;
-+  int am = (insn >> 20) & 0x3;
-+  int cmd_len = 4;
-+  int dst = 0;
-+
-+  if ( opcode_variant(opcode) < V_PUSHX )
-+    if ((am == 3 && reg == 0)           // #N operand
-+        || (am == 0 && reg == 3)        // R3 is illegal as dest: may be data section. 
-+       )
-+        {
-+          strcpy (comm, _("Illegal as 1-op instr"));
-+          return -1;
-+        }
-+ 
-+  // extract repeat count if any
-+  if ( am == 0 )                // extension word for register mode
-+    {
 +      if (insn & 0x008f)        // repetitions
 +      {
 +        if (insn & 0x0080)
@@ -6480,8 +6497,9 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 +        else
 +          *repeats = 0 - (insn & 0xf);  // negative number is #N
 +      }
-+    }
-+
+     }
+ 
+-  /* Destination. Special care needed on addr + XXXX.  */
 +  // extract operands
 +  dst = msp430dis_operand(addr + cmd_len, info, reg, am, &cmd_len) | ((insn & 0x0000000f) << 16);
 +  dst = (dst << 12) >> 12;      // sign extension
@@ -6507,9 +6525,18 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 +  int dst = 0;
 +  
 +  reg = insn & 0xf;
-+
+ 
+-  if (ad == 0)
 +  switch(opcode_variant(opcode))
-+    {
+     {
+-      /* Register.  */
+-      if (regd == 0)
+-	{
+-	  *cycles += 1;
+-	  sprintf (op2, "r0");
+-	}
+-      else if (regd == 1)
+-	sprintf (op2, "r1");
 +    case V_CALLA:
 +      switch((insn >> 4) & 0xf)
 +        {
@@ -6564,13 +6591,53 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 +      break;
 +    default:
 +      break;
-     }
--  else	/* ad == 1.  */
--    {
--      * cycles += 3;
++    }
 +  return cmd_len; 
 +}
  
+-      else if (regd == 2)
+-	sprintf (op2, "r2");
++static int
++msp430x_doubleoperand (disassemble_info *info,
++		      struct msp430_opcode_s const *opcode,
++		      bfd_vma addr,
++		      unsigned int insn,
++		      char *op1,
++		      char *op2,
++		      char *comm1,
++		      char *comm2,
++		      opwidth_t *op_width,
++		      int *repeats)
++{
++  int regs, regd;
++  int as, ad;
++  int ops, opd;
++  int cmd_len = 4;
+ 
+-      else
+-	sprintf (op2, "r%d", regd);
++  regd = (insn >> 16) & 0xf;
++  regs = (insn >> 24) & 0xf;
++  as = (insn >> 20) & 0x3;
++  ad = (insn >> 23) & 0x1;
++
++  if (ad == 0 && regd == 3)
++    {
++      // R3 is illegal as dest: may be data section.
++      if (comm1)
++        strcpy (comm1, _("Illegal as 2-op instr"));
++      else if (comm2)
++        strcpy (comm2, _("Illegal as 2-op instr"));
++      return -1;
+     }
+-  else	/* ad == 1.  */
++  *op_width = msp430x_opwidth(insn);
++  
++  // extract repeat count if any
++  if ( as == 0 && ad == 0 )     // extension word for register mode
+     {
+-      * cycles += 3;
+-
 -      if (regd == 0)
 -	{
 -	  /* PC relative.  */
@@ -6594,42 +6661,6 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -	  cmd_len += 2;
 -	  sprintf (op2, "%d(r%d)", dst, regd);
 -	}
-+static int
-+msp430x_doubleoperand (disassemble_info *info,
-+		      struct msp430_opcode_s const *opcode,
-+		      bfd_vma addr,
-+		      unsigned int insn,
-+		      char *op1,
-+		      char *op2,
-+		      char *comm1,
-+		      char *comm2,
-+		      opwidth_t *op_width,
-+		      int *repeats)
-+{
-+  int regs, regd;
-+  int as, ad;
-+  int ops, opd;
-+  int cmd_len = 4;
-+
-+  regd = (insn >> 16) & 0xf;
-+  regs = (insn >> 24) & 0xf;
-+  as = (insn >> 20) & 0x3;
-+  ad = (insn >> 23) & 0x1;
-+
-+  if (ad == 0 && regd == 3)
-+    {
-+      // R3 is illegal as dest: may be data section.
-+      if (comm1)
-+        strcpy (comm1, _("Illegal as 2-op instr"));
-+      else if (comm2)
-+        strcpy (comm2, _("Illegal as 2-op instr"));
-+      return -1;
-     }
-+  *op_width = msp430x_opwidth(insn);
-+  
-+  // extract repeat count if any
-+  if ( as == 0 && ad == 0 )     // extension word for register mode
-+    {
 +      if (insn & 0x008f)        // repetitions
 +      {
 +        if (insn & 0x0080)
@@ -6637,7 +6668,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 +        else
 +          *repeats = 0 - (insn & 0xf);  // negative number is #N
 +      }
-+    }
+     }
 +  // extract operands
 +  ops = msp430dis_operand(addr + cmd_len, info, regs, as, &cmd_len) | ((insn & 0x00000780) << 9);
 +  ops = (ops << 12) >> 12;      // sign extension
@@ -6681,7 +6712,9 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -
 -  /* dst is a source register.  */
 -  if (as == 0)
--    {
++  int dst = 0;
++  typedef struct 
+     {
 -      /* Constants.  */
 -      if (regs == 3)
 -	{
@@ -6695,10 +6728,14 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -	  *cycles = 1;
 -	  sprintf (op1, "r%d", regs);
 -	}
--    }
++      int as, regs;
++      int ad, regd;
++      int length;
+     }
 -  else if (as == 2)
-+  int dst = 0;
-+  typedef struct 
++  operands_t;
++  
++  static operands_t const operands_table[] =
      {
 -      if (regs == 2)
 -	{
@@ -6720,40 +6757,6 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 -	}
 -    }
 -  else if (as == 3)
--    {
--      if (regs == 2)
--	{
--	  *cycles = 1;
--	  sprintf (op1, "#8");
--	  sprintf (comm1, "r2 As==11");
--	}
--      else if (regs == 3)
--	{
--	  *cycles = 1;
--	  sprintf (op1, "#-1");
--	  sprintf (comm1, "r3 As==11");
--	}
--      else if (regs == 0)
--	{
--	  /* Absolute. @pc+  */
--	  *cycles = 3;
--	  dst = msp430dis_opcode (addr + 2, info);
--	  cmd_len += 2;
--	  sprintf (op1, "#0x%04x", PS (dst));
--	}
--      else
--	{
--	  *cycles = 2;
--	  sprintf (op1, "@r%d+", regs);
--	}
-+      int as, regs;
-+      int ad, regd;
-+      int length;
-+    }
-+  operands_t;
-+  
-+  static operands_t const operands_table[] =
-+    {
 +      { 2, -1, 0, -1, 0 },  // 0 @Rsrc, Rdst
 +      { 3, -1, 0, -1, 0 },  // 1 @Rsrc+, Rdst
 +      { 1,  2, 0, -1, 2 },  // 2 &abs20, Rdst
@@ -6786,7 +6789,32 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
 +    operands.regd = (insn >> 0 ) & 0x000f;
 +
 +  if (operands.regd == 3)
-+    {
+     {
+-      if (regs == 2)
+-	{
+-	  *cycles = 1;
+-	  sprintf (op1, "#8");
+-	  sprintf (comm1, "r2 As==11");
+-	}
+-      else if (regs == 3)
+-	{
+-	  *cycles = 1;
+-	  sprintf (op1, "#-1");
+-	  sprintf (comm1, "r3 As==11");
+-	}
+-      else if (regs == 0)
+-	{
+-	  /* Absolute. @pc+  */
+-	  *cycles = 3;
+-	  dst = msp430dis_opcode (addr + 2, info);
+-	  cmd_len += 2;
+-	  sprintf (op1, "#0x%04x", PS (dst));
+-	}
+-      else
+-	{
+-	  *cycles = 2;
+-	  sprintf (op1, "@r%d+", regs);
+-	}
 +      // R3 is illegal as dest: may be data section.
 +      if (comm1)
 +        strcpy (comm1, _("Illegal as address instr"));
@@ -6870,7 +6898,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
  }
  
  int
-@@ -668,85 +665,147 @@
+@@ -668,85 +665,147 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
  {
    void *stream = info->stream;
    fprintf_ftype prin = info->fprintf_func;
@@ -7059,7 +7087,7 @@ diff -urN binutils-2.20.1/opcodes/msp430-dis.c binutils-2.20.1-mspgcc4/opcodes/m
  
    if (*op1)
      (*prin) (stream, "\t%s", op1);
-@@ -765,23 +824,11 @@
+@@ -765,23 +824,11 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
  
    if (*comm1 || *comm2)
      (*prin) (stream, ";");
