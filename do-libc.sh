@@ -50,6 +50,10 @@ cd "$BUILD_DIR"
 
 export PATH="$TARGET_LOCATION/bin:$PATH"
 TARGET_LOCATION_SED="$(echo "$TARGET_LOCATION" | sed -e "s,/,\\\\/,g")"
+# Ensure updated path is provided to sudo
+if [ -n "${INSTALL_LAUNCHER}" ] ; then
+  INSTALL_LAUNCHER="${INSTALL_LAUNCHER} PATH=${PATH}"
+fi
 
 mkdir -p mspgcc
 cd mspgcc
