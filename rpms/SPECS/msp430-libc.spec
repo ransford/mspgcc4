@@ -3,7 +3,7 @@
 %global _binaries_in_noarch_packages_terminate_build 0
 
 Name:		msp430-libc
-Version:	20100430
+Version:	20100624
 Release:	1%{?dist}
 Summary:	C library for use with GCC on Texas Instruments MSP430 microcontrollers
 Group:		Development/Libraries
