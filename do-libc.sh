@@ -50,10 +50,6 @@ cd "$BUILD_DIR"
 
 export PATH="$TARGET_LOCATION/bin:$PATH"
 TARGET_LOCATION_SED="$(echo "$TARGET_LOCATION" | sed -e "s,/,\\\\/,g")"
-# Ensure updated path is provided to sudo
-if [ -n "${INSTALL_LAUNCHER}" ] ; then
-  INSTALL_LAUNCHER="${INSTALL_LAUNCHER} PATH=${PATH}"
-fi
 
 mkdir -p mspgcc
 cd mspgcc
@@ -92,7 +88,12 @@ fi
 # a serial build if the parallel build fails.
 $GNUMAKE -j$(num_cpus) PREFIX=$TARGET_LOCATION || \
 $GNUMAKE               PREFIX=$TARGET_LOCATION
-$INSTALL_LAUNCHER PATH="$PATH" $GNUMAKE install PREFIX=$TARGET_LOCATION
+# Ensure updated path is provided to sudo
+if [ -n "${INSTALL_LAUNCHER}" ] ; then
+	$INSTALL_LAUNCHER PATH="$PATH" $GNUMAKE install PREFIX=$TARGET_LOCATION
+else
+	$GNUMAKE install PREFIX=$TARGET_LOCATION
+fi
 
 echo '!<arch>' > 0lib.tmp
 $INSTALL_LAUNCHER cp 0lib.tmp "$TARGET_LOCATION/lib/libstdc++.a"
