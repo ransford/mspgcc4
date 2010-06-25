@@ -8,7 +8,7 @@
 # Version tags for what we're building.
 BINUTILS=2.20.1-2.r4.20100210
 GCC=4.4.3-2.r4.20100210
-LIBC=20100430-1
+LIBC=20100624-1
 
 # Get the target distribution (not pre-defined on RHEL/CentOS).  When
 # building on a derivative platform, also specify whose source RPM to use.

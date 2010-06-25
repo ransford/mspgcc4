@@ -52,6 +52,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Jun 24 2010 Peter A. Bigot pab@peoplepowerco.com  - 20100624-1
+- Update to version 20100624.
+
 * Sat May  1 2010 Peter A. Bigot pab@peoplepowerco.com  - 20100430-1
 - Update to version 20100430.
 
