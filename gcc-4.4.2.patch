@@ -1,7 +1,8 @@
-diff -urN gcc-4.4.2/configure.orig gcc-4.4.2/configure
---- gcc-4.4.2/configure.orig	2010-01-15 18:58:52.355557300 +0100
-+++ gcc-4.4.2/configure	2010-01-15 19:05:32.338914800 +0100
-@@ -2360,6 +2360,9 @@
+diff --git gcc-4.4.2.orig/configure gcc-4.4.2/configure
+index 8d2f7fb..27adbeb 100755
+--- gcc-4.4.2.orig/configure
++++ gcc-4.4.2/configure
+@@ -2360,6 +2360,9 @@ case "${target}" in
    avr-*-*)
      noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
      ;;
@@ -11,10 +12,11 @@ diff -urN gcc-4.4.2/configure.orig gcc-4.4.2/configure
    bfin-*-*)
      noconfigdirs="$noconfigdirs gdb"
      if test x${is_cross_compiler} != xno ; then
-diff -urN gcc-4.4.2/gcc/config.gcc.orig gcc-4.4.2/gcc/config.gcc
---- gcc-4.4.2/gcc/config.gcc.orig	2010-01-15 18:58:52.371182200 +0100
-+++ gcc-4.4.2/gcc/config.gcc	2010-01-15 19:05:32.354539700 +0100
-@@ -804,6 +804,12 @@
+diff --git gcc-4.4.2.orig/gcc/config.gcc gcc-4.4.2/gcc/config.gcc
+index 701fe44..e1ab9a9 100644
+--- gcc-4.4.2.orig/gcc/config.gcc
++++ gcc-4.4.2/gcc/config.gcc
+@@ -804,6 +804,12 @@ avr-*-rtems*)
  avr-*-*)
  	tm_file="avr/avr.h dbxelf.h"
  	;;
@@ -27,10 +29,11 @@ diff -urN gcc-4.4.2/gcc/config.gcc.orig gcc-4.4.2/gcc/config.gcc
  bfin*-elf*)
  	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
  	tmake_file=bfin/t-bfin-elf
-diff -urN gcc-4.4.2/gcc/configure.orig gcc-4.4.2/gcc/configure
---- gcc-4.4.2/gcc/configure.orig	2010-01-15 18:58:52.386807100 +0100
-+++ gcc-4.4.2/gcc/configure	2010-01-15 19:05:32.401414500 +0100
-@@ -1595,6 +1595,7 @@
+diff --git gcc-4.4.2.orig/gcc/configure gcc-4.4.2/gcc/configure
+index 04775ac..b21fec1 100755
+--- gcc-4.4.2.orig/gcc/configure
++++ gcc-4.4.2/gcc/configure
+@@ -1595,6 +1595,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  
  gcc_version=`cat $srcdir/BASE-VER`
@@ -38,10 +41,32 @@ diff -urN gcc-4.4.2/gcc/configure.orig gcc-4.4.2/gcc/configure
  
  # Determine the host, build, and target systems
  ac_aux_dir=
-diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
---- gcc-4.4.2/gcc/loop-invariant.c.orig	2010-01-15 18:58:52.418057100 +0100
-+++ gcc-4.4.2/gcc/loop-invariant.c	2010-01-15 19:05:32.432664500 +0100
-@@ -1171,11 +1171,13 @@
+@@ -23671,6 +23672,7 @@ esac
+ case "$target" in
+   i?86*-*-* | mips*-*-* | alpha*-*-* | powerpc*-*-* | sparc*-*-* | m68*-*-* \
+   | x86_64*-*-* | hppa*-*-* | arm*-*-* \
++  | msp430-*-* \
+   | xstormy16*-*-* | cris-*-* | crisv32-*-* | xtensa*-*-* | bfin-*-* | score*-*-* \
+   | spu-*-* | fido*-*-* | m32c-*-*)
+     insn="nop"
+diff --git gcc-4.4.2.orig/gcc/expr.c gcc-4.4.2/gcc/expr.c
+index 40104fa..c0a7a78 100644
+--- gcc-4.4.2.orig/gcc/expr.c
++++ gcc-4.4.2/gcc/expr.c
+@@ -955,7 +955,7 @@ move_by_pieces (rtx to, rtx from, unsigned HOST_WIDE_INT len,
+ 	  data.autinc_from = 1;
+ 	  data.explicit_inc_from = -1;
+ 	}
+-      if (USE_LOAD_POST_INCREMENT (mode) && ! data.autinc_from)
++      if (USE_LOAD_POST_INCREMENT (mode) && !data.reverse && !data.autinc_from)
+ 	{
+ 	  data.from_addr = copy_addr_to_reg (from_addr);
+ 	  data.autinc_from = 1;
+diff --git gcc-4.4.2.orig/gcc/loop-invariant.c gcc-4.4.2/gcc/loop-invariant.c
+index 82e1829..6b89551 100644
+--- gcc-4.4.2.orig/gcc/loop-invariant.c
++++ gcc-4.4.2/gcc/loop-invariant.c
+@@ -1171,11 +1171,13 @@ move_invariant_reg (struct loop *loop, unsigned invno)
    rtx reg, set, dest, note;
    struct use *use;
    bitmap_iterator bi;
@@ -55,7 +80,7 @@ diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
    /* If this is a representative of the class of equivalent invariants,
       really move the invariant.  Otherwise just replace its use with
       the register used for the representative.  */
-@@ -1200,7 +1202,17 @@
+@@ -1200,7 +1202,17 @@ move_invariant_reg (struct loop *loop, unsigned invno)
        reg = gen_reg_rtx_and_attrs (dest);
  
        /* Try replacing the destination by a new pseudoregister.  */
@@ -74,7 +99,7 @@ diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
  	goto fail;
        df_insn_rescan (inv->insn);
  
-@@ -1219,9 +1231,23 @@
+@@ -1219,9 +1231,23 @@ move_invariant_reg (struct loop *loop, unsigned invno)
      }
    else
      {
@@ -100,7 +125,7 @@ diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
        set = single_set (inv->insn);
        emit_insn_after (gen_move_insn (SET_DEST (set), reg), inv->insn);
        delete_insn (inv->insn);
-@@ -1230,17 +1256,9 @@
+@@ -1230,17 +1256,9 @@ move_invariant_reg (struct loop *loop, unsigned invno)
  
    inv->reg = reg;
  
@@ -120,10 +145,11 @@ diff -urN gcc-4.4.2/gcc/loop-invariant.c.orig gcc-4.4.2/gcc/loop-invariant.c
  
    return true;
  
-diff -urN gcc-4.4.2/libgcc/config.host.orig gcc-4.4.2/libgcc/config.host
---- gcc-4.4.2/libgcc/config.host.orig	2010-01-15 18:58:52.418057100 +0100
-+++ gcc-4.4.2/libgcc/config.host	2010-01-15 19:05:32.432664500 +0100
-@@ -224,6 +224,8 @@
+diff --git gcc-4.4.2.orig/libgcc/config.host gcc-4.4.2/libgcc/config.host
+index 55af651..23aa200 100644
+--- gcc-4.4.2.orig/libgcc/config.host
++++ gcc-4.4.2/libgcc/config.host
+@@ -224,6 +224,8 @@ avr-*-*)
      # Make HImode functions for AVR
      tmake_file=${cpu_type}/t-avr
  	;;
@@ -132,15 +158,3 @@ diff -urN gcc-4.4.2/libgcc/config.host.orig gcc-4.4.2/libgcc/config.host
  bfin*-elf*)
          ;;
  bfin*-uclinux*)
-diff -urN gcc-4.4.2/gcc/expr.c.orig gcc-4.4.2/gcc/expr.c
---- gcc-4.4.2/gcc/expr.c.orig	2010-01-15 18:58:52.433682100 +0100
-+++ gcc-4.4.2/gcc/expr.c	2010-01-15 19:05:32.448289500 +0100
-@@ -955,7 +955,7 @@
- 	  data.autinc_from = 1;
- 	  data.explicit_inc_from = -1;
- 	}
--      if (USE_LOAD_POST_INCREMENT (mode) && ! data.autinc_from)
-+      if (USE_LOAD_POST_INCREMENT (mode) && !data.reverse && !data.autinc_from)
- 	{
- 	  data.from_addr = copy_addr_to_reg (from_addr);
- 	  data.autinc_from = 1;
