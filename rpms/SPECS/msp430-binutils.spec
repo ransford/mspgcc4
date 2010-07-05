@@ -3,7 +3,7 @@
 %global VERSION_TAG r4.20100210
 # Marks the RPM spec file release.  Resets to 1 when VERSION_TAG
 # changes.
-%global RELEASE_NUMBER 2
+%global RELEASE_NUMBER 3
 
 Name:		%{target}-binutils
 Version:	2.20.1
@@ -16,7 +16,7 @@ Source0:	http://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.bz2
 # I (rob spanton) have attempted to get this patch upstream.
 # See mailing list post: http://article.gmane.org/gmane.comp.gnu.binutils/39694
 # FSF's response was to request copyright release from all contributors.
-Patch0:		binutils-2.20.1-mspgcc4-%{VERSION_TAG}.patch
+Patch0:		binutils-2.20.1-mspgcc4-%{RELEASE_NUMBER}.%{VERSION_TAG}.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	texinfo
 
@@ -60,6 +60,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man1/%{target}-*.1.gz
 
 %changelog
+* Sat Jul  3 2010 Peter A. Bigot pab@peoplepowerco.com  - 2.20.1-3.r4.20100210
+- Fix information memory and BSL memory locations
+- Fix CC430x5123 chip name
+
 * Sat May  1 2010 Peter A. Bigot pab@peoplepowerco.com  - 2.20.1-2.r4.20100210
 - Update to binutils 2.20.1
 

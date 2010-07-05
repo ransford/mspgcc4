@@ -4,7 +4,7 @@
 # Marks the RPM spec file release.  Resets to 1 when VERSION_TAG
 # changes.  As long as the version tag remains constant for a specific
 # version of gcc, ordinality of releases should be satisfied.
-%global RELEASE_NUMBER 2
+%global RELEASE_NUMBER 3
 # Match the mspgcc4 tested version
 %global mpfr_version 2.4.1
 
@@ -18,10 +18,9 @@ License:	GPLv2+
 URL:		http://mspgcc4.sourceforge.net/
 Source0:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-core-%{version}.tar.bz2
 Source1:	ftp://ftp.gnu.org/gnu/gcc/gcc-%{version}/gcc-g++-%{version}.tar.bz2
-Source2:	mspgcc4-%{VERSION_TAG}-gcc-%{version}.tar.bz2
-Source3: http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
-Patch0:		gcc-%{version}-mspgcc4-%{VERSION_TAG}.patch
-Patch1:		mspgcc4-%{VERSION_TAG}-chipcat.patch
+Source2:	mspgcc4-%{RELEASE_NUMBER}.%{VERSION_TAG}-gcc-%{version}.tar.bz2
+Source3:	http://www.mpfr.org/mpfr-%{mpfr_version}/mpfr-%{mpfr_version}.tar.bz2
+Patch0:		gcc-%{version}-mspgcc4-%{RELEASE_NUMBER}.%{VERSION_TAG}.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:	%{target}-binutils >= 2.19
 BuildRequires:	zlib-devel, gettext, bison, flex, texinfo
@@ -54,7 +53,6 @@ including templates and exception handling.
 %setup -T -D -a 3
 %patch0 -p0 -b .msp430~
 cd gcc-%{version}
-%patch1 -p3 -b .chipcat~
 cd ..
 
 %build
@@ -233,6 +231,9 @@ rm -fr %{buildroot}
 # %doc rpm.doc/changelogs/gcc/cp/ChangeLog*
 
 %changelog
+* Sat Jul  3 2010 Peter A. Bigot <pab@peoplepowerco.com> - 3.r4.20100210
+- 
+
 * Fri Apr 30 2010 Peter A. Bigot <pab@peoplepowerco.com> - 2.r4.20100210
 - Build mpfr locally
 - Fix for paths on 64-bit systems

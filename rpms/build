@@ -5,10 +5,7 @@
 # sh build distname sourcedistname
 #
 
-# Version tags for what we're building.
-BINUTILS=2.20.1-2.r4.20100210
-GCC=4.4.3-2.r4.20100210
-LIBC=20100624-1
+VERSION_TAG=r4.20100210
 
 # Get the target distribution (not pre-defined on RHEL/CentOS).  When
 # building on a derivative platform, also specify whose source RPM to use.
@@ -17,7 +14,13 @@ if [ -z "${1}" ] ; then
   echo "Must define dist as parameter"
   exit 1
 fi
-SDIST="${2:-${DIST}}"
+RELEASE=${2:-X}
+SDIST="${3:-${DIST}}"
+
+# Version tags for what we're building.
+BINUTILS=2.20.1-${RELEASE}.${VERSION_TAG}
+GCC=4.4.3-${RELEASE}.${VERSION_TAG}
+LIBC=20100624-1
 
 # Machine subdirectory into which RPM will be written
 MACH=`uname -m`
@@ -26,6 +29,9 @@ MACH=`uname -m`
 RPMROOT=/tmp/RPM
 rm -rf ${RPMROOT}
 mkdir -p ${RPMROOT}/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS}
+
+# Grab the sudo password now, so we don't have to wait for binutils to build
+sudo pwd
 
 # Build binutils first, then install it
 rpmbuild \

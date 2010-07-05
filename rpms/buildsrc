@@ -9,13 +9,16 @@
 # subversion trunk.  If that is not true, you need to build
 # ${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 yourself.
 
+RELEASE=${1:-X}
+SOURCE_BRANCH=${SOURCE_BRANCH:-next}
+
 BINUTILS_VERSION=${BINUTILS_VERSION:-2.20.1}
 MPFR_VERSION=${MPFR_VERSION:-2.4.1}
 GCC_VERSION=${GCC_VERSION:-4.4.3}
-LIBC_VERSION=${LIBC_VERSION:-20100430}
+LIBC_VERSION=${LIBC_VERSION:-20100624}
 
 MSPGCC4_VERSION_TAG=$(cat ../_version_tag.txt | sed -e 's@-@.@g')
-MSPGCC4="mspgcc4-${MSPGCC4_VERSION_TAG}"
+MSPGCC4="mspgcc4-${RELEASE}.${MSPGCC4_VERSION_TAG}"
 
 mkdir -p SOURCES
 
@@ -34,7 +37,7 @@ rm -rf XXports
   && git archive \
     --format=tar \
     --prefix=./XX \
-    svn ports/gcc-4.x ) \
+    ${SOURCE_BRANCH} ports/gcc-4.x ) \
 | tar xf -
 (cd XXports ; mv gcc-4.x gcc-${GCC_VERSION} ; tar cjf ../SOURCES/${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 ./gcc-${GCC_VERSION} )
 rm -rf XXports
