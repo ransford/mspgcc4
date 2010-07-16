@@ -4924,7 +4924,10 @@ rtx insn;
 		rtx pat = PATTERN (next);
 		rtx src, t;
 
-		if (GET_CODE (pat) == RETURN)
+		if (pat && GET_CODE (pat) == PARALLEL)
+			pat = XVECEXP (pat, 0, 0);
+
+		if (!pat || GET_CODE (pat) != SET)
 			return UNKNOWN;
 
 		src = SET_SRC (pat);
