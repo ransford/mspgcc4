@@ -1,10 +1,3 @@
-mspgcc4 is not maintained in git.  Use the subversion repository:
-
-  svn co https://mspgcc4.svn.sourceforge.net/svnroot/mspgcc4 mspgcc4 
-
-The git repository contains the following branches used for staging changes
-for integration into svn.
-
-svn -- should mirror the contents of the trunk of the svn repository
-next -- merge of all patches ready for integration
-other -- independent feature branches containing patches
+As of 20100726, mspgcc4 is now maintained in git.  End users should track
+the master branch.  Pathfinders should follow next.  Other branches contain
+pending patches not integrated into releases, and special-purpose releases.
