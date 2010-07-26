@@ -1,0 +1,134 @@
+diff -urN gcc-orig/configure gcc-new/configure
+--- gcc-orig/configure	2009-04-25 07:55:24.000000000 +0200
++++ gcc-new/configure	2009-08-23 16:32:08.250000000 +0200
+@@ -2279,6 +2279,9 @@
+   avr-*-*)
+     noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj}"
+     ;;
++  msp430-*-*)
++    noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
++    ;;
+   bfin-*-*)
+     noconfigdirs="$noconfigdirs gdb"
+     if test x${is_cross_compiler} != xno ; then
+diff -urN gcc-orig/gcc/config.gcc gcc-new/gcc/config.gcc
+--- gcc-orig/gcc/config.gcc	2009-04-07 03:15:38.000000000 +0200
++++ gcc-new/gcc/config.gcc	2009-08-23 16:33:05.671875000 +0200
+@@ -831,6 +831,12 @@
+ 	tm_file="avr/avr.h dbxelf.h"
+ 	use_fixproto=yes
+ 	;;
++msp430-*-*)
++	tm_file="msp430/msp430.h dbxelf.h"
++	c_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
++	cxx_target_objs=`cat ${srcdir}/config/msp430/objs-extra`
++	use_fixproto=yes
++	;;
+ bfin*-elf*)
+ 	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
+ 	tmake_file=bfin/t-bfin-elf
+diff -urN gcc-orig/gcc/configure gcc-new/gcc/configure
+--- gcc-orig/gcc/configure	2008-08-01 11:51:04.000000000 +0200
++++ gcc-new/gcc/configure	2009-08-31 20:39:56.234375000 +0200
+@@ -1561,6 +1561,7 @@
+ 
+ 
+ gcc_version=`cat $srcdir/BASE-VER`
++echo $gcc_version | sed s/\\\([0-9]\\\)\.\\\([0-9]\\\)\.\\\([0-9]\\\)/\#define\ GCC_VERSION_INT\ 0x\\1\\2\\3/g > $srcdir/_gccver.h
+ 
+ # Determine the host, build, and target systems
+ ac_aux_dir=
+diff -urN gcc-orig/gcc/loop-invariant.c gcc-new/gcc/loop-invariant.c
+--- gcc-orig/gcc/loop-invariant.c	2009-07-14 11:32:56.000000000 +0200
++++ gcc-orig/gcc/loop-invariant.c	2009-09-02 14:42:57.906250000 +0200
+@@ -1167,11 +1167,13 @@
+   rtx reg, set, dest, note;
+   struct use *use;
+   bitmap_iterator bi;
++  int n_validated;
+ 
+   if (inv->reg)
+     return true;
+   if (!repr->move)
+     return false;
++  n_validated = num_validated_changes ();
+   /* If this is a representative of the class of equivalent invariants,
+      really move the invariant.  Otherwise just replace its use with
+      the register used for the representative.  */
+@@ -1196,7 +1198,17 @@
+       reg = gen_reg_rtx_and_attrs (dest);
+ 
+       /* Try replacing the destination by a new pseudoregister.  */
+-      if (!validate_change (inv->insn, &SET_DEST (set), reg, false))
++      validate_change (inv->insn, &SET_DEST (set), reg, true);
++
++      /* Replace the uses we know to be dominated.  It saves work for copy
++	 propagation, and also it is necessary so that dependent invariants
++	 are computed right.  */
++      /* Note that we must test the changes for validity, lest we might
++	 rip apart a match_dup between a use and a clobber.  */
++      if (inv->def)
++	for (use = inv->def->uses; use; use = use->next)
++	  validate_change (use->insn, use->pos, reg, true);
++      if (!apply_change_group ())
+ 	goto fail;
+       df_insn_rescan (inv->insn);
+ 
+@@ -1215,9 +1227,23 @@
+     }
+   else
+     {
+-      if (!move_invariant_reg (loop, repr->invno))
+-	goto fail;
++      /* Replace the uses we know to be dominated.  It saves work for copy
++	 propagation, and also it is necessary so that dependent invariants
++	 are computed right.  */
+       reg = repr->reg;
++      if (inv->def)
++        for (use = inv->def->uses; use; use = use->next)
++	  validate_change (use->insn, use->pos, reg, true);
++
++      if (verify_changes (n_validated)
++	  && move_invariant_reg (loop, repr->invno))
++	confirm_change_group ();
++      else
++	{
++	  cancel_changes (n_validated);
++	  goto fail;
++	}
++
+       set = single_set (inv->insn);
+       emit_insn_after (gen_move_insn (SET_DEST (set), reg), inv->insn);
+       delete_insn (inv->insn);
+@@ -1226,17 +1252,9 @@
+ 
+   inv->reg = reg;
+ 
+-  /* Replace the uses we know to be dominated.  It saves work for copy
+-     propagation, and also it is necessary so that dependent invariants
+-     are computed right.  */
+   if (inv->def)
+-    {
+-      for (use = inv->def->uses; use; use = use->next)
+-	{
+-	  *use->pos = reg;
+-	  df_insn_rescan (use->insn);
+-	}      
+-    }
++    for (use = inv->def->uses; use; use = use->next)
++      df_insn_rescan (use->insn);
+ 
+   return true;
+ 
+diff -urN gcc-orig/libgcc/config.host gcc-new/libgcc/config.host
+--- gcc-orig/libgcc/config.host	2008-11-20 18:09:54.000000000 +0100
++++ gcc-new/libgcc/config.host	2009-08-29 16:53:04.906250000 +0200
+@@ -244,6 +244,8 @@
+ 	;;
+ avr-*-*)
+ 	;;
++msp430-*-*)
++	;;
+ bfin*-elf*)
+         ;;
+ bfin*-uclinux*)

@@ -1,0 +1,128 @@
+diff -urN msp430-libc/include/iomacros.h msp430-libc.new/include/iomacros.h
+--- msp430-libc/include/iomacros.h	2008-10-09 17:00:13.000000000 +0200
++++ msp430-libc.new/include/iomacros.h	2009-09-02 14:07:15.156250000 +0200
+@@ -116,7 +116,7 @@
+ #define __bis_SR_register(x)    __asm__ __volatile__("bis	%0, r2" : : "ir" ((uint16_t) x))
+ #define __bic_SR_register(x)    __asm__ __volatile__("bic	%0, r2" : : "ir" ((uint16_t) x))
+ 
+-#if __GNUC_MINOR__ >= 4
++#if __GNUC__ >= 4
+ 
+ extern void __bis_sr_irq(int);
+ extern void __bic_sr_irq(int);
+diff -urN msp430-libc/src/stdlib/_init_section__.c msp430-libc.new/src/stdlib/_init_section__.c
+--- msp430-libc/src/stdlib/_init_section__.c	2003-02-07 13:56:30.000000000 +0100
++++ msp430-libc.new/src/stdlib/_init_section__.c	2009-08-29 18:49:35.750000000 +0200
+@@ -34,29 +34,29 @@
+ int _init_section__(int section)
+ {
+   uint16_t start, stop, size, stack, ret = 0;
+-  void *from, *where;
++  char *from, *where;
+ 
+   if(section == MSP430_SECTION_BSS)
+   {
+-      (uint16_t *)start = &__bss_start;
+-      (uint16_t *)stop  = &__bss_end;
++      start = (uint16_t)&__bss_start;
++      stop  = (uint16_t)&__bss_end;
+       bzero(&__bss_start,stop-start);
+       return ret;
+   } 
+   else if(section == MSP430_SECTION_DATA)
+   {
+-      (uint16_t *)start = &__data_start_rom;
+-      (uint16_t *)stop  = &_edata;
+-      from = (void *)&_etext;
+-      where = (void *)&__data_start;
++      start = (uint16_t)&__data_start_rom;
++      stop  = (uint16_t)&_edata;
++      from = (char *)&_etext;
++      where = (char *)&__data_start;
+       size = ret = stop - start;
+   }
+   else if(section == MSP430_SECTION_NOINIT)
+   {
+-      (uint16_t *)start = &__noinit_start_rom;
+-      (uint16_t *)stop  = &__noinit_end_rom;
+-      from = (void *)&__noinit_start_rom;
+-      where = (void *)&__bss_end;
++      start = (uint16_t)&__noinit_start_rom;
++      stop  = (uint16_t)&__noinit_end_rom;
++      from = (char *)&__noinit_start_rom;
++      where = (char *)&__bss_end;
+       size = ret = stop - start;
+   }   
+   else
+@@ -69,7 +69,7 @@
+   
+   while(size--)
+   {
+-    *((char *)where)++ = *((char *)from)++;
++    *(where)++ = *(from)++;
+   }
+   
+   return ret;
+diff -urN msp430-libc/src/stdlib/itoa.c msp430-libc.new/src/stdlib/itoa.c
+--- msp430-libc/src/stdlib/itoa.c	2005-08-31 13:39:47.000000000 +0200
++++ msp430-libc.new/src/stdlib/itoa.c	2009-08-29 18:50:05.984375000 +0200
+@@ -28,7 +28,7 @@
+             temp[temp_loc++] = digit + '0';
+         else
+             temp[temp_loc++] = digit - 10 + 'A';
+-        ((unsigned int)num) /= radix;
++        num = (((unsigned int)num) / radix);
+     } while ((unsigned int)num > 0);
+ 
+     //now add the sign for radix 10
+diff -urN msp430-libc/src/stdlib/ltoa.c msp430-libc.new/src/stdlib/ltoa.c
+--- msp430-libc/src/stdlib/ltoa.c	2005-08-31 13:39:47.000000000 +0200
++++ msp430-libc.new/src/stdlib/ltoa.c	2009-08-29 18:50:19.156250000 +0200
+@@ -28,7 +28,7 @@
+             temp[temp_loc++] = digit + '0';
+         else
+             temp[temp_loc++] = digit - 10 + 'A';
+-        ((unsigned long)num) /= radix;
++        num = ((unsigned long)num) / radix;
+     } while ((unsigned long)num > 0);
+ 
+     //now add the sign for radix 10
+diff -urN msp430-libc/src/stdlib/ultoa.c msp430-libc.new/src/stdlib/ultoa.c
+--- msp430-libc/src/stdlib/ultoa.c	2005-08-31 13:39:47.000000000 +0200
++++ msp430-libc.new/src/stdlib/ultoa.c	2009-08-29 18:50:42.906250000 +0200
+@@ -21,7 +21,7 @@
+             temp[temp_loc++] = digit + '0';
+         else
+             temp[temp_loc++] = digit - 10 + 'A';
+-        ((unsigned long)num) /= radix;
++        num = ((unsigned long)num) / radix;
+     } while ((unsigned long)num > 0);
+ 
+     temp_loc--;
+diff -urN msp430-libc/src/stdlib/utoa.c msp430-libc.new/src/stdlib/utoa.c
+--- msp430-libc/src/stdlib/utoa.c	2005-08-31 13:39:47.000000000 +0200
++++ msp430-libc.new/src/stdlib/utoa.c	2009-08-29 18:50:30.671875000 +0200
+@@ -21,7 +21,7 @@
+             temp[temp_loc++] = digit + '0';
+         else
+             temp[temp_loc++] = digit - 10 + 'A';
+-        ((unsigned int)num) /= radix;
++        num = ((unsigned int)num) / radix;
+     } while ((unsigned int)num > 0);
+ 
+     temp_loc--;
+diff -urN msp430-libc/include/msp430x47xx.h snew/msp430x47xx.h
+--- msp430-libc.new/include/msp430x47xx.h	Sun Jul 26 07:53:27 2009
++++ msp430-libc/include/msp430x47xx.h	Sun Oct 25 21:34:15 2009
+@@ -72,9 +72,9 @@
+     || defined(__MSP430_4783__) || defined(__MSP430_4793__)
+ #define __MSP430_SD16IV_BASE__    0x110
+ #define __MSP430_SD16MEM_BASE__   0x112
+-#elif defined(__MSP430_47166__) || defined(__MSP430_47176__) || 
++#elif defined(__MSP430_47166__) || defined(__MSP430_47176__) || \
+ defined(__MSP430_47186__) || defined(__MSP430_47196__) \
+-    || defined(__MSP430_47167__) || defined(__MSP430_47177__) || 
++    || defined(__MSP430_47167__) || defined(__MSP430_47177__) || \
+ defined(__MSP430_47187__) || defined(__MSP430_47197__)
+ #define __MSP430_SD16IV_BASE__    0x1AE
+ #define __MSP430_SD16MEM_BASE__   0x110

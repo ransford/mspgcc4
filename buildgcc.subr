@@ -1,0 +1,32 @@
+# Written by Matthias Andree
+# (C) 2009 Universität Paderborn
+# Die Universität der Informationsgesellschaft
+# 33095 PADERBORN
+# GERMANY
+#
+# Acknowledgment:
+# This work is partially financed by the European Commission under the
+# Framework 6 Information Society Technologies Project IST-034963
+# "Wirelessly Accessible Sensor Populations (WASP)".
+
+num_cpus() {
+	local tmp
+
+	case $(uname -s) in
+		FreeBSD)	sysctl -n hw.ncpu 2>/dev/null ;;
+		Linux|CYGWIN_NT*)
+			tmp="$(grep ^processor /proc/cpuinfo 2>/dev/null| wc -l)"
+			if [ $tmp = 0 ] ; then tmp=1 ; fi
+			echo $tmp ;;
+		*)	echo 1
+	esac
+}
+
+find_gnumake() {
+	for i in gmake make ; do
+		case "$($i --version 2>/dev/null | head -n1)" in
+			"GNU "[mM]ake*) echo $i ; return ;;
+		esac
+	done
+	exit 1
+}

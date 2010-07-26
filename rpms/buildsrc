@@ -1,0 +1,43 @@
+#!/bin/sh
+#
+# Prepares the rpm build area from the current mspgcc4 source area.
+# This incorporates only the base files from the mspgcc4 release.
+# RPM-specific patches need to be added by hand.
+#
+# NOTE: This script assumes it's running in the rpms subdirectory of a
+# git workspace in which the branch svn refers to the mspgcc4
+# subversion trunk.  If that is not true, you need to build
+# ${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 yourself.
+
+RELEASE=${1:-X}
+SOURCE_BRANCH=${SOURCE_BRANCH:-next}
+
+BINUTILS_VERSION=${BINUTILS_VERSION:-2.20.1}
+MPFR_VERSION=${MPFR_VERSION:-2.4.1}
+GCC_VERSION=${GCC_VERSION:-4.4.3}
+LIBC_VERSION=${LIBC_VERSION:-20100624}
+
+MSPGCC4_VERSION_TAG=$(cat ../_version_tag.txt | sed -e 's@-@.@g')
+MSPGCC4="mspgcc4-${RELEASE}.${MSPGCC4_VERSION_TAG}"
+
+mkdir -p SOURCES
+
+( cd SOURCES ;
+  wget -N ftp://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERSION}.tar.bz2 
+  wget -N http://www.mpfr.org/mpfr-${MPFR_VERSION}/mpfr-${MPFR_VERSION}.tar.bz2
+  wget -N ftp://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-core-${GCC_VERSION}.tar.bz2
+  wget -N ftp://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERSION}/gcc-g++-${GCC_VERSION}.tar.bz2
+  wget -N http://sourceforge.net/projects/mspgcc4/files/msp430-libc/msp430-libc-${LIBC_VERSION}.tar.bz2
+)
+
+cp -p ../binutils-${BINUTILS_VERSION}.patch SOURCES/binutils-${BINUTILS_VERSION}-${MSPGCC4}.patch
+cp -p ../gcc-${GCC_VERSION}.patch SOURCES/gcc-${GCC_VERSION}-${MSPGCC4}.patch
+rm -rf XXports
+( cd .. \
+  && git archive \
+    --format=tar \
+    --prefix=./XX \
+    ${SOURCE_BRANCH} ports/gcc-4.x ) \
+| tar xf -
+(cd XXports ; mv gcc-4.x gcc-${GCC_VERSION} ; tar cjf ../SOURCES/${MSPGCC4}-gcc-${GCC_VERSION}.tar.bz2 ./gcc-${GCC_VERSION} )
+rm -rf XXports

@@ -1,0 +1,7 @@
+- check that most of the things don't discard expensive material (downloads,
+  checkouts, builds, configure caches)
+
+- remove code duplication in the various do-*.sh scripts, see num_cpus and the
+  sourced buildgcc.subr file for a sample
+
+- support command-line configuration for tools

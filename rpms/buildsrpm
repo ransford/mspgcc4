@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Build the source RPMs.
+#
+# This bundles the distribution tar files with the patches and spec files,
+# making it easier to do local builds on specific platforms.
+
+# The RPMs encode the distribution in their names.  CentOS/RHEL doesn't
+# define a dist macro, but we want one there because their RPM format
+# is out of date and doesn't work with current Fedora releases.
+DIST="${1}"
+if [ -z "${1}" ] ; then
+  echo "Must define dist as parameter"
+  exit 1
+fi
+
+mkdir -p SRPMS
+for sf in binutils gcc libc ; do
+  rpmbuild \
+    --define="dist .${DIST}" \
+    --define='_topdir .' \
+    -bs SPECS/msp430-${sf}.spec \
+  || exit 1
+done

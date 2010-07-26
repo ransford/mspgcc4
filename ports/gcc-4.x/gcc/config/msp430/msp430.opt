@@ -1,0 +1,81 @@
+; Options for the MSP430 port of the compiler.
+; Converted from msp430.c (gcc 3.2.3 port)
+
+; For every option from this file (such as PROF_STD), a corresponding command-line option is checked and an internal GCC flag is set.
+; To check such flag one should use the TARGET_xxx macro (such as TARGET_PROF_STD).
+; This replaces the deprecated #define TARGET_SWITCHES syntax
+; String options are defined similarily and replace the #define TARGET_OPTIONS syntax
+
+;; This work is partially financed by the European Commission under the
+;; Framework 6 Information Society Technologies Project
+;; "Wirelessly Accessible Sensor Populations (WASP)".
+
+mpgs
+Target Report Mask(PROF_STD)
+Add ordinary profile information
+
+mpgl
+Target Report Mask(PROF_LIB)
+Add ordinary profile information
+
+mpgr
+Target Report Mask(PROF_STACK)
+Add stack information to profiler
+
+mrtl
+Target Report Mask(RTL_DUMP)
+Dump RTL
+
+mdeb
+Target Report Mask(ALL_DEBUG)
+Dump all debug info
+
+mforce-hwmul
+Target Report Mask(FORCE_HWMUL)
+Force hardware multiplier
+
+mdisable-hwmul
+Target Report Mask(NO_HWMUL)
+Disable hardware multiplier
+
+minline-hwmul
+Target Report Mask(INLINESIHWMUL)
+Issue inline multiplication code for 32-bit integers
+
+mnoint-hwmul
+Target Report Mask(NOINT_HWMUL)
+Assume interrupt routine does not do hardware multiply
+
+mIAR
+Target Report Mask(IAR)
+Produce IAR assembler syntax
+
+mno-stack-init
+Target Report Mask(NO_STACK_INIT)
+No stack init in main()
+
+mno-volatile-workaround
+Target Report Mask(NVWA)
+Do not perform volatile workaround for bitwise operations
+
+msave-prologue
+Target Report Mask(SAVE_PROLOGUE)
+Use subroutine call for function prologue/epilogue when possible
+
+; ---------------------------------------- Here start the string options imported from TARGET_OPTIONS macro ----------------------------------------
+
+mmcu=
+Target RejectNegative Joined Var(msp430_mcu_name) Init("msp430x169")
+-mmcu=MCU	Select the target MCU
+
+mendup-at=
+Target RejectNegative Joined Var(msp430_endup) Init("__stop_progExec__")
+-mendup-at=ENDUP	Jump to specified routine at the end of main()
+
+minit-stack=
+Target RejectNegative Joined Var(msp430_init_stack) Init("__stack")
+-minit-stack=STACK	Use STACK as the initial value of the stack pointer
+
+maccumulate-outgoing-args
+Target Report Mask(ACCUMULATE_OUTGOING_ARGS) Save
+Reserve space for outgoing arguments in the function prologue
