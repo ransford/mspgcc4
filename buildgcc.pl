@@ -140,6 +140,7 @@ $GMP_VERSION="4.3.1";
 $MPFR_VERSION="2.4.1";
 
 @GCC_VERSIONS = ( 
+				  {'ver' => '4.4.4', 'config' => '4.x'}, 
 				  {'ver' => '4.4.3', 'config' => '4.x'}, 
 				  {'ver' => '4.4.2', 'config' => '4.x'}, 
 				  {'ver' => '4.3.4', 'config' => '4.x'},
@@ -148,7 +149,7 @@ $MPFR_VERSION="2.4.1";
 				  {'ver' => '3.2.3', 'config' => '3.3'},
 				  );
 				  
-@LIBC_VERSIONS = ('20100624', '20100430', '20100403', '20100207');
+@LIBC_VERSIONS = ('20100726', 'ti_20100724', '20100430', '20100403', '20100207');
 @GDB_VERSIONS = grep(/^gdb-(.*)\.patch/, split("\n", `ls -1 -r`));
 s/gdb-(.*)\.patch/$1/ foreach(@GDB_VERSIONS);
 @GDB_VERSIONS = sort{GNUVersionToInt($b) <=> GNUVersionToInt($a)}(@GDB_VERSIONS);
@@ -163,9 +164,8 @@ s/insight-(.*)\.patch/$1/ foreach(@INSIGHT_VERSIONS);
 $GDBVERSION = $GDB_VERSIONS[SelectFromList(0, "Select GDB version to build:", (map{'gdb-'.$_}(@GDB_VERSIONS)), "none")];
 $INSIGHTVERSION = $INSIGHT_VERSIONS[SelectFromList(0, "Select Insight version to build:", (map{'insight-'.$_}(@INSIGHT_VERSIONS)), "none")];
 
-$idx = SelectFromList(1, "Select libc version to build:", "v1", @LIBC_VERSIONS);
-$LIBC_ARG = "";
-$LIBC_ARG = " \"http://sourceforge.net/projects/mspgcc4/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx-1].tar.bz2\"" if ($idx);
+$idx = SelectFromList(0, "Select libc version to build:", @LIBC_VERSIONS);
+$LIBC_ARG = " \"http://sourceforge.net/projects/mspgcc4/files/msp430-libc/msp430-libc-$LIBC_VERSIONS[$idx].tar.bz2\"";
 
 $STRIPBINS = AskYesNo("Strip debug information\nfrom executables after install?", 1);
 
