@@ -49,6 +49,20 @@ index 481b345..778366f 100755
    | xstormy16*-*-* | cris-*-* | crisv32-*-* | xtensa*-*-* | bfin-*-* | score*-*-* \
    | spu-*-* | fido*-*-* | m32c-*-*)
      insn="nop"
+diff --git gcc-4.4.3.orig/gcc/emit-rtl.c gcc-4.4.3/gcc/emit-rtl.c
+index a91e7fd..0574d52 100644
+--- gcc-4.4.3.orig/gcc/emit-rtl.c
++++ gcc-4.4.3/gcc/emit-rtl.c
+@@ -1686,7 +1686,8 @@ set_mem_attributes_minus_bitpos (rtx ref, tree t, int objectp,
+       base = get_base_address (base);
+       if (base && DECL_P (base)
+ 	  && TREE_READONLY (base)
+-	  && (TREE_STATIC (base) || DECL_EXTERNAL (base)))
++	  && (TREE_STATIC (base) || DECL_EXTERNAL (base))
++          && !TREE_THIS_VOLATILE (base))
+ 	{
+ 	  tree base_type = TREE_TYPE (base);
+ 	  gcc_assert (!(base_type && TYPE_NEEDS_CONSTRUCTING (base_type))
 diff --git gcc-4.4.3.orig/gcc/expr.c gcc-4.4.3/gcc/expr.c
 index 8cd5dc9..6938297 100644
 --- gcc-4.4.3.orig/gcc/expr.c
