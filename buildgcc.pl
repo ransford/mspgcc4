@@ -144,7 +144,7 @@ $MPFR_VERSION="2.4.1";
 				  {'ver' => '4.4.3', 'config' => '4.x'}, 
 				  );
 				  
-@LIBC_VERSIONS = ('20100815', '20100726', 'ti_20100724');
+@LIBC_VERSIONS = ('20100815', 'ti_20100815', '20100726', 'ti_20100724');
 @GDB_VERSIONS = grep(/^gdb-(.*)\.patch/, split("\n", `ls -1 -r`));
 s/gdb-(.*)\.patch/$1/ foreach(@GDB_VERSIONS);
 @GDB_VERSIONS = sort{GNUVersionToInt($b) <=> GNUVersionToInt($a)}(@GDB_VERSIONS);
