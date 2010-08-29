@@ -311,6 +311,22 @@ static struct mcu_type_s msp430_mcu_types[] = {
 	{"msp430x5437",  MSP430_ISA_54, 1},
 	{"msp430x5438",  MSP430_ISA_54, 1},
 
+        {"msp430x5510",  MSP430_ISA_54, 1},
+        {"msp430x5513",  MSP430_ISA_54, 1},
+        {"msp430x5514",  MSP430_ISA_54, 1},
+        {"msp430x5515",  MSP430_ISA_54, 1},
+        {"msp430x5517",  MSP430_ISA_54, 1},
+        {"msp430x5519",  MSP430_ISA_54, 1},
+        {"msp430x5521",  MSP430_ISA_54, 1},
+        {"msp430x5522",  MSP430_ISA_54, 1},
+        {"msp430x5524",  MSP430_ISA_54, 1},
+        {"msp430x5525",  MSP430_ISA_54, 1},
+        {"msp430x5526",  MSP430_ISA_54, 1},
+        {"msp430x5527",  MSP430_ISA_54, 1},
+        {"msp430x5528",  MSP430_ISA_54, 1},
+        {"msp430x5529",  MSP430_ISA_54, 1},
+        {"msp430x6638",  MSP430_ISA_54, 1},
+
 	/* CC430 family */
 	{"cc430x5133",   MSP430_ISA_54, 1},
 	{"cc430x5125",   MSP430_ISA_54, 1},
