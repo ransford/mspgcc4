@@ -197,9 +197,16 @@ if ($GCCRELEASE{ver} ne '')
 	push @COMMANDS, "sh do-gcc.sh \"$TARGETPATH\" \"$GCCRELEASE{ver}\" \"$GNU_MIRROR\" \"$BUILD_DIR\" \"gcc-$GCCRELEASE{config}\" \"$GMP_VERSION\" \"$MPFR_VERSION\"";
 	push @COMMANDS, "sh do-libc.sh \"$TARGETPATH\" \"$BUILD_DIR\"$LIBC_ARG";
 }
-	
-push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$GDBVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" gdb" if $GDBVERSION ne '';
-push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$INSIGHTVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" insight" if $INSIGHTVERSION ne '';
+
+# Install Insight before building GDB, because Insight installs its own
+# (outdated) versions of msp430-gdb and -gdbtui.
+if (defined $INSIGHTVERSION and $INSIGHTVERSION ne '') {
+	push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$INSIGHTVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" insight";
+}
+
+if (defined $GDBVERSION and $GDBVERSION ne '') {
+	push @COMMANDS, "sh do-gdb.sh \"$TARGETPATH\" \"$GDBVERSION\" \"$GNU_MIRROR\" \"$BUILD_DIR\" gdb";
+}
 
 push @COMMANDS, "sh stripbin.sh \"$TARGETPATH\"" if ($STRIPBINS);
 
