@@ -1,0 +1,6 @@
+20101006
+ - 5affcde Merge branches 'ma/gdb' and 'ma/readme' into next
+ - 89b239a Shuffle README files around, update README-1st.txt.
+ - 5533d77 Install Insight before GDB; fix undef'd warnings.
+ - 3458481 [SF 3059894] Don't check for curses.h, too fragile.
+ - 5151e9d Update versions
