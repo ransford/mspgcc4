@@ -492,6 +492,9 @@ msp430_override_options (void)
 {
 	const struct mcu_type_s *t;
 
+        if (flag_pic)
+          error ("PIC not supported on msp430");
+
 	for (t = msp430_mcu_types; t->name; t++)
 	{
 		if (strcmp (t->name, msp430_mcu_name) == 0)
