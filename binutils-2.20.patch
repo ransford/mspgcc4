@@ -6182,7 +6182,7 @@ index 15eb517..7b7d0fb 100644
    } ${RELOCATING+ > vectors}
  
 diff --git binutils-2.20.orig/opcodes/msp430-dis.c binutils-2.20/opcodes/msp430-dis.c
-index c4a86eb..37001a2 100644
+index c4a86eb..623fa79 100644
 --- binutils-2.20.orig/opcodes/msp430-dis.c
 +++ binutils-2.20/opcodes/msp430-dis.c
 @@ -51,12 +51,153 @@ msp430dis_opcode (bfd_vma addr, disassemble_info *info)
@@ -6605,7 +6605,7 @@ index c4a86eb..37001a2 100644
      {
        /* Special case: rla and rlc are the only 2 emulated instructions that
  	 fall into two operand instructions.  */
-@@ -319,348 +312,352 @@ msp430_doubleoperand (disassemble_info *info,
+@@ -319,348 +312,354 @@ msp430_doubleoperand (disassemble_info *info,
        if (regd != regs || as != ad)
  	return 0;		/* May be 'data' section.  */
  
@@ -7034,7 +7034,9 @@ index c4a86eb..37001a2 100644
 +
 +  opd = msp430dis_operand(addr + cmd_len, info, regd, ad, &cmd_len) | ((insn & 0x0000000f) << 16);
 +  opd = (opd << 12) >> 12;      // sign extension
-+  if (opcode_variant(opcode) == V_X_SHIFT && ops != opd)
++  if (opcode_variant(opcode) == V_X_SHIFT
++      && ((0 == (as | ad) && ops != opd) /* non-register extension different ops */
++          || regs != regd))              /* register extension different regs */
 +    return 0;   // different operand => not emulated shift
 +
 +  msp430x_decode_operand(regd, ad, addr + cmd_len, opd, OP_20BIT, op2, comm2);
@@ -7256,7 +7258,7 @@ index c4a86eb..37001a2 100644
  }
  
  int
-@@ -668,85 +665,147 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
+@@ -668,85 +667,147 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
  {
    void *stream = info->stream;
    fprintf_ftype prin = info->fprintf_func;
@@ -7445,7 +7447,7 @@ index c4a86eb..37001a2 100644
  
    if (*op1)
      (*prin) (stream, "\t%s", op1);
-@@ -765,23 +824,11 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
+@@ -765,23 +826,11 @@ print_insn_msp430 (bfd_vma addr, disassemble_info *info)
  
    if (*comm1 || *comm2)
      (*prin) (stream, ";");
