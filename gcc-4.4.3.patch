@@ -49,6 +49,28 @@ index 481b345..778366f 100755
    | xstormy16*-*-* | cris-*-* | crisv32-*-* | xtensa*-*-* | bfin-*-* | score*-*-* \
    | spu-*-* | fido*-*-* | m32c-*-*)
      insn="nop"
+diff --git gcc-4.4.3.orig/gcc/dse.c gcc-4.4.3/gcc/dse.c
+index f7a1cbb..abd1afb 100644
+--- gcc-4.4.3.orig/gcc/dse.c
++++ gcc-4.4.3/gcc/dse.c
+@@ -826,7 +826,7 @@ replace_inc_dec (rtx *r, void *d)
+     case POST_INC:
+       {
+ 	rtx r1 = XEXP (x, 0);
+-	rtx c = gen_int_mode (Pmode, data->size);
++	rtx c = gen_int_mode (data->size, Pmode);
+ 	emit_insn_before (gen_rtx_SET (Pmode, r1, 
+ 				       gen_rtx_PLUS (Pmode, r1, c)),
+ 			  data->insn);
+@@ -837,7 +837,7 @@ replace_inc_dec (rtx *r, void *d)
+     case POST_DEC:
+       {
+ 	rtx r1 = XEXP (x, 0);
+-	rtx c = gen_int_mode (Pmode, -data->size);
++	rtx c = gen_int_mode (-data->size, Pmode);
+ 	emit_insn_before (gen_rtx_SET (Pmode, r1, 
+ 				       gen_rtx_PLUS (Pmode, r1, c)),
+ 			  data->insn);
 diff --git gcc-4.4.3.orig/gcc/emit-rtl.c gcc-4.4.3/gcc/emit-rtl.c
 index a91e7fd..0574d52 100644
 --- gcc-4.4.3.orig/gcc/emit-rtl.c

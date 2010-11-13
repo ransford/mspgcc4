@@ -1,7 +1,7 @@
-diff --git gcc-4.4.4.orig/configure gcc-4.4.4/configure
-index 8d2f7fb..27adbeb 100755
---- gcc-4.4.4.orig/configure
-+++ gcc-4.4.4/configure
+diff --git gcc-4.4.5.orig/configure gcc-4.4.5/configure
+index 2925c1a..994f6b5 100755
+--- gcc-4.4.5.orig/configure
++++ gcc-4.4.5/configure
 @@ -2360,6 +2360,9 @@ case "${target}" in
    avr-*-*)
      noconfigdirs="$noconfigdirs target-libiberty target-libstdc++-v3 ${libgcj} target-libssp"
@@ -12,11 +12,11 @@ index 8d2f7fb..27adbeb 100755
    bfin-*-*)
      noconfigdirs="$noconfigdirs gdb"
      if test x${is_cross_compiler} != xno ; then
-diff --git gcc-4.4.4.orig/gcc/config.gcc gcc-4.4.4/gcc/config.gcc
-index 9e499cb..47b57ac 100644
---- gcc-4.4.4.orig/gcc/config.gcc
-+++ gcc-4.4.4/gcc/config.gcc
-@@ -804,6 +804,12 @@ avr-*-rtems*)
+diff --git gcc-4.4.5.orig/gcc/config.gcc gcc-4.4.5/gcc/config.gcc
+index 6f72224..bb06db3 100644
+--- gcc-4.4.5.orig/gcc/config.gcc
++++ gcc-4.4.5/gcc/config.gcc
+@@ -810,6 +810,12 @@ avr-*-rtems*)
  avr-*-*)
  	tm_file="avr/avr.h dbxelf.h"
  	;;
@@ -29,10 +29,10 @@ index 9e499cb..47b57ac 100644
  bfin*-elf*)
  	tm_file="${tm_file} dbxelf.h elfos.h bfin/elf.h"
  	tmake_file=bfin/t-bfin-elf
-diff --git gcc-4.4.4.orig/gcc/configure gcc-4.4.4/gcc/configure
-index 481b345..778366f 100755
---- gcc-4.4.4.orig/gcc/configure
-+++ gcc-4.4.4/gcc/configure
+diff --git gcc-4.4.5.orig/gcc/configure gcc-4.4.5/gcc/configure
+index 64cdd91..d881a06 100755
+--- gcc-4.4.5.orig/gcc/configure
++++ gcc-4.4.5/gcc/configure
 @@ -1595,6 +1595,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
  
  
@@ -41,7 +41,7 @@ index 481b345..778366f 100755
  
  # Determine the host, build, and target systems
  ac_aux_dir=
-@@ -23707,6 +23708,7 @@ esac
+@@ -23819,6 +23820,7 @@ esac
  case "$target" in
    i?86*-*-* | mips*-*-* | alpha*-*-* | powerpc*-*-* | sparc*-*-* | m68*-*-* \
    | x86_64*-*-* | hppa*-*-* | arm*-*-* \
@@ -49,10 +49,10 @@ index 481b345..778366f 100755
    | xstormy16*-*-* | cris-*-* | crisv32-*-* | xtensa*-*-* | bfin-*-* | score*-*-* \
    | spu-*-* | fido*-*-* | m32c-*-*)
      insn="nop"
-diff --git gcc-4.4.4.orig/gcc/dse.c gcc-4.4.4/gcc/dse.c
+diff --git gcc-4.4.5.orig/gcc/dse.c gcc-4.4.5/gcc/dse.c
 index 3d347ce..844fd51 100644
---- gcc-4.4.4.orig/gcc/dse.c
-+++ gcc-4.4.4/gcc/dse.c
+--- gcc-4.4.5.orig/gcc/dse.c
++++ gcc-4.4.5/gcc/dse.c
 @@ -826,7 +826,7 @@ replace_inc_dec (rtx *r, void *d)
      case POST_INC:
        {
@@ -71,10 +71,10 @@ index 3d347ce..844fd51 100644
  	emit_insn_before (gen_rtx_SET (Pmode, r1, 
  				       gen_rtx_PLUS (Pmode, r1, c)),
  			  data->insn);
-diff --git gcc-4.4.4.orig/gcc/emit-rtl.c gcc-4.4.4/gcc/emit-rtl.c
+diff --git gcc-4.4.5.orig/gcc/emit-rtl.c gcc-4.4.5/gcc/emit-rtl.c
 index a91e7fd..0574d52 100644
---- gcc-4.4.4.orig/gcc/emit-rtl.c
-+++ gcc-4.4.4/gcc/emit-rtl.c
+--- gcc-4.4.5.orig/gcc/emit-rtl.c
++++ gcc-4.4.5/gcc/emit-rtl.c
 @@ -1686,7 +1686,8 @@ set_mem_attributes_minus_bitpos (rtx ref, tree t, int objectp,
        base = get_base_address (base);
        if (base && DECL_P (base)
@@ -85,10 +85,10 @@ index a91e7fd..0574d52 100644
  	{
  	  tree base_type = TREE_TYPE (base);
  	  gcc_assert (!(base_type && TYPE_NEEDS_CONSTRUCTING (base_type))
-diff --git gcc-4.4.4.orig/gcc/expr.c gcc-4.4.4/gcc/expr.c
-index fd8a7f4..ca42a4f 100644
---- gcc-4.4.4.orig/gcc/expr.c
-+++ gcc-4.4.4/gcc/expr.c
+diff --git gcc-4.4.5.orig/gcc/expr.c gcc-4.4.5/gcc/expr.c
+index b6bc529..9e93287 100644
+--- gcc-4.4.5.orig/gcc/expr.c
++++ gcc-4.4.5/gcc/expr.c
 @@ -955,7 +955,7 @@ move_by_pieces (rtx to, rtx from, unsigned HOST_WIDE_INT len,
  	  data.autinc_from = 1;
  	  data.explicit_inc_from = -1;
@@ -98,10 +98,10 @@ index fd8a7f4..ca42a4f 100644
  	{
  	  data.from_addr = copy_addr_to_reg (from_addr);
  	  data.autinc_from = 1;
-diff --git gcc-4.4.4.orig/gcc/loop-invariant.c gcc-4.4.4/gcc/loop-invariant.c
+diff --git gcc-4.4.5.orig/gcc/loop-invariant.c gcc-4.4.5/gcc/loop-invariant.c
 index 7eaabf7..0d0585e 100644
---- gcc-4.4.4.orig/gcc/loop-invariant.c
-+++ gcc-4.4.4/gcc/loop-invariant.c
+--- gcc-4.4.5.orig/gcc/loop-invariant.c
++++ gcc-4.4.5/gcc/loop-invariant.c
 @@ -1171,11 +1171,13 @@ move_invariant_reg (struct loop *loop, unsigned invno)
    rtx reg, set, dest, note;
    struct use *use;
@@ -181,10 +181,10 @@ index 7eaabf7..0d0585e 100644
  
    return true;
  
-diff --git gcc-4.4.4.orig/libgcc/config.host gcc-4.4.4/libgcc/config.host
+diff --git gcc-4.4.5.orig/libgcc/config.host gcc-4.4.5/libgcc/config.host
 index 55af651..23aa200 100644
---- gcc-4.4.4.orig/libgcc/config.host
-+++ gcc-4.4.4/libgcc/config.host
+--- gcc-4.4.5.orig/libgcc/config.host
++++ gcc-4.4.5/libgcc/config.host
 @@ -224,6 +224,8 @@ avr-*-*)
      # Make HImode functions for AVR
      tmake_file=${cpu_type}/t-avr
