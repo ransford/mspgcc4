@@ -1,3 +1,9 @@
+20101113
+ - Add gcc 4.4.5 support
+ - 861b018 SF 3090574: -fPIC silently won't work
+ - a462784 SF 3087663: internal compiler error
+ - 7d9a528 SF 3096352: Illegal disassembly instruction (addx.a R14,R15)
+
 20101006
  - 5affcde Merge branches 'ma/gdb' and 'ma/readme' into next
  - 89b239a Shuffle README files around, update README-1st.txt.
