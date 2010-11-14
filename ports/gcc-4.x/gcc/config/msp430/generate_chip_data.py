@@ -57,6 +57,11 @@ text = '''
 	{"msp430x2122",  MSP430_ISA_22, 0},
 	{"msp430x2132",  MSP430_ISA_22, 0},
 
+	{"msp430x2201",  MSP430_ISA_22, 0}, /* Value-Line */
+	{"msp430x2211",  MSP430_ISA_22, 0}, /* Value-Line */
+	{"msp430x2221",  MSP430_ISA_22, 0}, /* Value-Line */
+	{"msp430x2231",  MSP430_ISA_22, 0}, /* Value-Line */
+
 	{"msp430x2232",  MSP430_ISA_22, 0},
 	{"msp430x2252",  MSP430_ISA_22, 0},
 	{"msp430x2272",  MSP430_ISA_22, 0},

@@ -2565,6 +2565,10 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x2112:%(cpp_msp1) -D__MSP430_2112__} \
 %{mmcu=msp430x2122:%(cpp_msp1) -D__MSP430_2122__} \
 %{mmcu=msp430x2132:%(cpp_msp1) -D__MSP430_2132__} \
+%{mmcu=msp430x2201:%(cpp_msp1) -D__MSP430_2201__} \
+%{mmcu=msp430x2211:%(cpp_msp1) -D__MSP430_2211__} \
+%{mmcu=msp430x2221:%(cpp_msp1) -D__MSP430_2221__} \
+%{mmcu=msp430x2231:%(cpp_msp1) -D__MSP430_2231__} \
 %{mmcu=msp430x2232:%(cpp_msp1) -D__MSP430_2232__} \
 %{mmcu=msp430x2252:%(cpp_msp1) -D__MSP430_2252__} \
 %{mmcu=msp430x2272:%(cpp_msp1) -D__MSP430_2272__} \
@@ -2765,6 +2769,10 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x2112:-m msp430x2112 } \
 %{mmcu=msp430x2122:-m msp430x2122 } \
 %{mmcu=msp430x2132:-m msp430x2132 } \
+%{mmcu=msp430x2201:-m msp430x2201 } \
+%{mmcu=msp430x2211:-m msp430x2211 } \
+%{mmcu=msp430x2221:-m msp430x2221 } \
+%{mmcu=msp430x2231:-m msp430x2231 } \
 %{mmcu=msp430x2232:-m msp430x2232 } \
 %{mmcu=msp430x2252:-m msp430x2252 } \
 %{mmcu=msp430x2272:-m msp430x2272 } \
@@ -2944,6 +2952,10 @@ valid_machine_decl_attribute (DECL, ATTRIBUTES, IDENTIFIER, ARGS)
 %{mmcu=msp430x2112:crt430x2112.o%s} \
 %{mmcu=msp430x2122:crt430x2122.o%s} \
 %{mmcu=msp430x2132:crt430x2132.o%s} \
+%{mmcu=msp430x2201:crt430x2201.o%s} \
+%{mmcu=msp430x2211:crt430x2211.o%s} \
+%{mmcu=msp430x2221:crt430x2221.o%s} \
+%{mmcu=msp430x2231:crt430x2231.o%s} \
 %{mmcu=msp430x2232:crt430x2232.o%s} \
 %{mmcu=msp430x2252:crt430x2252.o%s} \
 %{mmcu=msp430x2272:crt430x2272.o%s} \

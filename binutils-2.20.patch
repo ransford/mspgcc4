@@ -971,7 +971,7 @@ index 3be29fe..9375f8e 100644
    msp430 specific relocation codes
  
 diff --git binutils-2.20.orig/gas/config/tc-msp430.c binutils-2.20/gas/config/tc-msp430.c
-index 0ccf4db..7afe753 100644
+index 0ccf4db..4784c05 100644
 --- binutils-2.20.orig/gas/config/tc-msp430.c
 +++ binutils-2.20/gas/config/tc-msp430.c
 @@ -23,7 +23,6 @@
@@ -1015,7 +1015,7 @@ index 0ccf4db..7afe753 100644
    int    tlab;		/* Number of labels in short mode.  */
    int    op0;		/* Opcode for first word of short jump.  */
    int    op1;		/* Opcode for second word of short jump.  */
-@@ -237,107 +238,267 @@ struct mcu_type_s
+@@ -237,107 +238,278 @@ struct mcu_type_s
    int mach;
  };
  
@@ -1192,6 +1192,17 @@ index 0ccf4db..7afe753 100644
 +  {"msp430x2122",  MSP430_ISA_21,  bfd_mach_msp21},
 +  {"msp430x2131",  MSP430_ISA_21x1,  bfd_mach_msp21},
 +  {"msp430x2132",  MSP430_ISA_21,  bfd_mach_msp21},
++
++  /* 20101114: note that these chips are msp430g22XX, not msp430f22XX.
++   * There are no msp430f22XX with these familty codes.  Historically,
++   * the F-type chips are not compatible with the G-type chips in
++   * terms of flash size and address.  Since gcc does not distinguish
++   * chips by memory type (uses x instead of f or g), other chips
++   * cannot be supported. */
++  {"msp430x2201",  MSP430_ISA_22,  bfd_mach_msp22}, // VALUE-LINUE msp430g
++  {"msp430x2211",  MSP430_ISA_22,  bfd_mach_msp22}, // VALUE-LINUE msp430g
++  {"msp430x2221",  MSP430_ISA_22,  bfd_mach_msp22}, // VALUE-LINUE msp430g
++  {"msp430x2231",  MSP430_ISA_22,  bfd_mach_msp22}, // VALUE-LINUE msp430g
 +
 +  {"msp430x2232",  MSP430_ISA_22,  bfd_mach_msp22},
 +  {"msp430x2234",  MSP430_ISA_22,  bfd_mach_msp22},
@@ -1375,7 +1386,7 @@ index 0ccf4db..7afe753 100644
  
  /* Profiling capability:
     It is a performance hit to use gcc's profiling approach for this tiny target.
-@@ -446,11 +607,14 @@ pow2value (int y)
+@@ -446,11 +618,14 @@ pow2value (int y)
  static char *
  parse_exp (char * s, expressionS * op)
  {
@@ -1391,7 +1402,7 @@ index 0ccf4db..7afe753 100644
  }
  
  
-@@ -504,7 +668,8 @@ extract_operand (char * from, char * to, int limit)
+@@ -504,7 +679,8 @@ extract_operand (char * from, char * to, int limit)
    *(to + size) = 0;
    del_spaces (to);
  
@@ -1401,7 +1412,7 @@ index 0ccf4db..7afe753 100644
  
    return from;
  }
-@@ -549,7 +714,8 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
+@@ -549,7 +725,8 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
        return;
      }
  
@@ -1411,7 +1422,7 @@ index 0ccf4db..7afe753 100644
  
    while (*flags)
      {
-@@ -662,7 +828,7 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
+@@ -662,7 +839,7 @@ msp430_profiler (int dummy ATTRIBUTE_UNUSED)
        /* Process like ".word xxx" directive.  */
        parse_exp (str, & exp);
        emit_expr (& exp, 2);
@@ -1420,7 +1431,7 @@ index 0ccf4db..7afe753 100644
      }
  
    /* Fill the rest with zeros.  */
-@@ -766,11 +932,14 @@ md_parse_option (int c, char * arg)
+@@ -766,11 +943,14 @@ md_parse_option (int c, char * arg)
    return 0;
  }
  
@@ -1435,7 +1446,7 @@ index 0ccf4db..7afe753 100644
    {NULL, NULL, 0}
  };
  
-@@ -792,26 +961,57 @@ md_show_usage (FILE * stream)
+@@ -792,26 +972,57 @@ md_show_usage (FILE * stream)
    fprintf (stream,
  	   _("MSP430 options:\n"
  	     "  -mmcu=[msp430-name] select microcontroller type\n"
@@ -1513,7 +1524,7 @@ index 0ccf4db..7afe753 100644
    fprintf (stream,
  	   _("  -mQ - enable relaxation at assembly time. DANGEROUS!\n"
  	     "  -mP - enable polymorph instructions\n"));
-@@ -851,7 +1051,7 @@ md_atof (int type, char * litP, int * sizeP)
+@@ -851,7 +1062,7 @@ md_atof (int type, char * litP, int * sizeP)
  void
  md_begin (void)
  {
@@ -1522,7 +1533,7 @@ index 0ccf4db..7afe753 100644
    msp430_hash = hash_new ();
  
    for (opcode = msp430_opcodes; opcode->name; opcode++)
-@@ -881,10 +1081,63 @@ check_reg (char * t)
+@@ -881,10 +1092,63 @@ check_reg (char * t)
    return 0;
  }
  
@@ -1587,7 +1598,7 @@ index 0ccf4db..7afe753 100644
  {
    char *__tl = l;
  
-@@ -965,79 +1218,11 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -965,79 +1229,11 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	      x = op->exp.X_add_number;
  	    }
  
@@ -1670,7 +1681,7 @@ index 0ccf4db..7afe753 100644
  	}
        else if (op->exp.X_op == O_symbol)
  	{
-@@ -1045,12 +1230,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -1045,12 +1241,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	}
        else if (op->exp.X_op == O_big)
  	{
@@ -1683,7 +1694,7 @@ index 0ccf4db..7afe753 100644
  	    }
  	  else
  	    {
-@@ -1059,49 +1242,6 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -1059,49 +1253,6 @@ msp430_srcoperand (struct msp430_operand_s * op,
  		      l);
  	      return 1;
  	    }
@@ -1733,7 +1744,7 @@ index 0ccf4db..7afe753 100644
  	}
        /* Redundant (yet) check.  */
        else if (op->exp.X_op == O_register)
-@@ -1128,7 +1268,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -1128,7 +1279,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	{
  	  int x = op->exp.X_add_number;
  
@@ -1742,7 +1753,7 @@ index 0ccf4db..7afe753 100644
  	    {
  	      as_bad (_("value out of range: %d"), x);
  	      return 1;
-@@ -1263,7 +1403,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -1263,7 +1414,7 @@ msp430_srcoperand (struct msp430_operand_s * op,
  	{
  	  int x = op->exp.X_add_number;
  
@@ -1751,7 +1762,7 @@ index 0ccf4db..7afe753 100644
  	    {
  	      as_bad (_("value out of range: %d"), x);
  	      return 1;
-@@ -1339,10 +1479,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
+@@ -1339,10 +1490,10 @@ msp430_srcoperand (struct msp430_operand_s * op,
  
  
  static int
@@ -1764,7 +1775,7 @@ index 0ccf4db..7afe753 100644
  
    if (ret)
      return ret;
-@@ -1374,39 +1514,135 @@ msp430_dstoperand (struct msp430_operand_s * op, char * l, int bin)
+@@ -1374,39 +1525,135 @@ msp430_dstoperand (struct msp430_operand_s * op, char * l, int bin)
    return 0;
  }
  
@@ -1911,7 +1922,7 @@ index 0ccf4db..7afe753 100644
    while (! ISSPACE (*line) && *line)
      line++;
  
-@@ -1424,22 +1660,22 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1424,22 +1671,22 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
    imm_op = 0;
  
@@ -1941,7 +1952,7 @@ index 0ccf4db..7afe753 100644
  	  if (res)
  	    break;
  
-@@ -1464,14 +1700,15 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1464,14 +1711,15 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	    }
  	  break;
  
@@ -1960,7 +1971,7 @@ index 0ccf4db..7afe753 100644
  
  	    if (res)
  	      break;	/* An error occurred.  All warnings were done before.  */
-@@ -1499,7 +1736,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1499,7 +1747,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
  	    if (op2.mode == OP_EXP)
  	      {
@@ -1974,7 +1985,7 @@ index 0ccf4db..7afe753 100644
  		bfd_putl16 ((bfd_vma) ZEROS, frag + 2 + ((__is == 3) ? 2 : 0));
  
  		if (op2.reg)	/* Not PC relative.  */
-@@ -1511,16 +1753,21 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1511,16 +1764,21 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	      }
  	    break;
  	  }
@@ -2000,7 +2011,7 @@ index 0ccf4db..7afe753 100644
  
  	  bin |= ((op1.reg << 8) | (op1.am << 4));
  	  __is = 1 + op1.ol;
-@@ -1545,11 +1792,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1545,11 +1803,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2016,7 +2027,7 @@ index 0ccf4db..7afe753 100644
  
        if (res)
  	break;			/* Error occurred.  All warnings were done before.  */
-@@ -1577,7 +1825,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1577,7 +1836,12 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  
        if (op2.mode == OP_EXP)
  	{
@@ -2030,7 +2041,7 @@ index 0ccf4db..7afe753 100644
  	  bfd_putl16 ((bfd_vma) ZEROS, frag + 2 + ((__is == 3) ? 2 : 0));
  
  	  if (op2.reg)		/* Not PC relative.  */
-@@ -1589,8 +1842,8 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1589,8 +1853,8 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2041,7 +2052,7 @@ index 0ccf4db..7afe753 100644
  	{
  	  /* reti instruction.  */
  	  frag = frag_more (2);
-@@ -1600,9 +1853,10 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1600,9 +1864,10 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
  
        line = extract_operand (line, l1, sizeof (l1));
@@ -2053,7 +2064,7 @@ index 0ccf4db..7afe753 100644
  
        bin |= op1.reg | (op1.am << 4);
        __is = 1 + op1.ol;
-@@ -1624,7 +1878,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1624,7 +1889,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2062,7 +2073,7 @@ index 0ccf4db..7afe753 100644
        line = extract_operand (line, l1, sizeof (l1));
        /* l1 is a label.  */
        if (l1[0])
-@@ -1694,11 +1948,13 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1694,11 +1959,13 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  else if (*l1 == '$')
  	    {
  	      as_bad (_("instruction requires label sans '$'"));
@@ -2076,7 +2087,7 @@ index 0ccf4db..7afe753 100644
  	    }
  	  dwarf2_emit_insn (2 * __is);
  	  break;
-@@ -1710,7 +1966,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1710,7 +1977,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	}
        break;
  
@@ -2085,7 +2096,7 @@ index 0ccf4db..7afe753 100644
        if (!msp430_enable_polys)
  	{
  	  as_bad (_("polymorphs are not enabled. Use -mP option to enable."));
-@@ -1731,7 +1987,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1731,7 +1998,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  if (exp.X_op == O_symbol)
  	    {
  	      /* Relaxation required.  */
@@ -2094,7 +2105,7 @@ index 0ccf4db..7afe753 100644
  
  	      /* The parameter to dwarf2_emit_insn is actually the offset to the start
  		 of the insn from the fix piece of instruction that was emitted.
-@@ -1752,7 +2008,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1752,7 +2019,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
        as_bad (_("instruction requires label"));
        break;
  
@@ -2103,7 +2114,7 @@ index 0ccf4db..7afe753 100644
        if (!msp430_enable_polys)
  	{
  	  as_bad (_("polymorphs are not enabled. Use -mP option to enable."));
-@@ -1772,7 +2028,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1772,7 +2039,7 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
  	  if (exp.X_op == O_symbol)
  	    {
  	      /* Relaxation required.  */
@@ -2112,7 +2123,7 @@ index 0ccf4db..7afe753 100644
  
  	      frag = frag_more (8);
  	      dwarf2_emit_insn (0);
-@@ -1791,18 +2047,680 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
+@@ -1791,18 +2058,680 @@ msp430_operands (struct msp430_opcode_s * opcode, char * line)
        as_bad (_("instruction requires label"));
        break;
  
@@ -2795,7 +2806,7 @@ index 0ccf4db..7afe753 100644
    char cmd[32];
    unsigned int i = 0;
  
-@@ -1822,7 +2740,7 @@ md_assemble (char * str)
+@@ -1822,7 +2751,7 @@ md_assemble (char * str)
        return;
      }
  
@@ -2804,7 +2815,7 @@ index 0ccf4db..7afe753 100644
  
    if (opcode == NULL)
      {
-@@ -1830,6 +2748,12 @@ md_assemble (char * str)
+@@ -1830,6 +2759,12 @@ md_assemble (char * str)
        return;
      }
  
@@ -2817,7 +2828,7 @@ index 0ccf4db..7afe753 100644
    {
      char *__t = input_line_pointer;
  
-@@ -1964,6 +2888,26 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
+@@ -1964,6 +2899,26 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  
        switch (fixp->fx_r_type)
  	{
@@ -2844,7 +2855,7 @@ index 0ccf4db..7afe753 100644
  	case BFD_RELOC_MSP430_10_PCREL:
  	  if (value & 1)
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
-@@ -1988,7 +2932,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
+@@ -1988,7 +2943,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  			  _("odd address operand: %ld"), value);
  
  	  /* Nothing to be corrected here.  */
@@ -2853,7 +2864,7 @@ index 0ccf4db..7afe753 100644
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
  			  _("operand out of range: %ld"), value);
  
-@@ -1998,7 +2942,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
+@@ -1998,7 +2953,7 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  
  	case BFD_RELOC_MSP430_16_PCREL_BYTE:
  	  /* Nothing to be corrected here.  */
@@ -2862,7 +2873,7 @@ index 0ccf4db..7afe753 100644
  	    as_bad_where (fixp->fx_file, fixp->fx_line,
  			  _("operand out of range: %ld"), value);
  
-@@ -2017,6 +2961,76 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
+@@ -2017,6 +2972,76 @@ md_apply_fix (fixS * fixp, valueT * valuep, segT seg)
  	  bfd_putl16 ((bfd_vma) value, where);
  	  break;
  
@@ -3345,7 +3356,7 @@ index eec2f1e..58a8962 100644
    { NULL, 0, 0, 0, 0 }
  };
 diff --git binutils-2.20.orig/ld/Makefile.am binutils-2.20/ld/Makefile.am
-index 7c4444b..80ed9fc 100644
+index 7c4444b..177ade3 100644
 --- binutils-2.20.orig/ld/Makefile.am
 +++ binutils-2.20/ld/Makefile.am
 @@ -198,7 +198,7 @@ ALL_EMULATIONS = \
@@ -3367,7 +3378,7 @@ index 7c4444b..80ed9fc 100644
  	emsp430x155.o \
  	emsp430x156.o \
  	emsp430x157.o \
-@@ -320,10 +323,45 @@ ALL_EMULATIONS = \
+@@ -320,10 +323,49 @@ ALL_EMULATIONS = \
  	emsp430x1610.o \
  	emsp430x1611.o \
  	emsp430x1612.o \
@@ -3384,6 +3395,10 @@ index 7c4444b..80ed9fc 100644
 +	emsp430x2122.o \
  	emsp430x2131.o \
 +	emsp430x2132.o \
++	emsp430x2201.o \
++	emsp430x2211.o \
++	emsp430x2221.o \
++	emsp430x2231.o \
 +	emsp430x2232.o \
 +	emsp430x2234.o \
 +	emsp430x2252.o \
@@ -3413,7 +3428,7 @@ index 7c4444b..80ed9fc 100644
  	emsp430x311.o \
  	emsp430x312.o \
  	emsp430x313.o \
-@@ -337,21 +375,82 @@ ALL_EMULATIONS = \
+@@ -337,21 +379,82 @@ ALL_EMULATIONS = \
  	emsp430x413.o \
  	emsp430x415.o \
  	emsp430x417.o \
@@ -3496,7 +3511,7 @@ index 7c4444b..80ed9fc 100644
  	enews.o \
  	ens32knbsd.o \
  	eor32.o \
-@@ -1447,6 +1546,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1447,6 +1550,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x149 "$(tdir_msp430x149)" msp430all
@@ -3515,7 +3530,7 @@ index 7c4444b..80ed9fc 100644
  emsp430x155.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1483,6 +1594,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1483,6 +1598,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x1612 "$(tdir_msp430x1612)" msp430all
@@ -3546,7 +3561,7 @@ index 7c4444b..80ed9fc 100644
  emsp430x2101.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1491,14 +1626,130 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1491,14 +1630,146 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x2111 "$(tdir_msp430x2111)" msp430all
@@ -3570,6 +3585,22 @@ index 7c4444b..80ed9fc 100644
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
 +	${GENSCRIPTS} msp430x2132 "$(tdir_msp430x2132)" msp430all
++emsp430x2201.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2201 "$(tdir_msp430x2201)" msp430all
++emsp430x2211.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2211 "$(tdir_msp430x2211)" msp430all
++emsp430x2221.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2221 "$(tdir_msp430x2221)" msp430all
++emsp430x2231.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2231 "$(tdir_msp430x2231)" msp430all
 +emsp430x2232.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
@@ -3677,7 +3708,7 @@ index 7c4444b..80ed9fc 100644
  emsp430x311.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430_3.sc \
    ${GEN_DEPENDS}
-@@ -1551,6 +1802,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1551,6 +1822,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x417 "$(tdir_msp430x417)" msp430all
@@ -3724,7 +3755,7 @@ index 7c4444b..80ed9fc 100644
  emsp430xE423.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1575,6 +1866,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1575,6 +1886,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430xW427 "$(tdir_msp430xW427)" msp430all
@@ -3743,7 +3774,7 @@ index 7c4444b..80ed9fc 100644
  emsp430xG437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1599,6 +1902,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1599,6 +1922,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x437 "$(tdir_msp430x437)" msp430all
@@ -3762,7 +3793,7 @@ index 7c4444b..80ed9fc 100644
  emsp430x447.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -1611,6 +1926,186 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -1611,6 +1946,186 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x449 "$(tdir_msp430x449)" msp430all
@@ -3950,7 +3981,7 @@ index 7c4444b..80ed9fc 100644
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
 diff --git binutils-2.20.orig/ld/Makefile.in binutils-2.20/ld/Makefile.in
-index 8aabafb..9d35d46 100644
+index 8aabafb..497d010 100644
 --- binutils-2.20.orig/ld/Makefile.in
 +++ binutils-2.20/ld/Makefile.in
 @@ -484,7 +484,7 @@ ALL_EMULATIONS = \
@@ -3972,7 +4003,7 @@ index 8aabafb..9d35d46 100644
  	emsp430x155.o \
  	emsp430x156.o \
  	emsp430x157.o \
-@@ -606,10 +609,45 @@ ALL_EMULATIONS = \
+@@ -606,10 +609,49 @@ ALL_EMULATIONS = \
  	emsp430x1610.o \
  	emsp430x1611.o \
  	emsp430x1612.o \
@@ -3989,6 +4020,10 @@ index 8aabafb..9d35d46 100644
 +	emsp430x2122.o \
  	emsp430x2131.o \
 +	emsp430x2132.o \
++	emsp430x2201.o \
++	emsp430x2211.o \
++	emsp430x2221.o \
++	emsp430x2231.o \
 +	emsp430x2232.o \
 +	emsp430x2234.o \
 +	emsp430x2252.o \
@@ -4018,7 +4053,7 @@ index 8aabafb..9d35d46 100644
  	emsp430x311.o \
  	emsp430x312.o \
  	emsp430x313.o \
-@@ -623,21 +661,82 @@ ALL_EMULATIONS = \
+@@ -623,21 +665,82 @@ ALL_EMULATIONS = \
  	emsp430x413.o \
  	emsp430x415.o \
  	emsp430x417.o \
@@ -4101,7 +4136,7 @@ index 8aabafb..9d35d46 100644
  	enews.o \
  	ens32knbsd.o \
  	eor32.o \
-@@ -2788,6 +2887,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2788,6 +2891,18 @@ emsp430x149.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x149 "$(tdir_msp430x149)" msp430all
@@ -4120,7 +4155,7 @@ index 8aabafb..9d35d46 100644
  emsp430x155.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2824,6 +2935,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2824,6 +2939,30 @@ emsp430x1612.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x1612 "$(tdir_msp430x1612)" msp430all
@@ -4151,7 +4186,7 @@ index 8aabafb..9d35d46 100644
  emsp430x2101.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2832,14 +2967,130 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2832,14 +2971,146 @@ emsp430x2111.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x2111 "$(tdir_msp430x2111)" msp430all
@@ -4175,6 +4210,22 @@ index 8aabafb..9d35d46 100644
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
 +	${GENSCRIPTS} msp430x2132 "$(tdir_msp430x2132)" msp430all
++emsp430x2201.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2201 "$(tdir_msp430x2201)" msp430all
++emsp430x2211.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2211 "$(tdir_msp430x2211)" msp430all
++emsp430x2221.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2221 "$(tdir_msp430x2221)" msp430all
++emsp430x2231.c: $(srcdir)/emulparams/msp430all.sh \
++  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
++  ${GEN_DEPENDS}
++	${GENSCRIPTS} msp430x2231 "$(tdir_msp430x2231)" msp430all
 +emsp430x2232.c: $(srcdir)/emulparams/msp430all.sh \
 +  $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
 +  ${GEN_DEPENDS}
@@ -4282,7 +4333,7 @@ index 8aabafb..9d35d46 100644
  emsp430x311.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430_3.sc \
    ${GEN_DEPENDS}
-@@ -2892,6 +3143,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2892,6 +3163,46 @@ emsp430x417.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x417 "$(tdir_msp430x417)" msp430all
@@ -4329,7 +4380,7 @@ index 8aabafb..9d35d46 100644
  emsp430xE423.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2916,6 +3207,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2916,6 +3227,18 @@ emsp430xW427.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430xW427 "$(tdir_msp430xW427)" msp430all
@@ -4348,7 +4399,7 @@ index 8aabafb..9d35d46 100644
  emsp430xG437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2940,6 +3243,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2940,6 +3263,18 @@ emsp430x437.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x437 "$(tdir_msp430x437)" msp430all
@@ -4367,7 +4418,7 @@ index 8aabafb..9d35d46 100644
  emsp430x447.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
-@@ -2952,6 +3267,186 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
+@@ -2952,6 +3287,186 @@ emsp430x449.c: $(srcdir)/emulparams/msp430all.sh \
    $(ELF_GEN_DEPS) $(srcdir)/scripttempl/elf32msp430.sc \
    ${GEN_DEPENDS}
  	${GENSCRIPTS} msp430x449 "$(tdir_msp430x449)" msp430all
@@ -4555,7 +4606,7 @@ index 8aabafb..9d35d46 100644
    $(srcdir)/emultempl/generic.em $(srcdir)/scripttempl/aout.sc ${GEN_DEPENDS}
  	${GENSCRIPTS} news "$(tdir_news)"
 diff --git binutils-2.20.orig/ld/configure.tgt binutils-2.20/ld/configure.tgt
-index d6d86ab..e91d5d1 100644
+index d6d86ab..8510b41 100644
 --- binutils-2.20.orig/ld/configure.tgt
 +++ binutils-2.20/ld/configure.tgt
 @@ -426,7 +426,7 @@ mn10300-*-*)		targ_emul=mn10300
@@ -4563,12 +4614,12 @@ index d6d86ab..e91d5d1 100644
  			;;
  msp430-*-*)             targ_emul=msp430x110
 -                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2101 msp430x2111 msp430x2121 msp430x2131 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430xE423 msp430xE425 msp430xE427 msp430xW423 msp430xW425 msp430xW427 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x447 msp430x448 msp430x449"
-+                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x1471 msp430x1481 msp430x1491 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2001 msp430x2011 msp430x2002 msp430x2012 msp430x2003 msp430x2013 msp430x2101 msp430x2111 msp430x2112 msp430x2121 msp430x2122 msp430x2131 msp430x2132 msp430x2232 msp430x2234 msp430x2252 msp430x2254 msp430x2272 msp430x2274 msp430x233 msp430x235 msp430x2330 msp430x2350 msp430x2370 msp430x247 msp430x248 msp430x249 msp430x2410 msp430x2471 msp430x2481 msp430x2491 msp430x2416 msp430x2417 msp430x2418 msp430x2419 msp430x2616 msp430x2617 msp430x2618 msp430x2619 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430x423 msp430x425 msp430x427 msp430x4250 msp430x4260 msp430x4270 msp430xE423 msp430xE425 msp430xE427 msp430xE4232 msp430xE4242 msp430xE4252 msp430xE4272 msp430xW423 msp430xW425 msp430xW427 msp430xG4250 msp430xG4260 msp430xG4270 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x4351 msp430x4361 msp430x4371 msp430x447 msp430x448 msp430x449 msp430xG4616 msp430xG4617 msp430xG4618 msp430xG4619 msp430x4783 msp430x4784 msp430x4793 msp430x4794 msp430x47166 msp430x47176 msp430x47186 msp430x47196 msp430x47167 msp430x47177 msp430x47187 msp430x47197 msp430x5418 msp430x5419 msp430x5435 msp430x5436 msp430x5437 msp430x5438 msp430x5510 msp430x5513 msp430x5514 msp430x5515 msp430x5517 msp430x5519 msp430x5521 msp430x5522 msp430x5524 msp430x5525 msp430x5526 msp430x5527 msp430x5528 msp430x5529 msp430x6638 cc430x5133 cc430x5125 cc430x6125 cc430x6135 cc430x6126 cc430x5137 cc430x6127 cc430x6137"
++                        targ_extra_emuls="msp430x112 msp430x1101 msp430x1111 msp430x1121 msp430x1122 msp430x1132 msp430x122 msp430x123 msp430x1222 msp430x1232 msp430x133 msp430x135 msp430x1331 msp430x1351 msp430x147 msp430x148 msp430x149 msp430x1471 msp430x1481 msp430x1491 msp430x155 msp430x156 msp430x157 msp430x167 msp430x168 msp430x169 msp430x1610 msp430x1611 msp430x1612 msp430x2001 msp430x2011 msp430x2002 msp430x2012 msp430x2003 msp430x2013 msp430x2101 msp430x2111 msp430x2112 msp430x2121 msp430x2122 msp430x2131 msp430x2101 msp430x2211 msp430x2221 msp430x2231 msp430x2232 msp430x2232 msp430x2234 msp430x2252 msp430x2254 msp430x2272 msp430x2274 msp430x233 msp430x235 msp430x2330 msp430x2350 msp430x2370 msp430x247 msp430x248 msp430x249 msp430x2410 msp430x2471 msp430x2481 msp430x2491 msp430x2416 msp430x2417 msp430x2418 msp430x2419 msp430x2616 msp430x2617 msp430x2618 msp430x2619 msp430x311 msp430x312 msp430x313 msp430x314 msp430x315 msp430x323 msp430x325 msp430x336 msp430x337 msp430x412 msp430x413 msp430x415 msp430x417 msp430x423 msp430x425 msp430x427 msp430x4250 msp430x4260 msp430x4270 msp430xE423 msp430xE425 msp430xE427 msp430xE4232 msp430xE4242 msp430xE4252 msp430xE4272 msp430xW423 msp430xW425 msp430xW427 msp430xG4250 msp430xG4260 msp430xG4270 msp430xG437 msp430xG438 msp430xG439 msp430x435 msp430x436 msp430x437 msp430x4351 msp430x4361 msp430x4371 msp430x447 msp430x448 msp430x449 msp430xG4616 msp430xG4617 msp430xG4618 msp430xG4619 msp430x4783 msp430x4784 msp430x4793 msp430x4794 msp430x47166 msp430x47176 msp430x47186 msp430x47196 msp430x47167 msp430x47177 msp430x47187 msp430x47197 msp430x5418 msp430x5419 msp430x5435 msp430x5436 msp430x5437 msp430x5438 msp430x5510 msp430x5513 msp430x5514 msp430x5515 msp430x5517 msp430x5519 msp430x5521 msp430x5522 msp430x5524 msp430x5525 msp430x5526 msp430x5527 msp430x5528 msp430x5529 msp430x6638 cc430x5133 cc430x5125 cc430x6125 cc430x6135 cc430x6126 cc430x5137 cc430x6127 cc430x6137"
  			;;
  ns32k-pc532-mach* | ns32k-pc532-ux*)  targ_emul=pc532macha ;;
  ns32k-*-netbsd* | ns32k-pc532-lites*) targ_emul=ns32knbsd
 diff --git binutils-2.20.orig/ld/emulparams/msp430all.sh binutils-2.20/ld/emulparams/msp430all.sh
-index 57d21c2..26eef03 100644
+index 57d21c2..95b745e 100644
 --- binutils-2.20.orig/ld/emulparams/msp430all.sh
 +++ binutils-2.20/ld/emulparams/msp430all.sh
 @@ -18,7 +18,7 @@ ROM_START=0xfc00
@@ -4632,10 +4683,19 @@ index 57d21c2..26eef03 100644
  RAM_START=0x0200
  RAM_SIZE=256
 -STACK=0x300
+-fi
+-
+-if [ "${MSP430_NAME}" = "msp430x122" ] ; then
+-ARCH=msp:12
+-ROM_START=0xf000
+-ROM_SIZE=0xfe0
+-RAM_START=0x0200
+-RAM_SIZE=256
+-STACK=0x300
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x122" ] ; then
+-if [ "${MSP430_NAME}" = "msp430x1222" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x122" -o "${MSP430_NAME}" = "msp430x1222" ] ; then
  ARCH=msp:12
  ROM_START=0xf000
@@ -4643,28 +4703,10 @@ index 57d21c2..26eef03 100644
  RAM_START=0x0200
  RAM_SIZE=256
 -STACK=0x300
--fi
--
--if [ "${MSP430_NAME}" = "msp430x1222" ] ; then
--ARCH=msp:12
--ROM_START=0xf000
--ROM_SIZE=0xfe0
--RAM_START=0x0200
--RAM_SIZE=256
--STACK=0x300
--fi
--
--if [ "${MSP430_NAME}" = "msp430x123" ] ; then
--ARCH=msp:12
--ROM_START=0xe000
--ROM_SIZE=0x1fe0
--RAM_START=0x0200
--RAM_SIZE=256
--STACK=0x300
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x1232" ] ; then
+-if [ "${MSP430_NAME}" = "msp430x123" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x123" -o "${MSP430_NAME}" = "msp430x1232" ] ; then
  ARCH=msp:12
  ROM_START=0xe000
@@ -4675,6 +4717,15 @@ index 57d21c2..26eef03 100644
 +VECTORS_START=0xffe0
  fi
  
+-if [ "${MSP430_NAME}" = "msp430x1232" ] ; then
+-ARCH=msp:12
+-ROM_START=0xe000
+-ROM_SIZE=0x1fe0
+-RAM_START=0x0200
+-RAM_SIZE=256
+-STACK=0x300
+-fi
+-
 -if [ "${MSP430_NAME}" = "msp430x133" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x133" -o "${MSP430_NAME}" = "msp430x1331" ] ; then
  ARCH=msp:13
@@ -4683,9 +4734,8 @@ index 57d21c2..26eef03 100644
  RAM_START=0x0200
  RAM_SIZE=256
 -STACK=0x300
-+VECTORS_START=0xffe0
- fi
- 
+-fi
+-
 -if [ "${MSP430_NAME}" = "msp430x1331" ] ; then
 -ARCH=msp:13
 -ROM_START=0xe000
@@ -4696,6 +4746,16 @@ index 57d21c2..26eef03 100644
 -fi
 -
 -if [ "${MSP430_NAME}" = "msp430x135" ] ; then
+-ARCH=msp:13
+-ROM_START=0xc000
+-ROM_SIZE=0x3fe0
+-RAM_START=0x0200
+-RAM_SIZE=512
+-STACK=0x400
++VECTORS_START=0xffe0
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430x1351" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x135" -o "${MSP430_NAME}" = "msp430x1351" ] ; then
  ARCH=msp:13
  ROM_START=0xc000
@@ -4706,15 +4766,6 @@ index 57d21c2..26eef03 100644
 +VECTORS_START=0xffe0
  fi
  
--if [ "${MSP430_NAME}" = "msp430x1351" ] ; then
--ARCH=msp:13
--ROM_START=0xc000
--ROM_SIZE=0x3fe0
--RAM_START=0x0200
--RAM_SIZE=512
--STACK=0x400
--fi
--
 -if [ "${MSP430_NAME}" = "msp430x147" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x147" -o  "${MSP430_NAME}" = "msp430x1471" ] ; then
  ARCH=msp:14
@@ -4859,7 +4910,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x2101" ] ; then
-@@ -261,34 +234,210 @@ ROM_START=0xFC00
+@@ -261,34 +234,224 @@ ROM_START=0xFC00
  ROM_SIZE=0x03e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -4897,6 +4948,20 @@ index 57d21c2..26eef03 100644
  RAM_START=0x0200
  RAM_SIZE=256
 -STACK=0x300
++VECTORS_START=0xffe0
++fi
++
++# Warning: Value-line chips, may not be correct for other models
++if [ "${MSP430_NAME}" = "msp430x2201" \
++    -o "${MSP430_NAME}" = "msp430x2211" \
++    -o "${MSP430_NAME}" = "msp430x2221" \
++    -o "${MSP430_NAME}" = "msp430x2231" \
++    ] ; then
++ARCH=msp:22
++ROM_START=0xF800
++ROM_SIZE=0x07e0
++RAM_START=0x0200
++RAM_SIZE=128
 +VECTORS_START=0xffe0
 +fi
 +
@@ -5077,7 +5142,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x311" ] ; then
-@@ -298,7 +447,7 @@ ROM_START=0xf800
+@@ -298,7 +461,7 @@ ROM_START=0xf800
  ROM_SIZE=0x07e0
  RAM_START=0x0200
  RAM_SIZE=128
@@ -5086,7 +5151,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x312" ] ; then
-@@ -308,7 +457,7 @@ ROM_START=0xf000
+@@ -308,7 +471,7 @@ ROM_START=0xf000
  ROM_SIZE=0x0fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -5095,7 +5160,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x313" ] ; then
-@@ -318,7 +467,7 @@ ROM_START=0xe000
+@@ -318,7 +481,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -5104,7 +5169,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x314" ] ; then
-@@ -328,7 +477,7 @@ ROM_START=0xd000
+@@ -328,7 +491,7 @@ ROM_START=0xd000
  ROM_SIZE=0x2fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -5113,7 +5178,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x315" ] ; then
-@@ -338,7 +487,7 @@ ROM_START=0xc000
+@@ -338,7 +501,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -5122,7 +5187,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x323" ] ; then
-@@ -348,7 +497,7 @@ ROM_START=0xe000
+@@ -348,7 +511,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -5131,7 +5196,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x325" ] ; then
-@@ -358,7 +507,7 @@ ROM_START=0xc000
+@@ -358,7 +521,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -5140,7 +5205,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x336" ] ; then
-@@ -368,7 +517,7 @@ ROM_START=0xa000
+@@ -368,7 +531,7 @@ ROM_START=0xa000
  ROM_SIZE=0x5fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5149,7 +5214,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x337" ] ; then
-@@ -378,7 +527,7 @@ ROM_START=0x8000
+@@ -378,7 +541,7 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5158,7 +5223,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x412" ] ; then
-@@ -387,7 +536,7 @@ ROM_START=0xf000
+@@ -387,7 +550,7 @@ ROM_START=0xf000
  ROM_SIZE=0x0fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -5167,7 +5232,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x413" ] ; then
-@@ -396,7 +545,7 @@ ROM_START=0xe000
+@@ -396,7 +559,7 @@ ROM_START=0xe000
  ROM_SIZE=0x1fe0
  RAM_START=0x0200
  RAM_SIZE=256
@@ -5176,7 +5241,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x415" ] ; then
-@@ -405,7 +554,7 @@ ROM_START=0xc000
+@@ -405,7 +568,7 @@ ROM_START=0xc000
  ROM_SIZE=0x3fe0
  RAM_START=0x0200
  RAM_SIZE=512
@@ -5185,14 +5250,15 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x417" ] ; then
-@@ -414,34 +563,79 @@ ROM_START=0x8000
+@@ -414,34 +577,79 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
 -STACK=0x600
 +VECTORS_START=0xffe0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430x435" ] ; then
 +if [ "${MSP430_NAME}" = "msp430x423" ] ; then
 +ARCH=msp:42
 +ROM_START=0xe000
@@ -5200,9 +5266,8 @@ index 57d21c2..26eef03 100644
 +RAM_START=0x0200
 +RAM_SIZE=256
 +VECTORS_START=0xffe0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430x435" ] ; then
++fi
++
 +if [ "${MSP430_NAME}" = "msp430x425" -o "${MSP430_NAME}" = "msp430x4250" ] ; then
 +ARCH=msp:42
 +ROM_START=0xc000
@@ -5272,7 +5337,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x447" ] ; then
-@@ -450,7 +644,7 @@ ROM_START=0x8000
+@@ -450,7 +658,7 @@ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5281,7 +5346,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x448" ] ; then
-@@ -458,8 +652,8 @@ ARCH=msp:44
+@@ -458,8 +666,8 @@ ARCH=msp:44
  ROM_START=0x4000
  ROM_SIZE=0xbfe0
  RAM_START=0x0200
@@ -5292,7 +5357,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430x449" ] ; then
-@@ -467,36 +661,69 @@ ARCH=msp:44
+@@ -467,44 +675,77 @@ ARCH=msp:44
  ROM_START=0x1100
  ROM_SIZE=0xeee0
  RAM_START=0x0200
@@ -5313,9 +5378,8 @@ index 57d21c2..26eef03 100644
  RAM_SIZE=256
 -STACK=0x300
 +VECTORS_START=0xffe0
- fi
- 
--if [ "${MSP430_NAME}" = "msp430xE425" ] ; then
++fi
++
 +if [ "${MSP430_NAME}" = "msp430xE4242" ] ; then
 +ARCH=msp:42
 +ROM_START=0xd000
@@ -5323,8 +5387,9 @@ index 57d21c2..26eef03 100644
 +RAM_START=0x0200
 +RAM_SIZE=512
 +VECTORS_START=0xffe0
-+fi
-+
+ fi
+ 
+-if [ "${MSP430_NAME}" = "msp430xE425" ] ; then
 +if [ "${MSP430_NAME}" = "msp430xE425" -o "${MSP430_NAME}" = "msp430xW425" \
 +    -o "${MSP430_NAME}" = "msp430xG4250" -o "${MSP430_NAME}" = "msp430xE4252" \
 +   ] ; then
@@ -5363,14 +5428,14 @@ index 57d21c2..26eef03 100644
 +else
  RAM_SIZE=1024
 -STACK=0x600
- fi
-+VECTORS_START=0xffe0
 +fi
-+
++VECTORS_START=0xffe0
+ fi
  
++
  if [ "${MSP430_NAME}" = "msp430xG437" ] ; then
  ARCH=msp:43
-@@ -504,7 +731,7 @@ ROM_START=0x8000
+ ROM_START=0x8000
  ROM_SIZE=0x7fe0
  RAM_START=0x0200
  RAM_SIZE=1024
@@ -5379,7 +5444,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430xG438" ] ; then
-@@ -512,8 +739,8 @@ ARCH=msp:43
+@@ -512,8 +753,8 @@ ARCH=msp:43
  ROM_START=0x4000
  ROM_SIZE=0xbef0
  RAM_START=0x0200
@@ -5390,7 +5455,7 @@ index 57d21c2..26eef03 100644
  fi
  
  if [ "${MSP430_NAME}" = "msp430xG439" ] ; then
-@@ -521,33 +748,417 @@ ARCH=msp:43
+@@ -521,33 +762,417 @@ ARCH=msp:43
  ROM_START=0x1100
  ROM_SIZE=0xeee0
  RAM_START=0x0200
@@ -5642,7 +5707,7 @@ index 57d21c2..26eef03 100644
 +RAM_START=0x2400
 +RAM_SIZE=4096
 +VECTORS_START=0xff80
- fi
++fi
 +
 +if [ "${MSP430_NAME}" = "msp430x5513" ] ; then
 +ARCH=msp:54
@@ -5785,7 +5850,7 @@ index 57d21c2..26eef03 100644
 +RAM_START=0x2400
 +RAM_SIZE=6144
 +VECTORS_START=0xff80
-+fi
+ fi
 +
 +if [ "${MSP430_NAME}" = "msp430x5528" ] ; then
 +ARCH=msp:54
