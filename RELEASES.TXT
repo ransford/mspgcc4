@@ -1,3 +1,7 @@
+20101114
+ - c0e2dda SF 3109143: Support value-line MSP430G22x1 devices
+ - cb66d77 Drop support for binutils 2.19.1
+
 20101113
  - Add gcc 4.4.5 support
  - 861b018 SF 3090574: -fPIC silently won't work
