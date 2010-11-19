@@ -75,6 +75,11 @@ else
 	
 	test -e $ARCHIVE_BASE && rm -rf $ARCHIVE_BASE
 	tar xjf $ARCHIVE_NAME
+	if [ -e "$INITIAL_DIR/$ARCHIVE_BASE.patch" ] ; then
+		cd $ARCHIVE_BASE
+		patch -p1 -N -i "$INITIAL_DIR/$ARCHIVE_BASE.patch"
+		cd ..
+	fi
 	cd 	$ARCHIVE_BASE/src
 fi
 

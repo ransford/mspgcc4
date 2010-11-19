@@ -1,0 +1,86 @@
+diff -urN msp430-libc-ti_20101114.old/include/iomacros.h msp430-libc-ti_20101114/include/iomacros.h
+--- msp430-libc-ti_20101114.old/include/iomacros.h	2010-11-14 11:40:14.000000000 -0500
++++ msp430-libc-ti_20101114/include/iomacros.h	2010-11-19 16:02:35.000000000 -0500
+@@ -52,6 +52,12 @@
+ #endif
+ #endif
+ 
++#ifdef __cplusplus
++#define __MSP430_EXTERN__ extern "C"
++#else
++#define __MSP430_EXTERN__ extern
++#endif // __cplusplus
++
+ #define Critical __attribute__ ((critical))
+ #define CRITICAL __attribute__ ((critical))
+ #define critical __attribute__ ((critical))
+@@ -116,7 +122,23 @@
+ #define __bis_SR_register(x)    __asm__ __volatile__("bis	%0, r2" : : "ir" ((uint16_t) x))
+ #define __bic_SR_register(x)    __asm__ __volatile__("bic	%0, r2" : : "ir" ((uint16_t) x))
+ 
+-#if __GNUC__ >= 4
++#ifdef __clang__
++
++/* clang has proper __builtin_frameaddress support */
++#define _BIS_SR_IRQ(x)                                  \
++  do {                                                  \
++    int *__fa = __builtin_frame_address(0);             \
++    __fa[1] |= (x);                                     \
++  } while(0)
++#define _BIC_SR_IRQ(x)                                  \
++  do {                                                  \
++    int *__fa = __builtin_frame_address(0);             \
++    __fa[1] &= ~(x);                                    \
++  } while(0)
++#define __bis_SR_register_on_exit(x)    _BIS_SR_IRQ(x)
++#define __bic_SR_register_on_exit(x)    _BIC_SR_IRQ(x)
++
++#elif __GNUC__ >= 4
+ 
+ extern void __bis_sr_irq(int);
+ extern void __bic_sr_irq(int);
+@@ -188,14 +210,14 @@
+ 
+ #endif
+ 
+-#define sfrb_(x,x_) volatile unsigned char x asm(#x_)
++#define sfrb_(x,x_) __MSP430_EXTERN__ volatile unsigned char x asm(#x_)
+ #define sfrb(x,x_) sfrb_(x,x_)
+ 
+-#define sfrw_(x,x_) volatile unsigned int x asm(#x_)
++#define sfrw_(x,x_) __MSP430_EXTERN__ volatile unsigned int x asm(#x_)
+ #define sfrw(x,x_) sfrw_(x,x_)
+ 
+ #if 1 || defined(__MSP430X__) || defined(__MSP430X2__)
+-#define sfra_(x,x_) volatile unsigned long int x asm(#x_)
++#define sfra_(x,x_) __MSP430_EXTERN__ volatile unsigned long int x asm(#x_)
+ #define sfra(x,x_) sfra_(x,x_)
+ #endif
+ 
+diff -urN msp430-libc-ti_20101114.old/include/legacy/msp430x21x2.h msp430-libc-ti_20101114/include/legacy/msp430x21x2.h
+--- msp430-libc-ti_20101114.old/include/legacy/msp430x21x2.h	2010-11-14 11:40:14.000000000 -0500
++++ msp430-libc-ti_20101114/include/legacy/msp430x21x2.h	2010-11-19 14:59:59.000000000 -0500
+@@ -21,7 +21,7 @@
+ #define __MSP430_HAS_PORT1_R__
+ #define __MSP430_HAS_PORT2_R__
+ #define __MSP430_HAS_PORT3_R__
+-#define __MSP430_HAS_USCI_AB0__
++#define __MSP430_HAS_USCI0__
+ #define __MSP430_HAS_TA3__
+ #define __MSP430_HAS_T1A2__
+ #define __MSP430_HAS_BC2__
+diff -urN msp430-libc-ti_20101114.old/include/signal.h msp430-libc-ti_20101114/include/signal.h
+--- msp430-libc-ti_20101114.old/include/signal.h	2010-11-14 11:40:14.000000000 -0500
++++ msp430-libc-ti_20101114/include/signal.h	2010-11-19 14:59:04.000000000 -0500
+@@ -45,9 +45,11 @@
+ 
+ #if !defined(__ASSEMBLER__)
+ 
++#ifndef __clang__
+ #define Interrupt(x) void __attribute__((interrupt (x)))
+ #define INTERRUPT(x) void __attribute__((interrupt (x)))
+ #define interrupt(x) void __attribute__((interrupt (x)))
++#endif // __clang__
+ 
+ #define wakeup  __attribute__((wakeup))
+ #define Wakeup  __attribute__((wakeup))
