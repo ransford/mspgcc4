@@ -1,6 +1,6 @@
 diff -urN msp430-libc-ti_20101114.old/include/iomacros.h msp430-libc-ti_20101114/include/iomacros.h
 --- msp430-libc-ti_20101114.old/include/iomacros.h	2010-11-14 11:40:14.000000000 -0500
-+++ msp430-libc-ti_20101114/include/iomacros.h	2010-12-13 13:17:20.000000000 -0500
++++ msp430-libc-ti_20101114/include/iomacros.h	2010-12-15 13:30:38.000000000 -0500
 @@ -52,6 +52,12 @@
  #endif
  #endif
@@ -59,7 +59,7 @@ diff -urN msp430-libc-ti_20101114.old/include/iomacros.h msp430-libc-ti_20101114
  
 diff -urN msp430-libc-ti_20101114.old/include/legacy/msp430x21x2.h msp430-libc-ti_20101114/include/legacy/msp430x21x2.h
 --- msp430-libc-ti_20101114.old/include/legacy/msp430x21x2.h	2010-11-14 11:40:14.000000000 -0500
-+++ msp430-libc-ti_20101114/include/legacy/msp430x21x2.h	2010-12-13 13:17:20.000000000 -0500
++++ msp430-libc-ti_20101114/include/legacy/msp430x21x2.h	2010-12-15 13:30:38.000000000 -0500
 @@ -21,7 +21,7 @@
  #define __MSP430_HAS_PORT1_R__
  #define __MSP430_HAS_PORT2_R__
@@ -71,7 +71,7 @@ diff -urN msp430-libc-ti_20101114.old/include/legacy/msp430x21x2.h msp430-libc-t
  #define __MSP430_HAS_BC2__
 diff -urN msp430-libc-ti_20101114.old/include/signal.h msp430-libc-ti_20101114/include/signal.h
 --- msp430-libc-ti_20101114.old/include/signal.h	2010-11-14 11:40:14.000000000 -0500
-+++ msp430-libc-ti_20101114/include/signal.h	2010-12-13 13:17:20.000000000 -0500
++++ msp430-libc-ti_20101114/include/signal.h	2010-12-15 13:30:38.000000000 -0500
 @@ -45,9 +45,11 @@
  
  #if !defined(__ASSEMBLER__)
@@ -86,7 +86,7 @@ diff -urN msp430-libc-ti_20101114.old/include/signal.h msp430-libc-ti_20101114/i
  #define Wakeup  __attribute__((wakeup))
 diff -urN msp430-libc-ti_20101114.old/src/Makefile msp430-libc-ti_20101114/src/Makefile
 --- msp430-libc-ti_20101114.old/src/Makefile	2010-11-14 11:40:14.000000000 -0500
-+++ msp430-libc-ti_20101114/src/Makefile	2010-12-13 13:32:50.000000000 -0500
++++ msp430-libc-ti_20101114/src/Makefile	2010-12-15 13:33:16.000000000 -0500
 @@ -163,7 +163,8 @@
  __do_clear_bss.S __do_copy_data.S __do_global_ctors.S \
  __do_global_dtors.S __init_stack.S __jump_to_main.S \
@@ -102,13 +102,13 @@ diff -urN msp430-libc-ti_20101114.old/src/Makefile msp430-libc-ti_20101114/src/M
  isalnum.c isupper.c strcasecmp.c strlen.c strstr.c \
  isalpha.c isxdigit.c strcat.c strncasecmp.c strtok.c \
 -ispunct.c
-+ispunct.c udivsi3.c
++ispunct.c udivsi3.c udivhi3.c
  
  LIBC_OBJS = $(addprefix $(BUILDDIR)/,$(libc_str_sources:.c=.o) $(libc_c_sources:.c=.o) $(libc_asm_sources:.S=.o) )
  build-libc: create_libdir $(LIBC)
 diff -urN msp430-libc-ti_20101114.old/src/stdlib/__mulhi3hw_noint.S msp430-libc-ti_20101114/src/stdlib/__mulhi3hw_noint.S
 --- msp430-libc-ti_20101114.old/src/stdlib/__mulhi3hw_noint.S	1969-12-31 19:00:00.000000000 -0500
-+++ msp430-libc-ti_20101114/src/stdlib/__mulhi3hw_noint.S	2010-12-13 13:10:38.000000000 -0500
++++ msp430-libc-ti_20101114/src/stdlib/__mulhi3hw_noint.S	2010-12-15 13:30:38.000000000 -0500
 @@ -0,0 +1,8 @@
 +	.section .text
 +	.global __mulhi3hw_noint
@@ -118,9 +118,32 @@ diff -urN msp430-libc-ti_20101114.old/src/stdlib/__mulhi3hw_noint.S msp430-libc-
 +        mov.w   r14, &0x138
 +        mov.w   &0x13a, r15
 +        ret
+diff -urN msp430-libc-ti_20101114.old/src/stdlib/udivhi3.c msp430-libc-ti_20101114/src/stdlib/udivhi3.c
+--- msp430-libc-ti_20101114.old/src/stdlib/udivhi3.c	1969-12-31 19:00:00.000000000 -0500
++++ msp430-libc-ti_20101114/src/stdlib/udivhi3.c	2010-12-15 13:31:40.000000000 -0500
+@@ -0,0 +1,19 @@
++unsigned int __udivhi3(unsigned int num, unsigned int denom) {
++  unsigned int a = 0, b = 0;
++  char i = 15; // 16-bit unsigned int
++
++  /* Work from leftmost to rightmost bit in numerator */
++  while(i>=0) {
++    /* appends one bit from numerator to a */
++    a = (a << 1) + ((num & (1 << i)) >> i);
++    b = b << 1;
++    //printf("After shifting a=%d and b=%d\n",a,b);
++    if (a >= denom) {
++      a -= denom;
++      b++;
++    }
++    //printf("After subtraction a=%d and b=%d\n",a,b);
++  i--;
++  }
++  return b;
++}
 diff -urN msp430-libc-ti_20101114.old/src/stdlib/udivsi3.c msp430-libc-ti_20101114/src/stdlib/udivsi3.c
 --- msp430-libc-ti_20101114.old/src/stdlib/udivsi3.c	1969-12-31 19:00:00.000000000 -0500
-+++ msp430-libc-ti_20101114/src/stdlib/udivsi3.c	2010-12-13 13:31:42.000000000 -0500
++++ msp430-libc-ti_20101114/src/stdlib/udivsi3.c	2010-12-15 13:30:38.000000000 -0500
 @@ -0,0 +1,19 @@
 +unsigned long __udivsi3(unsigned long num, unsigned long denom) {
 +  unsigned long a = 0, b = 0;
